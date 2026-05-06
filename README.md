@@ -9,8 +9,6 @@ Public surface: `gym.genlayer.foundation` (forthcoming).
 - `benchmarks/` — one subdir per bench. Each bench is self-contained: pipeline, data, runs, results.
   - `pm-bench/` — Polymarket benchmark. Continuous funnel of upcoming PM markets through GenLayer-fit, source, and accessibility gates; PASS markets resolved through IO and graded against PM settlement.
   - `sources-bench/` — Sources benchmark. Versioned dataset of web sources labeled `accessible` / `partial` / `blocked` + reason, probed by an Intelligent Contract and ground-truth-checked off-chain.
-- `shared/` — code reused across benches (GenLayer SDK / IO factory client, Polymarket client, dataset schemas).
-- `site/` — `gym.genlayer.foundation` frontend. Built once bench data shapes stabilize.
 
 ## Roadmap
 
