@@ -1,0 +1,26 @@
+services:
+  genvm-webdriver:
+    build:
+      context: ./service
+    image: polymarket-genvm-webdriver:local
+    container_name: polymarket-genvm-webdriver
+    ports:
+      - "${GENVM_WEBDRIVER_PORT:-4444}:4444"
+    environment:
+      PORT: "4444"
+      GVM_WEBDRIVER_HEALTHCHECK_CACHE_DURATION: "5m"
+      GVM_WEBDRIVER_ROTATION_CHECK_INTERVAL: "10m"
+      GVM_WEBDRIVER_ROTATION_ABSOLUTE_MB: "2048"
+      GVM_WEBDRIVER_ROTATION_IDLE_DELTA_MB: "256"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-sf",
+          "http://localhost:4444/healthcheck?mode=text&url=https%3A%2F%2Ftest-server.genlayer.com%2Fstatic%2Fgenvm%2Fhello.html",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 15s
