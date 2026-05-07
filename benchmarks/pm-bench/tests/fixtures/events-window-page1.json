@@ -1,0 +1,86 @@
+[
+  {
+    "id": "74788",
+    "title": "Guinea-Bissau Presidential Election",
+    "slug": "guinea-bissau-presidential-election",
+    "resolutionSource": "https://example.com/source",
+    "endDate": "2026-05-06T12:00:00Z",
+    "closed": false,
+    "archived": false,
+    "active": true,
+    "tags": [
+      { "id": "1", "slug": "politics", "label": "Politics" },
+      { "id": "2", "slug": "geopolitics", "label": "Geopolitics" }
+    ],
+    "markets": [
+      {
+        "id": "668328",
+        "conditionId": "0xabc",
+        "question": "Will Umaro Sissoco Embaló win?",
+        "slug": "embalo-win",
+        "description": "A market.",
+        "endDate": "2026-05-06T12:00:00Z",
+        "startDate": "2025-11-06T00:00:00Z",
+        "closed": false,
+        "active": true,
+        "archived": false,
+        "outcomes": "[\"Yes\", \"No\"]",
+        "outcomePrices": "[\"0.025\", \"0.975\"]",
+        "volume": "87157.737",
+        "volumeNum": 87157.737,
+        "liquidity": "12002.0361",
+        "liquidityNum": 12002.0361,
+        "createdAt": "2025-11-06T00:00:00Z",
+        "updatedAt": "2026-05-06T08:00:00Z",
+        "umaResolutionStatuses": "[]",
+        "marketType": "binary"
+      },
+      {
+        "id": "668329",
+        "conditionId": "0xdef",
+        "question": "Will another candidate win?",
+        "slug": "another-win",
+        "description": "Another market.",
+        "endDate": "2026-05-06T12:00:00Z",
+        "closed": true,
+        "active": true,
+        "archived": false,
+        "outcomes": "[\"Yes\", \"No\"]",
+        "outcomePrices": "[\"0.5\", \"0.5\"]",
+        "volumeNum": 100,
+        "liquidityNum": 50,
+        "createdAt": "2025-11-06T00:00:00Z",
+        "updatedAt": "2026-05-06T08:00:00Z"
+      }
+    ]
+  },
+  {
+    "id": "74789",
+    "title": "Some other event",
+    "slug": "some-other-event",
+    "resolutionSource": "",
+    "endDate": "2026-05-07T00:00:00Z",
+    "closed": false,
+    "archived": false,
+    "active": true,
+    "markets": [
+      {
+        "id": "999111",
+        "conditionId": "0x999",
+        "question": "Will X happen by tomorrow?",
+        "slug": "x-by-tomorrow",
+        "description": null,
+        "endDate": "2026-05-07T00:00:00Z",
+        "closed": false,
+        "active": true,
+        "archived": false,
+        "outcomes": "[\"Yes\", \"No\"]",
+        "outcomePrices": "[\"0.4\", \"0.6\"]",
+        "volumeNum": 250.5,
+        "liquidityNum": 75.25,
+        "createdAt": "2025-11-06T00:00:00Z",
+        "updatedAt": "2026-05-06T11:00:00Z"
+      }
+    ]
+  }
+]

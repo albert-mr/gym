@@ -1,0 +1,413 @@
+{
+  "date": "2026-05-07",
+  "raw_rows": 5348,
+  "after_dedup": 5348,
+  "total_rows": 5348,
+  "unique_markets": 5348,
+  "unique_events": 3202,
+  "unique_templates": 282,
+  "unique_domains": 27,
+  "polled_at_min": "2026-05-07T08:59:12.479Z",
+  "polled_at_max": "2026-05-07T08:59:12.479Z",
+  "end_date_min": "2026-05-07T09:00:00Z",
+  "end_date_max": "2026-05-08T08:55:00Z",
+  "gate1_chainlink": {
+    "matched": 2730,
+    "pct": 51.047120418848166
+  },
+  "gate1_no_url": {
+    "matched": 69,
+    "pct": 1.2902019446522064
+  },
+  "gate1_dropped": 2799,
+  "io_addressable_markets": 2549,
+  "io_addressable_templates": 275,
+  "io_addressable_events": 466,
+  "io_addressable_recurring": 785,
+  "io_addressable_non_recurring": 1764,
+  "io_unique_domains": 26,
+  "truly_io_shaped_markets": 2207,
+  "truly_io_shaped_templates": 182,
+  "kinds": [
+    {
+      "kind": "esports_match",
+      "label": "Esports match",
+      "markets": 1173,
+      "unique_templates": 77,
+      "unique_events": 77,
+      "recurring": 0,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "weather_forecast",
+      "label": "Weather forecast",
+      "markets": 430,
+      "unique_templates": 57,
+      "unique_events": 57,
+      "recurring": 430,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "sports_match",
+      "label": "Sports match",
+      "markets": 346,
+      "unique_templates": 28,
+      "unique_events": 55,
+      "recurring": 0,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "crypto_price_feed",
+      "label": "Crypto price feed",
+      "markets": 270,
+      "unique_templates": 49,
+      "unique_events": 210,
+      "recurring": 219,
+      "deterministic_feed": true
+    },
+    {
+      "kind": "news_or_other",
+      "label": "News / other",
+      "markets": 258,
+      "unique_templates": 20,
+      "unique_events": 23,
+      "recurring": 136,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "stock_or_finance",
+      "label": "Stock close threshold",
+      "markets": 72,
+      "unique_templates": 44,
+      "unique_events": 44,
+      "recurring": 0,
+      "deterministic_feed": true
+    }
+  ],
+  "resolution_source_buckets": [
+    {
+      "domain": "data.chain.link",
+      "count": 2730,
+      "pct": 51.047120418848166
+    },
+    {
+      "domain": "www.twitch.tv",
+      "count": 743,
+      "pct": 13.893044128646222
+    },
+    {
+      "domain": "(empty)",
+      "count": 411,
+      "pct": 7.685115931189229
+    },
+    {
+      "domain": "www.wunderground.com",
+      "count": 388,
+      "pct": 7.255048616305161
+    },
+    {
+      "domain": "kick.com",
+      "count": 284,
+      "pct": 5.310396409872849
+    },
+    {
+      "domain": "www.binance.com",
+      "count": 175,
+      "pct": 3.2722513089005236
+    },
+    {
+      "domain": "www.uefa.com",
+      "count": 92,
+      "pct": 1.7202692595362752
+    },
+    {
+      "domain": "www.dotabuff.com",
+      "count": 68,
+      "pct": 1.2715033657442034
+    },
+    {
+      "domain": "conmebollibertadores.com",
+      "count": 60,
+      "pct": 1.1219147344801794
+    },
+    {
+      "domain": "www.conmebol.com",
+      "count": 48,
+      "pct": 0.8975317875841435
+    },
+    {
+      "domain": "pythdata.app",
+      "count": 42,
+      "pct": 0.7853403141361256
+    },
+    {
+      "domain": "www.youtube.com",
+      "count": 40,
+      "pct": 0.7479431563201197
+    },
+    {
+      "domain": "www.nba.com",
+      "count": 38,
+      "pct": 0.7105459985041137
+    },
+    {
+      "domain": "seekingalpha.com",
+      "count": 37,
+      "pct": 0.6918474195961106
+    },
+    {
+      "domain": "www.efa.com.eg",
+      "count": 36,
+      "pct": 0.6731488406881078
+    },
+    {
+      "domain": "www.frmf.ma",
+      "count": 36,
+      "pct": 0.6731488406881078
+    },
+    {
+      "domain": "finance.yahoo.com",
+      "count": 35,
+      "pct": 0.6544502617801047
+    },
+    {
+      "domain": "play-origin.sooplive.com",
+      "count": 16,
+      "pct": 0.2991772625280479
+    },
+    {
+      "domain": "www.ligagt.org",
+      "count": 14,
+      "pct": 0.2617801047120419
+    },
+    {
+      "domain": "www.slstat.com",
+      "count": 12,
+      "pct": 0.22438294689603588
+    }
+  ],
+  "io_resolution_source_buckets": [
+    {
+      "domain": "www.twitch.tv",
+      "count": 743,
+      "pct": 29.148685759121225
+    },
+    {
+      "domain": "www.wunderground.com",
+      "count": 388,
+      "pct": 15.221655551196548
+    },
+    {
+      "domain": "(empty)",
+      "count": 342,
+      "pct": 13.417026284817576
+    },
+    {
+      "domain": "kick.com",
+      "count": 284,
+      "pct": 11.14162416633974
+    },
+    {
+      "domain": "www.binance.com",
+      "count": 175,
+      "pct": 6.865437426441742
+    },
+    {
+      "domain": "www.uefa.com",
+      "count": 92,
+      "pct": 3.6092585327579445
+    },
+    {
+      "domain": "www.dotabuff.com",
+      "count": 68,
+      "pct": 2.6677128285602194
+    },
+    {
+      "domain": "conmebollibertadores.com",
+      "count": 60,
+      "pct": 2.3538642604943116
+    },
+    {
+      "domain": "www.conmebol.com",
+      "count": 48,
+      "pct": 1.8830914083954493
+    },
+    {
+      "domain": "pythdata.app",
+      "count": 42,
+      "pct": 1.647704982346018
+    },
+    {
+      "domain": "www.youtube.com",
+      "count": 40,
+      "pct": 1.5692428403295409
+    },
+    {
+      "domain": "www.nba.com",
+      "count": 38,
+      "pct": 1.490780698313064
+    },
+    {
+      "domain": "seekingalpha.com",
+      "count": 37,
+      "pct": 1.4515496273048254
+    },
+    {
+      "domain": "www.efa.com.eg",
+      "count": 36,
+      "pct": 1.4123185562965868
+    },
+    {
+      "domain": "www.frmf.ma",
+      "count": 36,
+      "pct": 1.4123185562965868
+    },
+    {
+      "domain": "finance.yahoo.com",
+      "count": 35,
+      "pct": 1.3730874852883483
+    },
+    {
+      "domain": "play-origin.sooplive.com",
+      "count": 16,
+      "pct": 0.6276971361318164
+    },
+    {
+      "domain": "www.ligagt.org",
+      "count": 14,
+      "pct": 0.5492349941153394
+    },
+    {
+      "domain": "www.slstat.com",
+      "count": 12,
+      "pct": 0.4707728520988623
+    },
+    {
+      "domain": "hltv.org",
+      "count": 12,
+      "pct": 0.4707728520988623
+    }
+  ],
+  "top_families": [
+    {
+      "template": "LoL: Dplus KIA vs KT Rolster (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 49,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "## Free App in the US Apple App Store on May #?",
+      "kind": "news_or_other",
+      "kindLabel": "News / other",
+      "markets": 42,
+      "recurring": false,
+      "domain": "(empty)"
+    },
+    {
+      "template": "LoL: HMBLE vs Colossal Gaming (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 39,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "LoL: Weibo Gaming vs Team WE (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 37,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "LoL: HANJIN BRION vs BNK FEARX (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 37,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "Cavaliers vs. Pistons",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 37,
+      "recurring": false,
+      "domain": "www.nba.com"
+    },
+    {
+      "template": "Dota #: #win vs Team Nemesis (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 36,
+      "recurring": false,
+      "domain": "www.dotabuff.com"
+    },
+    {
+      "template": "LoL: Ninjas in Pyjamas vs Anyone's Legend (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 35,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "Aston Villa FC vs. Nottingham Forest FC",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 34,
+      "recurring": false,
+      "domain": "www.uefa.com"
+    },
+    {
+      "template": "SC Freiburg vs. SC Braga",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 34,
+      "recurring": false,
+      "domain": "www.uefa.com"
+    },
+    {
+      "template": "Dota #: L#ga Team vs MOUZ (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 32,
+      "recurring": false,
+      "domain": "www.dotabuff.com"
+    },
+    {
+      "template": "LoL: Vitality.Bee vs Galions (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 25,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "What will be said on the next All-In Podcast? (May #)",
+      "kind": "news_or_other",
+      "kindLabel": "News / other",
+      "markets": 25,
+      "recurring": false,
+      "domain": "(empty)"
+    },
+    {
+      "template": "LoL: Solary vs ZYB Esport (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 25,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "Bitcoin Up or Down",
+      "kind": "crypto_price_feed",
+      "kindLabel": "Crypto price feed",
+      "markets": 24,
+      "recurring": true,
+      "domain": "www.binance.com"
+    }
+  ]
+}

@@ -1,0 +1,426 @@
+{
+  "date": "2026-05-07",
+  "prevDate": "2026-05-06",
+  "filtered": {
+    "chainlink": {
+      "markets": 2730,
+      "pct": 51.047120418848166
+    },
+    "noUrl": {
+      "markets": 69,
+      "pct": 1.2902019446522064
+    },
+    "totalFiltered": {
+      "markets": 2799,
+      "pct": 52.33732236350037
+    },
+    "ioAddressableMarkets": 2549,
+    "ioAddressablePct": 47.66267763649963
+  },
+  "prevFiltered": {
+    "chainlink": {
+      "markets": 2730,
+      "pct": 47.53613094201637
+    },
+    "noUrl": {
+      "markets": 379,
+      "pct": 6.599338324917291
+    },
+    "totalFiltered": {
+      "markets": 3109,
+      "pct": 54.135469266933654
+    },
+    "ioAddressableMarkets": 2634,
+    "ioAddressablePct": 45.864530733066346
+  },
+  "metrics": [
+    {
+      "key": "io_addressable_templates",
+      "label": "IO-addressable: unique templates",
+      "today": 275,
+      "prev": 270,
+      "delta": 5,
+      "deltaPct": 1.8518518518518516,
+      "unit": "count"
+    },
+    {
+      "key": "io_addressable_events",
+      "label": "IO-addressable: unique events",
+      "today": 466,
+      "prev": 460,
+      "delta": 6,
+      "deltaPct": 1.3043478260869565,
+      "unit": "count"
+    },
+    {
+      "key": "io_unique_domains",
+      "label": "IO-addressable: unique domains",
+      "today": 26,
+      "prev": 32,
+      "delta": -6,
+      "deltaPct": -18.75,
+      "unit": "count"
+    },
+    {
+      "key": "io_addressable_markets",
+      "label": "IO-addressable: markets (total)",
+      "today": 2549,
+      "prev": 2634,
+      "delta": -85,
+      "deltaPct": -3.2270311313591495,
+      "unit": "count"
+    },
+    {
+      "key": "io_addressable_recurring",
+      "label": "IO-addressable: recurring markets",
+      "today": 785,
+      "prev": 754,
+      "delta": 31,
+      "deltaPct": 4.111405835543767,
+      "unit": "count"
+    },
+    {
+      "key": "io_addressable_non_recurring",
+      "label": "IO-addressable: one-off markets",
+      "today": 1764,
+      "prev": 1880,
+      "delta": -116,
+      "deltaPct": -6.170212765957447,
+      "unit": "count"
+    },
+    {
+      "key": "truly_io_shaped_templates",
+      "label": "Truly-IO-shaped templates",
+      "today": 182,
+      "prev": 193,
+      "delta": -11,
+      "deltaPct": -5.699481865284974,
+      "unit": "count"
+    }
+  ],
+  "kindShifts": [
+    {
+      "kind": "esports_match",
+      "label": "Esports match",
+      "todayTemplates": 77,
+      "prevTemplates": 82,
+      "templatesDelta": -5,
+      "todayMarkets": 1173,
+      "prevMarkets": 1248,
+      "marketsDelta": -75,
+      "deterministic_feed": false,
+      "is_new": false,
+      "is_dropped": false
+    },
+    {
+      "kind": "weather_forecast",
+      "label": "Weather forecast",
+      "todayTemplates": 57,
+      "prevTemplates": 58,
+      "templatesDelta": -1,
+      "todayMarkets": 430,
+      "prevMarkets": 421,
+      "marketsDelta": 9,
+      "deterministic_feed": false,
+      "is_new": false,
+      "is_dropped": false
+    },
+    {
+      "kind": "crypto_price_feed",
+      "label": "Crypto price feed",
+      "todayTemplates": 49,
+      "prevTemplates": 49,
+      "templatesDelta": 0,
+      "todayMarkets": 270,
+      "prevMarkets": 270,
+      "marketsDelta": 0,
+      "deterministic_feed": true,
+      "is_new": false,
+      "is_dropped": false
+    },
+    {
+      "kind": "stock_or_finance",
+      "label": "Stock close threshold",
+      "todayTemplates": 44,
+      "prevTemplates": 28,
+      "templatesDelta": 16,
+      "todayMarkets": 72,
+      "prevMarkets": 56,
+      "marketsDelta": 16,
+      "deterministic_feed": true,
+      "is_new": false,
+      "is_dropped": false
+    },
+    {
+      "kind": "sports_match",
+      "label": "Sports match",
+      "todayTemplates": 28,
+      "prevTemplates": 37,
+      "templatesDelta": -9,
+      "todayMarkets": 346,
+      "prevMarkets": 439,
+      "marketsDelta": -93,
+      "deterministic_feed": false,
+      "is_new": false,
+      "is_dropped": false
+    },
+    {
+      "kind": "news_or_other",
+      "label": "News / other",
+      "todayTemplates": 20,
+      "prevTemplates": 13,
+      "templatesDelta": 7,
+      "todayMarkets": 258,
+      "prevMarkets": 130,
+      "marketsDelta": 128,
+      "deterministic_feed": false,
+      "is_new": false,
+      "is_dropped": false
+    },
+    {
+      "kind": "election_political",
+      "label": "Election / political",
+      "todayTemplates": 0,
+      "prevTemplates": 3,
+      "templatesDelta": -3,
+      "todayMarkets": 0,
+      "prevMarkets": 70,
+      "marketsDelta": -70,
+      "deterministic_feed": false,
+      "is_new": false,
+      "is_dropped": true
+    }
+  ],
+  "topDomainShifts": [
+    {
+      "domain": "www.twitch.tv",
+      "todayCount": 743,
+      "todayPct": 29.148685759121225,
+      "prevCount": 651,
+      "prevPct": 24.715261958997722,
+      "delta": 92,
+      "deltaPct": 4.433423800123503,
+      "status": "shifted"
+    },
+    {
+      "domain": "www.wunderground.com",
+      "todayCount": 388,
+      "todayPct": 15.221655551196548,
+      "prevCount": 382,
+      "prevPct": 14.502657555049355,
+      "delta": 6,
+      "deltaPct": 0.7189979961471931,
+      "status": "stable"
+    },
+    {
+      "domain": "(empty)",
+      "todayCount": 342,
+      "todayPct": 13.417026284817576,
+      "prevCount": 273,
+      "prevPct": 10.364464692482915,
+      "delta": 69,
+      "deltaPct": 3.0525615923346603,
+      "status": "shifted"
+    },
+    {
+      "domain": "kick.com",
+      "todayCount": 284,
+      "todayPct": 11.14162416633974,
+      "prevCount": 317,
+      "prevPct": 12.034927866362946,
+      "delta": -33,
+      "deltaPct": -0.8933037000232051,
+      "status": "stable"
+    },
+    {
+      "domain": "www.binance.com",
+      "todayCount": 175,
+      "todayPct": 6.865437426441742,
+      "prevCount": 175,
+      "prevPct": 6.643887623386484,
+      "delta": 0,
+      "deltaPct": 0.2215498030552583,
+      "status": "stable"
+    },
+    {
+      "domain": "www.uefa.com",
+      "todayCount": 92,
+      "todayPct": 3.6092585327579445,
+      "prevCount": 63,
+      "prevPct": 2.3917995444191344,
+      "delta": 29,
+      "deltaPct": 1.21745898833881,
+      "status": "shifted"
+    },
+    {
+      "domain": "www.dotabuff.com",
+      "todayCount": 68,
+      "todayPct": 2.6677128285602194,
+      "prevCount": 123,
+      "prevPct": 4.669703872437358,
+      "delta": -55,
+      "deltaPct": -2.0019910438771387,
+      "status": "shifted"
+    },
+    {
+      "domain": "conmebollibertadores.com",
+      "todayCount": 60,
+      "todayPct": 2.3538642604943116,
+      "prevCount": 72,
+      "prevPct": 2.733485193621868,
+      "delta": -12,
+      "deltaPct": -0.3796209331275562,
+      "status": "stable"
+    },
+    {
+      "domain": "www.conmebol.com",
+      "todayCount": 48,
+      "todayPct": 1.8830914083954493,
+      "prevCount": 72,
+      "prevPct": 2.733485193621868,
+      "delta": -24,
+      "deltaPct": -0.8503937852264185,
+      "status": "stable"
+    },
+    {
+      "domain": "pythdata.app",
+      "todayCount": 42,
+      "todayPct": 1.647704982346018,
+      "prevCount": 42,
+      "prevPct": 1.5945330296127564,
+      "delta": 0,
+      "deltaPct": 0.053171952733261474,
+      "status": "stable"
+    }
+  ],
+  "newDomains": [
+    {
+      "domain": "www.efa.com.eg",
+      "todayCount": 36,
+      "todayPct": 1.4123185562965868,
+      "prevCount": null,
+      "prevPct": null,
+      "delta": null,
+      "deltaPct": null,
+      "status": "new"
+    }
+  ],
+  "droppedDomains": [
+    {
+      "domain": "www.csl-china.com",
+      "todayCount": null,
+      "todayPct": null,
+      "prevCount": 48,
+      "prevPct": 1.8223234624145785,
+      "delta": null,
+      "deltaPct": null,
+      "status": "dropped"
+    },
+    {
+      "domain": "gol.gg",
+      "todayCount": null,
+      "todayPct": null,
+      "prevCount": 46,
+      "prevPct": 1.7463933181473046,
+      "delta": null,
+      "deltaPct": null,
+      "status": "dropped"
+    },
+    {
+      "domain": "www.kick.com",
+      "todayCount": null,
+      "todayPct": null,
+      "prevCount": 33,
+      "prevPct": 1.2528473804100226,
+      "delta": null,
+      "deltaPct": null,
+      "status": "dropped"
+    }
+  ],
+  "topFamilies": [
+    {
+      "template": "LoL: Dplus KIA vs KT Rolster (BO#)",
+      "kindLabel": "Esports match",
+      "domain": "www.twitch.tv",
+      "markets": 49,
+      "recurring": false
+    },
+    {
+      "template": "## Free App in the US Apple App Store on May #?",
+      "kindLabel": "News / other",
+      "domain": "(empty)",
+      "markets": 42,
+      "recurring": false
+    },
+    {
+      "template": "LoL: HMBLE vs Colossal Gaming (BO#)",
+      "kindLabel": "Esports match",
+      "domain": "www.twitch.tv",
+      "markets": 39,
+      "recurring": false
+    },
+    {
+      "template": "LoL: Weibo Gaming vs Team WE (BO#)",
+      "kindLabel": "Esports match",
+      "domain": "www.twitch.tv",
+      "markets": 37,
+      "recurring": false
+    },
+    {
+      "template": "LoL: HANJIN BRION vs BNK FEARX (BO#)",
+      "kindLabel": "Esports match",
+      "domain": "www.twitch.tv",
+      "markets": 37,
+      "recurring": false
+    },
+    {
+      "template": "Cavaliers vs. Pistons",
+      "kindLabel": "Sports match",
+      "domain": "www.nba.com",
+      "markets": 37,
+      "recurring": false
+    },
+    {
+      "template": "Dota #: #win vs Team Nemesis (BO#)",
+      "kindLabel": "Esports match",
+      "domain": "www.dotabuff.com",
+      "markets": 36,
+      "recurring": false
+    },
+    {
+      "template": "LoL: Ninjas in Pyjamas vs Anyone's Legend (BO#)",
+      "kindLabel": "Esports match",
+      "domain": "www.twitch.tv",
+      "markets": 35,
+      "recurring": false
+    },
+    {
+      "template": "Aston Villa FC vs. Nottingham Forest FC",
+      "kindLabel": "Sports match",
+      "domain": "www.uefa.com",
+      "markets": 34,
+      "recurring": false
+    },
+    {
+      "template": "SC Freiburg vs. SC Braga",
+      "kindLabel": "Sports match",
+      "domain": "www.uefa.com",
+      "markets": 34,
+      "recurring": false
+    },
+    {
+      "template": "Dota #: L#ga Team vs MOUZ (BO#)",
+      "kindLabel": "Esports match",
+      "domain": "www.dotabuff.com",
+      "markets": 32,
+      "recurring": false
+    },
+    {
+      "template": "LoL: Vitality.Bee vs Galions (BO#)",
+      "kindLabel": "Esports match",
+      "domain": "www.twitch.tv",
+      "markets": 25,
+      "recurring": false
+    }
+  ]
+}
