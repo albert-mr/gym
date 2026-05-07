@@ -19,14 +19,17 @@ Concrete, point-based plan for the Polymarket benchmark. Read top to bottom. Eve
 
 ## 3. v1.0 — what gets shipped first (the funnel)
 
-3.1. **Polling.** Daily job that pulls every active Polymarket market through the Gamma API and writes a per-day snapshot. Idempotent. Resilient to rate limits. Schema-validated at the boundary.
-3.2. **Gate 1 (GenLayer fit).** For each polled market, decide whether a deterministic oracle (Chainlink, on-chain settlement) already serves it. If yes, drop it. Cheap heuristics first, LLM rubric only for the residual.
-3.3. **Gate 2 (has source).** For each Gate-1 PASS, decide whether PM specifies a primary source we can resolve against, or whether agentic search can find one. If neither, drop it.
-3.4. **Reasoned labels.** Every gate decision carries a one-line reason. Not "not-fit" but "not-fit: BTC/USD is in Chainlink feed list."
+3.1. **Polling.** Daily job that pulls every active Polymarket market through the Gamma API and appends to `data/markets/{YYYY-MM-DD}/all.jsonl`. Idempotent. Resilient to rate limits. Schema-validated at the boundary.
+3.2. **Gate 1 (deterministic exclusion).** Two cheap rules, both deterministic, both run from the snapshot with no LLM:
+  - **Gate 1a — Chainlink-fed.** `eventResolutionSource` startsWith `https://data.chain.link/` or `https://reference.chainlink.com/`. Already served by an on-chain feed; IO not needed.
+  - **Gate 1b — no URL anywhere.** Neither `eventResolutionSource` nor `description` contains any `http(s)://` URL. With zero URLs in the entire payload, no agentic source-recovery has anything to work with.
+  Each rule is a separate, named line in the funnel. Anything that survives both rules flows to Gate 2.
+3.3. **Gate 2 (LLM/skill rubric on the residual).** Deferred — reserved for a future pass. Will reason over the residual to (a) decide whether the listed source is actually adequate, and (b) where the source is missing or weak, attempt agentic recovery from URLs found in the description. Out of scope for v1.0; the slot is reserved so the funnel can grow into it.
+3.4. **Reasoned labels.** Every gate decision carries a one-line reason. Not "not-fit" but "not-fit: Chainlink prefix matched on `eventResolutionSource`" or "not-fit: no URL in `eventResolutionSource` or `description`."
 3.5. **Per-market run record.** Append-only log per market, in `data/runs/{market_id}.jsonl`. Every classification, every later event, lands as a new line.
-3.6. **Funnel rollup.** Daily process that turns the day's classified records into one structured row in `results/funnel-daily.jsonl` and one human-readable Markdown rollup in `reports/{YYYY-MM-DD}-funnel.md`. Counts must reconcile; rollup fails loudly if they don't.
+3.6. **Funnel rollup.** Daily process that derives, from `data/markets/{date}/all.jsonl`, the filtered subsets `gate1-pass.jsonl`, `gate1-drop-chainlink.jsonl`, `gate1-drop-no-url.jsonl`, the showcase `header.jsonl` / `header.md`, and the human-readable `snapshot.md` — all co-located under `data/markets/{date}/`. Counts must reconcile (drops + pass = total); rollup fails loudly if they don't. The rolling cross-day funnel still lands in `results/funnel-daily.jsonl`.
 3.7. **CI cron.** Daily GitHub Actions workflow that runs the full v1.0 pipeline and commits the day's outputs.
-3.8. **README.** Top of `benchmarks/pm-bench/README.md` links to the latest funnel rollup and shows the current addressability number.
+3.8. **README.** Top of `benchmarks/pm-bench/README.md` links to the latest `data/markets/{date}/snapshot.md` and shows the current addressability number.
 
 ## 4. v1.1 — what gets added after v1.0 ships
 
@@ -89,11 +92,12 @@ Concrete, point-based plan for the Polymarket benchmark. Read top to bottom. Eve
 ## 9. Decisions to revisit after the first cohort
 
 9.1. Sample size and stratification, calibrated to the v1.0 funnel shape.
-9.2. Retention policy for `data/markets/*.jsonl`, depending on row counts.
-9.3. Gate 1 LLM rubric — the first version will be wrong at the edges.
-9.4. Polling cadence (daily vs more frequent for late-resolution sports markets).
-9.5. Per-market vs per-cohort contract deploys, after first cost data.
-9.6. Default network for v1.1 (Asimov recommended; confirm with IO team).
+9.2. Retention policy for `data/markets/{date}/all.jsonl`, depending on row counts.
+9.3. More deterministic Gate 1 rules. Candidates: non-Chainlink price-feed domains (binance.com, pyth.network, coingecko.com, kraken.com — already half-implemented in `src/analyze/categorize.ts:36-47`), stock/finance domains (yahoo, bloomberg, marketwatch, seeking), and recurring-template patterns ("Up or Down"). Each rule needs its own evidence and its own line in the funnel before it ships.
+9.4. Gate 2 design — the LLM/skill rubric on the residual. Shape, prompt, cost guardrails, evidence collection, error modes.
+9.5. Polling cadence (daily vs more frequent for late-resolution sports markets).
+9.6. Per-market vs per-cohort contract deploys, after first cost data.
+9.7. Default network for v1.1 (Asimov recommended; confirm with IO team).
 
 ## 10. Reference (read, don't import)
 

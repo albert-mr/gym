@@ -1,0 +1,23 @@
+{
+  "name": "@gym/pm-bench",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "poll": "tsx src/cli/poll.ts",
+    "analyze": "tsx src/cli/analyze.ts",
+    "sample": "tsx src/cli/sample.ts",
+    "daily-report": "tsx src/cli/daily-report.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
