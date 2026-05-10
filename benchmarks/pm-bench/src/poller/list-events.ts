@@ -3,7 +3,10 @@ import { gammaEventsListSchema, type GammaRawEvent } from "../schemas/gamma-raw.
 import { sleep } from "../lib/sleep.js";
 
 const PAGE_SIZE = 100;
-const MAX_OFFSET = 5000;
+// Raised from 5000 -> 20000 on 2026-05-10 after audit found ~35% of 30-day events
+// were being truncated. Polymarket's actual 30-day universe is ~7,800 events;
+// the prior 5000 cap returned only 5,100. New cap covers comfortable headroom.
+const MAX_OFFSET = 20000;
 const POLITENESS_MS = 50;
 
 export interface ListEventsOptions {

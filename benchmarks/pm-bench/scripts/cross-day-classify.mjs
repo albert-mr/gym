@@ -58,6 +58,9 @@ const ALT = new Set([
   'www.pglesports.com',            // PGL esports → Liquipedia
   'pro.eslgaming.com',             // ESL → Liquipedia
   'esportsworldcup.com',           // EWC → Liquipedia
+  // 2026-05-10 uncapped audit (top 10 misc additions):
+  'www.atptour.com',               // ATP tennis (703) → ESPN tennis ALT (CF-walled binding)
+  'www.crunchyroll.com',           // anime awards (576) → Wikipedia reroute (CF-walled binding)
 ]);
 
 // Studio-blocked domains: confirmed via Studio test that web.render gets blocked here
@@ -114,6 +117,11 @@ const NEW_RENDER = new Set([
   'fred.stlouisfed.org',         // FRED economic data
   'www.wtatennis.com',           // tennis live scores
   'lmarena.ai',                  // AI model leaderboard
+  // 2026-05-10 uncapped audit (top 10 misc, 4 RENDER):
+  'www.rolandgarros.com',        // French Open tennis (354)
+  'www.formula1.com',            // F1 racing (242)
+  'www.mlb.com',                 // MLB baseball (226)
+  'www.nec.go.kr',               // Korean elections (199)
 ]);
 
 function clean(h){return (h||'').replace(/[.,;:)\]]+$/g,'');}
@@ -202,7 +210,10 @@ function tally(date){
     try{
       const m = JSON.parse(line);
       const desc = m.description||'';
-      const sUrl = m.eventResolutionSource||'';
+      let sUrl = m.eventResolutionSource||'';
+      // 2026-05-10: treat asset-URL eRS (S3, polymarket-upload, image extensions) as
+      // "no eRS" for subjective detection — these are illustrative images, not data sources
+      if(sUrl && ASSET_URL_RE.test(sUrl)) sUrl = '';
       if(!sUrl && isSubjective(desc)){b.subjective++; continue;}
       const host = realBinding(m);
       if(!host){b.no_source++; continue;}
