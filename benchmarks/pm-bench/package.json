@@ -7,6 +7,7 @@
     "poll": "tsx src/cli/poll.ts",
     "analyze": "tsx src/cli/analyze.ts",
     "sample": "tsx src/cli/sample.ts",
+    "fetch-probe": "tsx src/cli/fetch-probe.ts",
     "daily-report": "tsx src/cli/daily-report.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"

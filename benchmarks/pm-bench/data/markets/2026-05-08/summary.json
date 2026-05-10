@@ -1,0 +1,422 @@
+{
+  "date": "2026-05-08",
+  "raw_rows": 6080,
+  "after_dedup": 6080,
+  "total_rows": 6080,
+  "unique_markets": 6080,
+  "unique_events": 3272,
+  "unique_templates": 324,
+  "unique_domains": 45,
+  "polled_at_min": "2026-05-08T09:16:54.132Z",
+  "polled_at_max": "2026-05-08T09:16:54.132Z",
+  "end_date_min": "2026-05-08T09:20:00Z",
+  "end_date_max": "2026-05-09T09:15:00Z",
+  "gate1_chainlink": {
+    "matched": 2723,
+    "pct": 44.786184210526315
+  },
+  "gate1_no_url": {
+    "matched": 0,
+    "pct": 0
+  },
+  "gate1_dropped": 2723,
+  "io_addressable_markets": 3357,
+  "io_addressable_templates": 323,
+  "io_addressable_events": 549,
+  "io_addressable_recurring": 768,
+  "io_addressable_non_recurring": 2589,
+  "io_unique_domains": 44,
+  "truly_io_shaped_markets": 2724,
+  "truly_io_shaped_templates": 234,
+  "kinds": [
+    {
+      "kind": "esports_match",
+      "label": "Esports match",
+      "markets": 1067,
+      "unique_templates": 76,
+      "unique_events": 76,
+      "recurring": 0,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "sports_match",
+      "label": "Sports match",
+      "markets": 881,
+      "unique_templates": 66,
+      "unique_events": 131,
+      "recurring": 0,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "crypto_price_feed",
+      "label": "Crypto price feed",
+      "markets": 466,
+      "unique_templates": 70,
+      "unique_events": 231,
+      "recurring": 219,
+      "deterministic_feed": true
+    },
+    {
+      "kind": "weather_forecast",
+      "label": "Weather forecast",
+      "markets": 440,
+      "unique_templates": 58,
+      "unique_events": 58,
+      "recurring": 433,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "news_or_other",
+      "label": "News / other",
+      "markets": 306,
+      "unique_templates": 33,
+      "unique_events": 33,
+      "recurring": 116,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "stock_or_finance",
+      "label": "Stock close threshold",
+      "markets": 167,
+      "unique_templates": 19,
+      "unique_events": 19,
+      "recurring": 0,
+      "deterministic_feed": true
+    },
+    {
+      "kind": "election_political",
+      "label": "Election / political",
+      "markets": 30,
+      "unique_templates": 1,
+      "unique_events": 1,
+      "recurring": 0,
+      "deterministic_feed": false
+    }
+  ],
+  "resolution_source_buckets": [
+    {
+      "domain": "data.chain.link",
+      "count": 2723,
+      "pct": 44.786184210526315
+    },
+    {
+      "domain": "www.twitch.tv",
+      "count": 509,
+      "pct": 8.37171052631579
+    },
+    {
+      "domain": "www.wunderground.com",
+      "count": 400,
+      "pct": 6.578947368421052
+    },
+    {
+      "domain": "kick.com",
+      "count": 374,
+      "pct": 6.151315789473684
+    },
+    {
+      "domain": "(empty)",
+      "count": 356,
+      "pct": 5.855263157894737
+    },
+    {
+      "domain": "pythdata.app",
+      "count": 237,
+      "pct": 3.898026315789474
+    },
+    {
+      "domain": "www.binance.com",
+      "count": 175,
+      "pct": 2.8782894736842106
+    },
+    {
+      "domain": "finance.yahoo.com",
+      "count": 165,
+      "pct": 2.7138157894736845
+    },
+    {
+      "domain": "www.dotabuff.com",
+      "count": 131,
+      "pct": 2.1546052631578947
+    },
+    {
+      "domain": "www.legaserieb.it",
+      "count": 120,
+      "pct": 1.9736842105263157
+    },
+    {
+      "domain": "www.bundesliga.com",
+      "count": 90,
+      "pct": 1.4802631578947367
+    },
+    {
+      "domain": "www.jleague.jp",
+      "count": 84,
+      "pct": 1.381578947368421
+    },
+    {
+      "domain": "x.com",
+      "count": 65,
+      "pct": 1.069078947368421
+    },
+    {
+      "domain": "www.ligue1.com",
+      "count": 61,
+      "pct": 1.0032894736842106
+    },
+    {
+      "domain": "www.youtube.com",
+      "count": 57,
+      "pct": 0.9375
+    },
+    {
+      "domain": "www.laliga.com",
+      "count": 53,
+      "pct": 0.8717105263157894
+    },
+    {
+      "domain": "www.efa.com.eg",
+      "count": 48,
+      "pct": 0.7894736842105263
+    },
+    {
+      "domain": "www.legaseriea.it",
+      "count": 48,
+      "pct": 0.7894736842105263
+    },
+    {
+      "domain": "www.nba.com",
+      "count": 40,
+      "pct": 0.6578947368421052
+    },
+    {
+      "domain": "upl.ua",
+      "count": 36,
+      "pct": 0.5921052631578948
+    }
+  ],
+  "io_resolution_source_buckets": [
+    {
+      "domain": "www.twitch.tv",
+      "count": 509,
+      "pct": 15.162347333929102
+    },
+    {
+      "domain": "www.wunderground.com",
+      "count": 400,
+      "pct": 11.915400655347035
+    },
+    {
+      "domain": "kick.com",
+      "count": 374,
+      "pct": 11.140899612749479
+    },
+    {
+      "domain": "(empty)",
+      "count": 356,
+      "pct": 10.604706583258862
+    },
+    {
+      "domain": "pythdata.app",
+      "count": 237,
+      "pct": 7.059874888293119
+    },
+    {
+      "domain": "www.binance.com",
+      "count": 175,
+      "pct": 5.212987786714328
+    },
+    {
+      "domain": "finance.yahoo.com",
+      "count": 165,
+      "pct": 4.915102770330653
+    },
+    {
+      "domain": "www.dotabuff.com",
+      "count": 131,
+      "pct": 3.9022937146261545
+    },
+    {
+      "domain": "www.legaserieb.it",
+      "count": 120,
+      "pct": 3.5746201966041107
+    },
+    {
+      "domain": "www.bundesliga.com",
+      "count": 90,
+      "pct": 2.680965147453083
+    },
+    {
+      "domain": "www.jleague.jp",
+      "count": 84,
+      "pct": 2.5022341376228776
+    },
+    {
+      "domain": "x.com",
+      "count": 65,
+      "pct": 1.9362526064938934
+    },
+    {
+      "domain": "www.ligue1.com",
+      "count": 61,
+      "pct": 1.817098599940423
+    },
+    {
+      "domain": "www.youtube.com",
+      "count": 57,
+      "pct": 1.6979445933869526
+    },
+    {
+      "domain": "www.laliga.com",
+      "count": 53,
+      "pct": 1.5787905868334822
+    },
+    {
+      "domain": "www.efa.com.eg",
+      "count": 48,
+      "pct": 1.4298480786416443
+    },
+    {
+      "domain": "www.legaseriea.it",
+      "count": 48,
+      "pct": 1.4298480786416443
+    },
+    {
+      "domain": "www.nba.com",
+      "count": 40,
+      "pct": 1.1915400655347037
+    },
+    {
+      "domain": "upl.ua",
+      "count": 36,
+      "pct": 1.0723860589812333
+    },
+    {
+      "domain": "www.kleague.com",
+      "count": 36,
+      "pct": 1.0723860589812333
+    }
+  ],
+  "top_families": [
+    {
+      "template": "BV Borussia # Dortmund vs. Eintracht Frankfurt",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 66,
+      "recurring": false,
+      "domain": "www.bundesliga.com"
+    },
+    {
+      "template": "Racing Club de Lens vs. FC Nantes",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 61,
+      "recurring": false,
+      "domain": "www.ligue1.com"
+    },
+    {
+      "template": "LoL: T# vs DN SOOPers (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 57,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "Torino FC vs. US Sassuolo Calcio",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 48,
+      "recurring": false,
+      "domain": "www.legaseriea.it"
+    },
+    {
+      "template": "Dota #: Nigma Galaxy vs PlayTime (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 45,
+      "recurring": false,
+      "domain": "www.dotabuff.com"
+    },
+    {
+      "template": "Dota #: Tundra Esports vs #win (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 44,
+      "recurring": false,
+      "domain": "www.dotabuff.com"
+    },
+    {
+      "template": "Dota #: Yellow Submarine vs REKONIX (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 43,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "Dota #: PARIVISION vs L#ga Team (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 42,
+      "recurring": false,
+      "domain": "www.dotabuff.com"
+    },
+    {
+      "template": "Levante UD vs. CA Osasuna",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 41,
+      "recurring": false,
+      "domain": "www.laliga.com"
+    },
+    {
+      "template": "Knicks vs. #ers",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 40,
+      "recurring": false,
+      "domain": "www.nba.com"
+    },
+    {
+      "template": "LoL: Ultra Prime vs LNG Esports (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 39,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "LoL: GMBLERS ESPORTS vs Zena Esports (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 39,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "LoL: Kiwoom DRX vs Gen.G (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 37,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "LoL: Karmine Corp vs G# Esports (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 37,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "LoL: JD Gaming vs Bilibili Gaming (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 35,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    }
+  ]
+}

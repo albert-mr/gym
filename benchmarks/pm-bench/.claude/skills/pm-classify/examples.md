@@ -24,6 +24,9 @@ A market on whether an Ethereum address receives X tokens between block A and bl
 ### Sports market with domain only (no exact URL)
 "Will the Warriors win the 2025-26 NBA Championship, as reported by nba.com." No URL given, but the domain is named. Expected: `genlayer-fit = pass`, `has-source = pass`, source captured as `nba.com`. The domain mention counts — finding the exact URL inside is a separate future step.
 
+### Structured field and description name different sources
+An esports market where the description names a stats database as the binding source ("official information from https://gol.gg/esports/home") while the polled `eventResolutionSource` field points at a live-stream URL on a different domain (`https://www.twitch.tv/LITofficial`). The two sources differ in kind: the description URL is a post-match results page; the structured field is a live broadcast. Expected: `genlayer-fit = pass`, `has-source = pass`, with both sources captured joined by `"; "` per the multiple-sources rule. The non-obvious bit is that disagreement between PM's structured field and the prose-named source is not a contradiction to resolve — it's two binding signals, both kept.
+
 ---
 
 ## `no-source` cases — fits GenLayer but no usable source

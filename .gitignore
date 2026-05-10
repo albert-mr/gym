@@ -29,3 +29,16 @@ build/
 # Logs
 *.log
 logs/
+
+# pm-bench: poll output is large + reproducible; keep small artifacts only
+benchmarks/pm-bench/data/markets/*/all.jsonl
+benchmarks/pm-bench/data/markets/*/gate1-pass.jsonl
+benchmarks/pm-bench/data/markets/*/gate1-drop-chainlink.jsonl
+benchmarks/pm-bench/data/markets/*/gate1-drop-no-url.jsonl
+benchmarks/pm-bench/data/markets-30d/
+benchmarks/pm-bench/data/markets/2026-05-10-30d
+
+# pm-bench probe artifacts: HTML responses from Studio probes can contain
+# embedded API tokens (Fox Sports Nuxt SSR, etc.). Keep .txt/.jsonl only.
+benchmarks/pm-bench/data/markets/*/probe-samples/**/*.html
+benchmarks/pm-bench/data/markets/*/probe-samples/*.html
