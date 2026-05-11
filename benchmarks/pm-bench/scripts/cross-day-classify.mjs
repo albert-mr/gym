@@ -220,6 +220,36 @@ function isMapLevelKills(market){
   return /map\s+\d.*total.*kills|total.*kills.*map\s+\d/i.test(q);
 }
 
+// Single-market classifier — used by tally() below and importable by other scripts
+// (e.g. report builder). Returns { bucket, rebindHost }.
+export function classifyMarket(m){
+  const desc = m.description||'';
+  let sUrl = m.eventResolutionSource||'';
+  if(sUrl && ASSET_URL_RE.test(sUrl)) sUrl = '';
+  if(!sUrl && isSubjective(desc)) return { bucket:'subjective', rebindHost:null };
+  const host = realBinding(m);
+  if(!host) return { bucket:'no_source', rebindHost:null };
+  if(RENDER.has(host) || NEW_RENDER.has(host)) return { bucket:'render', rebindHost:host };
+  if(FRMF_REROUTED.has(host)) return { bucket:'frmf_via_flashscore', rebindHost:'www.flashscore.com' };
+  if(EUROVISION_REROUTED.has(host)) return { bucket:'eurovision_via_wiki', rebindHost:'en.wikipedia.org' };
+  if(STUDIO_BLOCKED.has(host)) return { bucket:'studio_blocked', rebindHost:host };
+  if(ALT.has(host)) return { bucket:'alt', rebindHost:host };
+  if(API.has(host)) return { bucket:'api', rebindHost:host };
+  if(HLTV.has(host)) {
+    return isMapLevelKills(m)
+      ? { bucket:'bo3_recover', rebindHost:'bo3.gg' }
+      : { bucket:'liquipedia_recover', rebindHost:'liquipedia.net' };
+  }
+  if(YAHOO.has(host)) return { bucket:'yahoo', rebindHost:host };
+  if(HARD.has(host)) return { bucket:'hard', rebindHost:host };
+  return { bucket:'misc', rebindHost:host };
+}
+
+// Buckets considered "solved" for the headline percent.
+export const SOLVED_BUCKETS = new Set([
+  'render','alt','api','liquipedia_recover','bo3_recover','frmf_via_flashscore','eurovision_via_wiki',
+]);
+
 function tally(date){
   const lines = fs.readFileSync(`data/markets/${date}/gate1-pass.jsonl`,'utf-8').trim().split('\n');
   const b = {render:0, alt:0, api:0,
@@ -230,35 +260,21 @@ function tally(date){
   for(const line of lines){
     try{
       const m = JSON.parse(line);
-      const desc = m.description||'';
-      let sUrl = m.eventResolutionSource||'';
-      // 2026-05-10: treat asset-URL eRS (S3, polymarket-upload, image extensions) as
-      // "no eRS" for subjective detection — these are illustrative images, not data sources
-      if(sUrl && ASSET_URL_RE.test(sUrl)) sUrl = '';
-      if(!sUrl && isSubjective(desc)){b.subjective++; continue;}
-      const host = realBinding(m);
-      if(!host){b.no_source++; continue;}
-      if(RENDER.has(host) || NEW_RENDER.has(host)) b.render++;
-      else if(FRMF_REROUTED.has(host)) b.frmf_via_flashscore++;
-      else if(EUROVISION_REROUTED.has(host)) b.eurovision_via_wiki++;
-      else if(STUDIO_BLOCKED.has(host)) b.studio_blocked++;
-      else if(ALT.has(host)) b.alt++;
-      else if(API.has(host)) b.api++;
-      else if(HLTV.has(host)){
-        // Per-map total kills was previously "lost" — bo3.gg recovers them
-        // (verified locally 2026-05-10; needs Studio dry-run to confirm).
-        if(isMapLevelKills(m)) b.bo3_recover++;
-        else b.liquipedia_recover++;
-      }
-      else if(YAHOO.has(host)) b.yahoo++;
-      else if(HARD.has(host)) b.hard++;
-      else b.misc++;
+      const { bucket } = classifyMarket(m);
+      b[bucket] = (b[bucket]||0) + 1;
     }catch{b.no_source++;}
   }
   return {total: lines.length, b};
 }
 
 function pct(n,d){return ((100*n)/d).toFixed(1);}
+
+// Only run CLI when invoked directly (not when imported by another script).
+import { pathToFileURL } from 'node:url';
+const isMain = import.meta.url === pathToFileURL(process.argv[1] || '').href;
+if (!isMain) {
+  // imported as a module — exports above are enough
+} else {
 
 const days = process.argv.slice(2);
 if (days.length === 0) {
@@ -304,3 +320,5 @@ if (results.length >= 2) {
   console.log(`Solved:   ${ta} -> ${tb}  (+${tb - ta})`);
   console.log(`Solve %:  ${pct(ta, a.total)}% -> ${pct(tb, b.total)}%  (${(pct(tb,b.total) - pct(ta,a.total)).toFixed(1)} pp)`);
 }
+
+} // end isMain guard
