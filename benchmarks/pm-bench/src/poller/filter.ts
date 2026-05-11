@@ -32,7 +32,7 @@ export function filterMarkets(
       continue;
     }
 
-    const endMs_ = Date.parse(m.endDate);
+    const endMs_ = m.endDate ? Date.parse(m.endDate) : NaN;
     if (Number.isNaN(endMs_)) {
       dropped.push({ market: row, reason: "endDate-unparseable" });
       continue;

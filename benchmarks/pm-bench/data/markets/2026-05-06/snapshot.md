@@ -1,4 +1,4 @@
-# pm-bench snapshot — 2026-05-06
+# pm-bench snapshot — 2026-05-11
 
 Universe: Polymarket markets resolving in the next 24h, `closed=false`.
 
@@ -21,17 +21,18 @@ Universe: Polymarket markets resolving in the next 24h, `closed=false`.
 | --- | ---: | ---: | ---: |
 | Total polled | +5,743 | 5,743 | 100.0% |
 | Drop: Chainlink-fed (Gate 1a) | -2,730 | 3,013 | 52.5% |
-| Drop: no URL anywhere (Gate 1b) | -379 | 2,634 | 45.9% |
+| Drop: Pyth Network (Gate 1c) | -42 | 2,971 | 51.7% |
+| Drop: no URL anywhere (Gate 1b) | -379 | 2,592 | 45.1% |
 
-**Post-Gate-1 (IO-addressable): 2,634 markets / 270 unique templates.**
-**Gate 1 dropped: 2,730 Chainlink-fed + 379 with no URL anywhere = 3,109 markets.**
+**Post-Gate-1 (IO-addressable): 2,592 markets / 248 unique templates.**
+**Gate 1 dropped: 2,730 Chainlink-fed + 379 with no URL anywhere = 3,151 markets.**
 
 ## Coverage scenarios
 
 | Scenario | Markets | Coverage | Description |
 | --- | ---: | ---: | --- |
-| One-off only | 1,880 | 32.7% | IO-addressable AND not tagged `recurring` (true novelty) |
-| Post-Gate-1 (deterministic exclusion) | 2,634 | 45.9% | Drop Chainlink-fed AND drop markets with no URL anywhere |
+| One-off only | 1,838 | 32.0% | IO-addressable AND not tagged `recurring` (true novelty) |
+| Post-Gate-1 (deterministic exclusion) | 2,592 | 45.1% | Drop Chainlink-fed AND drop markets with no URL anywhere |
 
 Gate 2 (the LLM/skill rubric on the residual) is reserved for a later pass — see PLAN.md §3.3.
 
@@ -39,20 +40,20 @@ Gate 2 (the LLM/skill rubric on the residual) is reserved for a later pass — s
 
 | Bucket | Markets | % of IO-addressable |
 | --- | ---: | ---: |
-| Recurring (templated, fans out daily) | 754 | 28.6% |
-| Non-recurring (true one-off) | 1,880 | 71.4% |
+| Recurring (templated, fans out daily) | 754 | 29.1% |
+| Non-recurring (true one-off) | 1,838 | 70.9% |
 
 ## Kinds of markets (within IO-addressable)
 
 | Kind | Markets | % | Templates | Events | Recurring | Note |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Esports match | 1,248 | 47.4% | 82 | 82 | 0 | IO-shaped |
-| Sports match | 439 | 16.7% | 37 | 66 | 0 | IO-shaped |
-| Weather forecast | 421 | 16.0% | 58 | 58 | 421 | IO-shaped |
-| Crypto price feed | 270 | 10.3% | 49 | 210 | 219 | deterministic feed (IO not useful) |
-| News / other | 130 | 4.9% | 13 | 13 | 114 | IO-shaped |
+| Esports match | 1,248 | 48.1% | 82 | 82 | 0 | IO-shaped |
+| Sports match | 439 | 16.9% | 37 | 66 | 0 | IO-shaped |
+| Weather forecast | 421 | 16.2% | 58 | 58 | 421 | IO-shaped |
+| Crypto price feed | 228 | 8.8% | 27 | 188 | 219 | deterministic feed (IO not useful) |
+| News / other | 130 | 5.0% | 13 | 13 | 114 | IO-shaped |
 | Election / political | 70 | 2.7% | 3 | 3 | 0 | IO-shaped |
-| Stock close threshold | 56 | 2.1% | 28 | 28 | 0 | deterministic feed (IO not useful) |
+| Stock close threshold | 56 | 2.2% | 28 | 28 | 0 | deterministic feed (IO not useful) |
 
 **Truly IO-shaped (drop deterministic feeds): 2,308 markets / 193 unique templates.**
 

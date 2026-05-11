@@ -1,4 +1,4 @@
-# pm-bench snapshot — 2026-05-08
+# pm-bench snapshot — 2026-05-11
 
 Universe: Polymarket markets resolving in the next 24h, `closed=false`.
 
@@ -21,17 +21,18 @@ Universe: Polymarket markets resolving in the next 24h, `closed=false`.
 | --- | ---: | ---: | ---: |
 | Total polled | +6,080 | 6,080 | 100.0% |
 | Drop: Chainlink-fed (Gate 1a) | -2,723 | 3,357 | 55.2% |
-| Drop: no URL anywhere (Gate 1b) | -0 | 3,357 | 55.2% |
+| Drop: Pyth Network (Gate 1c) | -237 | 3,120 | 51.3% |
+| Drop: no URL anywhere (Gate 1b) | -0 | 3,120 | 51.3% |
 
-**Post-Gate-1 (IO-addressable): 3,357 markets / 323 unique templates.**
-**Gate 1 dropped: 2,723 Chainlink-fed + 0 with no URL anywhere = 2,723 markets.**
+**Post-Gate-1 (IO-addressable): 3,120 markets / 281 unique templates.**
+**Gate 1 dropped: 2,723 Chainlink-fed + 0 with no URL anywhere = 2,960 markets.**
 
 ## Coverage scenarios
 
 | Scenario | Markets | Coverage | Description |
 | --- | ---: | ---: | --- |
-| One-off only | 2,589 | 42.6% | IO-addressable AND not tagged `recurring` (true novelty) |
-| Post-Gate-1 (deterministic exclusion) | 3,357 | 55.2% | Drop Chainlink-fed AND drop markets with no URL anywhere |
+| One-off only | 2,352 | 38.7% | IO-addressable AND not tagged `recurring` (true novelty) |
+| Post-Gate-1 (deterministic exclusion) | 3,120 | 51.3% | Drop Chainlink-fed AND drop markets with no URL anywhere |
 
 Gate 2 (the LLM/skill rubric on the residual) is reserved for a later pass — see PLAN.md §3.3.
 
@@ -39,20 +40,20 @@ Gate 2 (the LLM/skill rubric on the residual) is reserved for a later pass — s
 
 | Bucket | Markets | % of IO-addressable |
 | --- | ---: | ---: |
-| Recurring (templated, fans out daily) | 768 | 22.9% |
-| Non-recurring (true one-off) | 2,589 | 77.1% |
+| Recurring (templated, fans out daily) | 768 | 24.6% |
+| Non-recurring (true one-off) | 2,352 | 75.4% |
 
 ## Kinds of markets (within IO-addressable)
 
 | Kind | Markets | % | Templates | Events | Recurring | Note |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Esports match | 1,067 | 31.8% | 76 | 76 | 0 | IO-shaped |
-| Sports match | 881 | 26.2% | 66 | 131 | 0 | IO-shaped |
-| Crypto price feed | 466 | 13.9% | 70 | 231 | 219 | deterministic feed (IO not useful) |
-| Weather forecast | 440 | 13.1% | 58 | 58 | 433 | IO-shaped |
-| News / other | 306 | 9.1% | 33 | 33 | 116 | IO-shaped |
-| Stock close threshold | 167 | 5.0% | 19 | 19 | 0 | deterministic feed (IO not useful) |
-| Election / political | 30 | 0.9% | 1 | 1 | 0 | IO-shaped |
+| Esports match | 1,067 | 34.2% | 76 | 76 | 0 | IO-shaped |
+| Sports match | 881 | 28.2% | 66 | 131 | 0 | IO-shaped |
+| Weather forecast | 440 | 14.1% | 58 | 58 | 433 | IO-shaped |
+| News / other | 306 | 9.8% | 33 | 33 | 116 | IO-shaped |
+| Crypto price feed | 229 | 7.3% | 28 | 189 | 219 | deterministic feed (IO not useful) |
+| Stock close threshold | 167 | 5.4% | 19 | 19 | 0 | deterministic feed (IO not useful) |
+| Election / political | 30 | 1.0% | 1 | 1 | 0 | IO-shaped |
 
 **Truly IO-shaped (drop deterministic feeds): 2,724 markets / 234 unique templates.**
 
@@ -60,9 +61,9 @@ Gate 2 (the LLM/skill rubric on the residual) is reserved for a later pass — s
 
 - **Esports match** — `LoL: T# vs DN SOOPers (BO#)` (57), `Dota #: Nigma Galaxy vs PlayTime (BO#)` (45), `Dota #: Tundra Esports vs #win (BO#)` (44)
 - **Sports match** — `BV Borussia # Dortmund vs. Eintracht Frankfurt` (66), `Racing Club de Lens vs. FC Nantes` (61), `Torino FC vs. US Sassuolo Calcio` (48)
-- **Crypto price feed** — `Bitcoin Up or Down` (24), `Ethereum Up or Down` (24), `Solana Up or Down` (24)
 - **Weather forecast** — `Lowest temperature in Hong Kong on May #?` (11), `Highest temperature in London on May #?` (11), `Highest temperature in Paris on May #?` (11)
 - **News / other** — `Elon Musk # tweets May #` (18), `What price will Bitcoin hit on May #?` (16), `What price will Ethereum hit on May #?` (14)
+- **Crypto price feed** — `Bitcoin Up or Down` (24), `Ethereum Up or Down` (24), `Solana Up or Down` (24)
 - **Stock close threshold** — `Will Apple (AAPL) finish week of May # above___?` (13), `Will Microsoft (MSFT) finish week of May # above___?` (13), `Will Amazon (AMZN) finish week of May # above___?` (13)
 - **Election / political** — `Farrer By-Election Winner` (30)
 

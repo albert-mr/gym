@@ -1,5 +1,5 @@
 {
-  "date": "2026-05-06",
+  "date": "2026-05-11",
   "raw_rows": 11486,
   "after_dedup": 5743,
   "total_rows": 5743,
@@ -15,17 +15,21 @@
     "matched": 2730,
     "pct": 47.53613094201637
   },
+  "gate1_pyth": {
+    "matched": 42,
+    "pct": 0.7313250914156365
+  },
   "gate1_no_url": {
     "matched": 379,
     "pct": 6.599338324917291
   },
-  "gate1_dropped": 3109,
-  "io_addressable_markets": 2634,
-  "io_addressable_templates": 270,
-  "io_addressable_events": 460,
+  "gate1_dropped": 3151,
+  "io_addressable_markets": 2592,
+  "io_addressable_templates": 248,
+  "io_addressable_events": 438,
   "io_addressable_recurring": 754,
-  "io_addressable_non_recurring": 1880,
-  "io_unique_domains": 32,
+  "io_addressable_non_recurring": 1838,
+  "io_unique_domains": 31,
   "truly_io_shaped_markets": 2308,
   "truly_io_shaped_templates": 193,
   "kinds": [
@@ -59,9 +63,9 @@
     {
       "kind": "crypto_price_feed",
       "label": "Crypto price feed",
-      "markets": 270,
-      "unique_templates": 49,
-      "unique_events": 210,
+      "markets": 228,
+      "unique_templates": 27,
+      "unique_events": 188,
       "recurring": 219,
       "deterministic_feed": true
     },
@@ -199,102 +203,102 @@
     {
       "domain": "www.twitch.tv",
       "count": 651,
-      "pct": 24.715261958997722
+      "pct": 25.115740740740737
     },
     {
       "domain": "www.wunderground.com",
       "count": 382,
-      "pct": 14.502657555049355
+      "pct": 14.737654320987653
     },
     {
       "domain": "kick.com",
       "count": 317,
-      "pct": 12.034927866362946
+      "pct": 12.229938271604938
     },
     {
       "domain": "(empty)",
       "count": 273,
-      "pct": 10.364464692482915
+      "pct": 10.532407407407407
     },
     {
       "domain": "www.binance.com",
       "count": 175,
-      "pct": 6.643887623386484
+      "pct": 6.751543209876543
     },
     {
       "domain": "www.dotabuff.com",
       "count": 123,
-      "pct": 4.669703872437358
+      "pct": 4.74537037037037
     },
     {
       "domain": "conmebollibertadores.com",
       "count": 72,
-      "pct": 2.733485193621868
+      "pct": 2.7777777777777777
     },
     {
       "domain": "www.conmebol.com",
       "count": 72,
-      "pct": 2.733485193621868
+      "pct": 2.7777777777777777
     },
     {
       "domain": "www.uefa.com",
       "count": 63,
-      "pct": 2.3917995444191344
+      "pct": 2.430555555555556
     },
     {
       "domain": "www.csl-china.com",
       "count": 48,
-      "pct": 1.8223234624145785
+      "pct": 1.8518518518518516
     },
     {
       "domain": "hltv.org",
       "count": 48,
-      "pct": 1.8223234624145785
+      "pct": 1.8518518518518516
     },
     {
       "domain": "gol.gg",
       "count": 46,
-      "pct": 1.7463933181473046
-    },
-    {
-      "domain": "pythdata.app",
-      "count": 42,
-      "pct": 1.5945330296127564
+      "pct": 1.7746913580246912
     },
     {
       "domain": "www.nba.com",
       "count": 40,
-      "pct": 1.518602885345482
+      "pct": 1.5432098765432098
     },
     {
       "domain": "www.frmf.ma",
       "count": 36,
-      "pct": 1.366742596810934
+      "pct": 1.3888888888888888
     },
     {
       "domain": "finance.yahoo.com",
       "count": 35,
-      "pct": 1.3287775246772968
+      "pct": 1.3503086419753085
     },
     {
       "domain": "www.kick.com",
       "count": 33,
-      "pct": 1.2528473804100226
+      "pct": 1.2731481481481481
     },
     {
       "domain": "www.youtube.com",
       "count": 29,
-      "pct": 1.1009870918754745
+      "pct": 1.1188271604938271
     },
     {
       "domain": "seekingalpha.com",
       "count": 21,
-      "pct": 0.7972665148063782
+      "pct": 0.8101851851851851
     },
     {
       "domain": "liquipedia.net",
       "count": 20,
-      "pct": 0.759301442672741
+      "pct": 0.7716049382716049
+    },
+    {
+      "domain": "www.ligagt.org",
+      "count": 14,
+      "pct": 0.5401234567901234
     }
   ],
   "top_families": [

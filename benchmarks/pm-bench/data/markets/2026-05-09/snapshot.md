@@ -1,4 +1,4 @@
-# pm-bench snapshot — 2026-05-09
+# pm-bench snapshot — 2026-05-11
 
 Universe: Polymarket markets resolving in the next 24h, `closed=false`.
 
@@ -21,6 +21,7 @@ Universe: Polymarket markets resolving in the next 24h, `closed=false`.
 | --- | ---: | ---: | ---: |
 | Total polled | +9,446 | 9,446 | 100.0% |
 | Drop: Chainlink-fed (Gate 1a) | -2,723 | 6,723 | 71.2% |
+| Drop: Pyth Network (Gate 1c) | -0 | 6,723 | 71.2% |
 | Drop: no URL anywhere (Gate 1b) | -25 | 6,698 | 70.9% |
 
 **Post-Gate-1 (IO-addressable): 6,698 markets / 337 unique templates.**

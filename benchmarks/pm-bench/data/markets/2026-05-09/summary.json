@@ -1,5 +1,5 @@
 {
-  "date": "2026-05-09",
+  "date": "2026-05-11",
   "raw_rows": 9446,
   "after_dedup": 9446,
   "total_rows": 9446,
@@ -14,6 +14,10 @@
   "gate1_chainlink": {
     "matched": 2723,
     "pct": 28.827016726656783
+  },
+  "gate1_pyth": {
+    "matched": 0,
+    "pct": 0
   },
   "gate1_no_url": {
     "matched": 25,

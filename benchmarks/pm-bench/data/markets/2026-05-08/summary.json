@@ -1,5 +1,5 @@
 {
-  "date": "2026-05-08",
+  "date": "2026-05-11",
   "raw_rows": 6080,
   "after_dedup": 6080,
   "total_rows": 6080,
@@ -15,17 +15,21 @@
     "matched": 2723,
     "pct": 44.786184210526315
   },
+  "gate1_pyth": {
+    "matched": 237,
+    "pct": 3.898026315789474
+  },
   "gate1_no_url": {
     "matched": 0,
     "pct": 0
   },
-  "gate1_dropped": 2723,
-  "io_addressable_markets": 3357,
-  "io_addressable_templates": 323,
-  "io_addressable_events": 549,
+  "gate1_dropped": 2960,
+  "io_addressable_markets": 3120,
+  "io_addressable_templates": 281,
+  "io_addressable_events": 507,
   "io_addressable_recurring": 768,
-  "io_addressable_non_recurring": 2589,
-  "io_unique_domains": 44,
+  "io_addressable_non_recurring": 2352,
+  "io_unique_domains": 43,
   "truly_io_shaped_markets": 2724,
   "truly_io_shaped_templates": 234,
   "kinds": [
@@ -48,15 +52,6 @@
       "deterministic_feed": false
     },
     {
-      "kind": "crypto_price_feed",
-      "label": "Crypto price feed",
-      "markets": 466,
-      "unique_templates": 70,
-      "unique_events": 231,
-      "recurring": 219,
-      "deterministic_feed": true
-    },
-    {
       "kind": "weather_forecast",
       "label": "Weather forecast",
       "markets": 440,
@@ -73,6 +68,15 @@
       "unique_events": 33,
       "recurring": 116,
       "deterministic_feed": false
+    },
+    {
+      "kind": "crypto_price_feed",
+      "label": "Crypto price feed",
+      "markets": 229,
+      "unique_templates": 28,
+      "unique_events": 189,
+      "recurring": 219,
+      "deterministic_feed": true
     },
     {
       "kind": "stock_or_finance",
@@ -199,102 +203,102 @@
     {
       "domain": "www.twitch.tv",
       "count": 509,
-      "pct": 15.162347333929102
+      "pct": 16.314102564102566
     },
     {
       "domain": "www.wunderground.com",
       "count": 400,
-      "pct": 11.915400655347035
+      "pct": 12.82051282051282
     },
     {
       "domain": "kick.com",
       "count": 374,
-      "pct": 11.140899612749479
+      "pct": 11.987179487179487
     },
     {
       "domain": "(empty)",
       "count": 356,
-      "pct": 10.604706583258862
-    },
-    {
-      "domain": "pythdata.app",
-      "count": 237,
-      "pct": 7.059874888293119
+      "pct": 11.41025641025641
     },
     {
       "domain": "www.binance.com",
       "count": 175,
-      "pct": 5.212987786714328
+      "pct": 5.6089743589743595
     },
     {
       "domain": "finance.yahoo.com",
       "count": 165,
-      "pct": 4.915102770330653
+      "pct": 5.288461538461538
     },
     {
       "domain": "www.dotabuff.com",
       "count": 131,
-      "pct": 3.9022937146261545
+      "pct": 4.198717948717948
     },
     {
       "domain": "www.legaserieb.it",
       "count": 120,
-      "pct": 3.5746201966041107
+      "pct": 3.8461538461538463
     },
     {
       "domain": "www.bundesliga.com",
       "count": 90,
-      "pct": 2.680965147453083
+      "pct": 2.8846153846153846
     },
     {
       "domain": "www.jleague.jp",
       "count": 84,
-      "pct": 2.5022341376228776
+      "pct": 2.6923076923076925
     },
     {
       "domain": "x.com",
       "count": 65,
-      "pct": 1.9362526064938934
+      "pct": 2.083333333333333
     },
     {
       "domain": "www.ligue1.com",
       "count": 61,
-      "pct": 1.817098599940423
+      "pct": 1.955128205128205
     },
     {
       "domain": "www.youtube.com",
       "count": 57,
-      "pct": 1.6979445933869526
+      "pct": 1.826923076923077
     },
     {
       "domain": "www.laliga.com",
       "count": 53,
-      "pct": 1.5787905868334822
+      "pct": 1.6987179487179487
     },
     {
       "domain": "www.efa.com.eg",
       "count": 48,
-      "pct": 1.4298480786416443
+      "pct": 1.5384615384615385
     },
     {
       "domain": "www.legaseriea.it",
       "count": 48,
-      "pct": 1.4298480786416443
+      "pct": 1.5384615384615385
     },
     {
       "domain": "www.nba.com",
       "count": 40,
-      "pct": 1.1915400655347037
+      "pct": 1.282051282051282
     },
     {
       "domain": "upl.ua",
       "count": 36,
-      "pct": 1.0723860589812333
+      "pct": 1.153846153846154
     },
     {
       "domain": "www.kleague.com",
       "count": 36,
-      "pct": 1.0723860589812333
+      "pct": 1.153846153846154
+    },
+    {
+      "domain": "www.lpf.ro",
+      "count": 28,
+      "pct": 0.8974358974358974
     }
   ],
   "top_families": [

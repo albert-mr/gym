@@ -19,13 +19,25 @@ Both are polled from `gamma-api.polymarket.com/events`, flattened to per-market 
 ```
 Polled markets (N events × M markets per event)
   ↓ Gate 1 (deterministic, IMPLEMENTED)
-  ↓   1a: drop Chainlink-bound (eventResolutionSource startsWith chain.link/reference.chainlink.com)
+  ↓   1a: drop Chainlink-bound (data.chain.link / reference.chainlink.com)
+  ↓   1c: drop Pyth Network (pythdata.app / hermes.pyth.network)
   ↓   1b: drop no-URL (no http(s):// in eventResolutionSource OR description)
 gate1-pass.jsonl (the addressable universe)
   ↓ Gate 2 (LLM source-adequacy rubric, NOT YET IMPLEMENTED — done by hand via classifier sets)
   ↓ Gate 3 (URL accessibility probe at validator-equivalent infra, NOT YET IMPLEMENTED — done by spot-check Studio deploys)
 solvable estimate
 ```
+
+### Why Pyth is excluded (Gate 1c)
+
+Polymarket integrates THREE on-chain oracles for resolution:
+- **UMA Optimistic Oracle** (~98% of markets) — humans propose answers, optimistic 2-hour challenge window. This is what GenLayer's intelligent oracle substitutes for.
+- **Chainlink Data Feeds** — deterministic on-chain price feeds, automated settlement. GenLayer has no role.
+- **Pyth Network** — deterministic high-frequency price oracle for commodities + US stocks. Polymarket's April 2026 partnership. GenLayer has no role.
+
+Markets bound to `pythdata.app` (UI) or `hermes.pyth.network` (API) reference Pyth's on-chain feed. Like Chainlink, the resolution is already deterministic and on-chain — no LLM needed.
+
+**Off-chain exchange references stay IN scope**: `www.binance.com`, `coingecko.com`, `coinmarketcap.com`, `kraken.com` etc. These are referenced by UMA proposers who manually read them. GenLayer can substitute the human work for these (since the data is off-chain and needs fetching).
 
 Gates 2 and 3 are designed in PLAN.md but currently approximated by `scripts/cross-day-classify.mjs` (per-domain heuristic) plus periodic 10-25 market Studio dry-runs.
 

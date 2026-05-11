@@ -83,7 +83,10 @@ const FRMF_REROUTED = new Set(['www.frmf.ma']); // → flashscore.com/football/m
 // en.wikipedia.org/wiki/Eurovision_Song_Contest_2026 renders the full event data.
 const EUROVISION_REROUTED = new Set(['eurovision.tv','eurovision.com']);
 
-const API = new Set(['www.binance.com','pythdata.app','www.dotabuff.com','dotabuff.com']);
+// API endpoints (off-chain). Pyth was previously here but is now excluded at Gate 1
+// (deterministic on-chain oracle, like Chainlink — GenLayer has no role).
+// Note: pythdata.app/hermes.pyth.network are filtered upstream by Gate 1 in analyze.ts.
+const API = new Set(['www.binance.com','www.dotabuff.com','dotabuff.com']);
 const HLTV = new Set(['hltv.org','www.hltv.org']);
 const YAHOO = new Set(['finance.yahoo.com','www.wsj.com']);
 const HARD = new Set([
