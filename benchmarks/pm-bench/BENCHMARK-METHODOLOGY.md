@@ -1,8 +1,23 @@
-# pm-bench: Polymarket Resolution Benchmark Methodology
+# Polymarket benchmark — methodology
+
+> Codebase slug: `pm-bench` · UI display name: "Polymarket benchmark"
+> Headline rendered at `gym.genlayer.foundation/benchmarks/polymarket`
 
 ## Purpose
 
-Quantify what fraction of Polymarket's daily market universe a GenLayer intelligent oracle can resolve end-to-end, with hard evidence per source family.
+Quantify what fraction of Polymarket's daily market universe GenLayer can resolve, with hard evidence per source family.
+
+## Headline framing
+
+The published headline ("GenLayer can resolve X% of Polymarket markets resolving in the next 24 hours") is a **forward-looking inference**, not a per-market record. It says: GenLayer has been Studio-verified end-to-end on at least one representative market per source family; we claim every market on those families would resolve the same way under the same prompt.
+
+Three verification levels exist in the data:
+
+1. **Studio-verified end-to-end** — ~108 markets across May 7-10 dev sessions. Contract deployed, `resolve()` called, output compared against the deterministic ground truth. 100/108 matched.
+2. **Per-source-family inferred** — the bulk of the headline. We deployed 1-10 representatives per source family (wunderground, NHL gamecenter, ESPN scoreboard, Liquipedia, Binance API, etc.) and inferred the rest.
+3. **Classifier heuristic only** — subjective + misc residual. Description-text classifier; never deployed to Studio.
+
+The dashboard surfaces this on `/benchmarks/polymarket/methodology`. The headline pages do not bury the qualifier deeper than that.
 
 ## Universe definition
 
