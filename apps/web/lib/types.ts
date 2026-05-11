@@ -50,6 +50,7 @@ export type DomainRow = {
   buckets: Record<string, number>;
   dominantBucket: string;
   rebind: string;
+  category: string; // dominant L1 across markets bound to this host
 };
 
 export type Unsolvable = {

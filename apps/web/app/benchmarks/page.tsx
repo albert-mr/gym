@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { loadBenchmark, loadComingSoon } from '@/lib/data';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { longDate } from '@/lib/format';
 
 export default function BenchmarksIndex() {
   const pm = loadBenchmark('pm-bench');
   const sources = loadComingSoon('sources-bench');
+  const startLong = longDate(pm.meta.window.start);
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
       <p className="text-sm uppercase tracking-widest text-muted-foreground mb-3">Benchmarks</p>
@@ -22,7 +24,7 @@ export default function BenchmarksIndex() {
               </div>
               <h2 className="text-xl font-semibold tracking-tight">Polymarket resolution coverage</h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                What fraction of Polymarket markets resolving in the next 24 hours can GenLayer resolve?
+                Of every Polymarket market that has ended since {startLong}, what fraction is within GenLayer&apos;s resolution coverage?
               </p>
             </CardHeader>
             <CardContent>
@@ -35,19 +37,22 @@ export default function BenchmarksIndex() {
         </Link>
 
         <Link href="/benchmarks/sources-bench" className="group">
-          <Card className="h-full transition-colors hover:border-foreground/30 bg-muted/40">
+          <Card className="h-full transition-colors hover:border-foreground/30">
             <CardHeader className="space-y-3">
               <div className="flex items-baseline justify-between">
                 <span className="font-mono text-xs text-muted-foreground">Sources benchmark</span>
-                <Badge variant="outline" className="text-[10px] uppercase tracking-widest">Planned</Badge>
+                <Badge variant="secondary" className="text-[10px] uppercase tracking-widest">Live</Badge>
               </div>
               <h2 className="text-xl font-semibold tracking-tight">Source accessibility</h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                {sources?.description ?? 'Versioned dataset of web sources labeled accessible / partial / blocked, for oracle contracts to check before attempting a fetch.'}
+                Which web sources are reachable from validator-equivalent infrastructure, by category &mdash; and which ones aren&apos;t (with the failure reason).
               </p>
             </CardHeader>
             <CardContent>
-              <span className="text-xs text-muted-foreground">In design</span>
+              <div className="flex items-baseline gap-3 mt-2">
+                <div className="text-4xl font-semibold tracking-tight tabular-nums">{pm.domains.length}</div>
+                <div className="text-xs text-muted-foreground">unique sources tracked</div>
+              </div>
             </CardContent>
           </Card>
         </Link>

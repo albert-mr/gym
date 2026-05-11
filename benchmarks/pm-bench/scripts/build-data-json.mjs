@@ -199,18 +199,24 @@ function build() {
   }
   templates.sort((a, b) => b.count - a.count);
 
-  // Domains
+  // Domains — also track L1 categories per host so the sources benchmark page
+  // can show "what kind of stuff this source is for" without market counts.
   const domainMap = new Map();
   for (const r of allRows) {
     const h = r.eRSHost || '(none)';
-    if (!domainMap.has(h)) domainMap.set(h, { host: h, count: 0, buckets: {}, rebind: r.rebindHost || '' });
+    if (!domainMap.has(h)) domainMap.set(h, { host: h, count: 0, buckets: {}, rebind: r.rebindHost || '', _l1Counts: {} });
     const d = domainMap.get(h);
     d.count++;
     d.buckets[r.bucket] = (d.buckets[r.bucket] || 0) + 1;
+    d._l1Counts[r.L1] = (d._l1Counts[r.L1] || 0) + 1;
     if (!d.rebind && r.rebindHost) d.rebind = r.rebindHost;
   }
   const domains = [...domainMap.values()].sort((a,b) => b.count - a.count);
-  for (const d of domains) d.dominantBucket = dominantBucket(d.buckets);
+  for (const d of domains) {
+    d.dominantBucket = dominantBucket(d.buckets);
+    d.category = dominantBucket(d._l1Counts) ?? 'Other'; // L1 with the most markets
+    delete d._l1Counts; // internal only
+  }
 
   // Unsolvables
   const unsolvedBuckets = new Set(['hard','subjective','yahoo','studio_blocked','hltv_lost','misc','no_source']);
