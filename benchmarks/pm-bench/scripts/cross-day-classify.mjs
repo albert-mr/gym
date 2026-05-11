@@ -104,6 +104,8 @@ const HARD = new Set([
   'www.cnn.com',             // per-URL article failures
   'www.espncricinfo.com',    // Akamai blocked (also blocks ESPN cricket — same backend)
   'www.indec.gob.ar',        // geo-blocks the webdriver IP
+  // 2026-05-11 retroactive May 6 audit:
+  'www.aljazeera.com',       // news site — paywall/article-specific, not canonical (24 May 6)
 ]);
 
 // Probed 8/10 unclassified domains in 2026-05-09 — count as render
@@ -131,6 +133,10 @@ const NEW_RENDER = new Set([
   'www.nec.go.kr',               // Korean elections (199)
   // 2026-05-11 audit addition:
   'www.strategy.com',            // MicroStrategy BTC purchases page (2 markets)
+  // 2026-05-11 retroactive May 6 audit additions (official gov/regulatory render-friendly):
+  'www.electoralcommission.org.uk', // UK Electoral Commission (24 May 6)
+  'senedd.wales',                   // Welsh Senedd / parliament (22 May 6)
+  'www.banxico.org.mx',             // Mexican central bank (3 May 6)
 ]);
 
 function clean(h){return (h||'').replace(/[.,;:)\]]+$/g,'');}
@@ -158,6 +164,11 @@ function realBinding(m){
 // Asset / illustrative URLs that should NOT count as "named source"
 const ASSET_URL_RE = /(?:s3[.-]|polymarket-upload|cloudfront\.net|googleusercontent\.com|twimg\.com|imgur\.com|\.(?:jpg|jpeg|png|gif|webp|svg|mp4|pdf)(?:[?#]|$))/i;
 
+// Bare-domain references (descriptions sometimes say "csl-china.com" without an https:// prefix).
+// Empirically (May 6-11): 0 markets currently fall through to this check, but tighten so a future
+// Polymarket template change can't silently flip "real source pinned" markets into the subjective bucket.
+const BARE_DOMAIN_RE = /\b(?:www\.)?[a-z0-9-]{3,}\.(?:com|org|net|gov|edu|io|gg|tv|ai|info|cn|jp|de|fr|es|it|nl|ru|br|ar|au|ca|mx|wales|uk)(?:\/[\w./?=&%#:+~,-]*)?/i;
+
 function isSubjective(d){
   if(!d) return false;
   const cons = /\b(consensus of credible|consensus of reputable|consensus of major|consensus of official|will be a consensus|credible reporting|reputable reporting|consensus may be used|consensus will suffice)\b/i.test(d);
@@ -182,12 +193,13 @@ function isSubjective(d){
   // Asset URL classification
   const allUrls = [...d.matchAll(/(https?:\/\/[\w./?=&%#:+~,-]+)/gi)].map(m => m[1]);
   const realUrls = allUrls.filter(u => !ASSET_URL_RE.test(u));
+  const hasBareDomain = BARE_DOMAIN_RE.test(d);
 
-  // Pattern C: only asset URLs (no real URLs anywhere)
-  if (allUrls.length > 0 && realUrls.length === 0) return true;
+  // Pattern C: only asset URLs (no real URLs anywhere) AND no bare-domain reference either
+  if (allUrls.length > 0 && realUrls.length === 0 && !hasBareDomain) return true;
 
-  // Pattern D: no URL anywhere
-  if (allUrls.length === 0) return true;
+  // Pattern D: no URL anywhere (scheme OR bare domain)
+  if (allUrls.length === 0 && !hasBareDomain) return true;
 
   // Pattern A/B fired: consensus is mechanism, URLs are just examples
   if (consensusIsMechanism) return true;
