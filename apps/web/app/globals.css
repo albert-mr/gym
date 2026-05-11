@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  font-family: theme('fontFamily.sans');
+  background: theme('colors.ink.50');
+  color: theme('colors.ink.900');
+}
+
+/* Anchor link offset so #section navigation doesn't hide under a sticky header */
+section[id] { scroll-margin-top: 4rem; }

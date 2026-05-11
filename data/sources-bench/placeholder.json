@@ -1,0 +1,6 @@
+{
+  "name": "sources-bench",
+  "description": "Versioned, queryable dataset of web sources, each labeled accessible / partial / blocked + reason. Consumable by Intelligent Contracts at runtime to know what they can rely on before reaching out. Starts with newspapers, expands to the sources Polymarket markets actually depend on.",
+  "status": "planned",
+  "link": "https://github.com/genlayer-foundation/gym/tree/main/benchmarks/sources-bench"
+}
