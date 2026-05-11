@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <span className="text-xs text-muted-foreground hidden sm:inline">where we measure what GenLayer can do</span>
             </Link>
             <nav className="flex gap-7 text-sm text-muted-foreground">
-              <Link className="hover:text-foreground transition-colors" href="/benchmarks">Benchmarks</Link>
+              <Link className="hover:text-foreground transition-colors" href="/">Benchmarks</Link>
               <Link className="hover:text-foreground transition-colors" href="/about">About</Link>
               <a className="hover:text-foreground transition-colors" href="https://github.com/genlayer-foundation" target="_blank" rel="noopener noreferrer">GitHub</a>
             </nav>
