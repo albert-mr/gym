@@ -23,6 +23,10 @@ import fs from 'fs';
 const STREAMING = new Set([
   'www.twitch.tv', 'kick.com', 'www.kick.com',
   'www.youtube.com', 'www.sooplive.com', 'play-origin.sooplive.com',
+  // 2026-05-11 audit addition: Huya is China's Twitch-equivalent. Asian CS2 markets
+  // bind to huya.com but descriptions rebind to hltv.org via "official information
+  // from <URL>" pattern — same shape as twitch/kick/youtube.
+  'www.huya.com',
 ]);
 
 const RENDER = new Set([
@@ -125,6 +129,8 @@ const NEW_RENDER = new Set([
   'www.formula1.com',            // F1 racing (242)
   'www.mlb.com',                 // MLB baseball (226)
   'www.nec.go.kr',               // Korean elections (199)
+  // 2026-05-11 audit addition:
+  'www.strategy.com',            // MicroStrategy BTC purchases page (2 markets)
 ]);
 
 function clean(h){return (h||'').replace(/[.,;:)\]]+$/g,'');}
