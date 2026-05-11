@@ -28,15 +28,15 @@ export default function MethodologyPage() {
       <section className="space-y-3">
         <h2 className="text-xl font-semibold tracking-tight">Polymarket has three oracles. We measure one.</h2>
         <p className="text-base text-muted-foreground leading-relaxed">
-          Polymarket settles markets through three on-chain oracles:
+          Polymarket settles markets through three on-chain oracles. The share each one takes across our daily polls (since {startLong}, {data.onchainFeedStats.polledUniverse.toLocaleString()} unique markets):
         </p>
         <ul className="space-y-2 text-base text-muted-foreground leading-relaxed list-disc pl-5">
-          <li><span className="text-foreground font-medium">UMA Optimistic Oracle</span> &mdash; the bulk of Polymarket&rsquo;s markets. A human proposer reads the source, the answer is challengeable for two hours. This is the resolution GenLayer&rsquo;s intelligent oracle substitutes for.</li>
-          <li><span className="text-foreground font-medium">Chainlink Data Feeds</span> &mdash; deterministic on-chain price feeds. No human in the loop. GenLayer has no role.</li>
-          <li><span className="text-foreground font-medium">Pyth Network</span> &mdash; deterministic high-frequency price oracle for stocks and commodities. No human in the loop. GenLayer has no role.</li>
+          <li><span className="text-foreground font-medium">UMA Optimistic Oracle &mdash; {data.onchainFeedStats.addressablePct.toFixed(0)}%.</span> A human proposer reads the source, the answer is challengeable for two hours. This is the resolution GenLayer&rsquo;s intelligent oracle substitutes for.</li>
+          <li><span className="text-foreground font-medium">Chainlink Data Feeds &mdash; {data.onchainFeedStats.chainlinkPct.toFixed(0)}%.</span> Deterministic on-chain price feeds (mostly recurring &ldquo;BTC Up or Down hourly&rdquo;-style markets). No human in the loop. GenLayer has no role.</li>
+          <li><span className="text-foreground font-medium">Pyth Network &mdash; {data.onchainFeedStats.pythPct.toFixed(1)}%.</span> Deterministic high-frequency price oracle for stocks and commodities. No human in the loop. GenLayer has no role.</li>
         </ul>
         <p className="text-base text-muted-foreground leading-relaxed">
-          We drop the Chainlink and Pyth markets at the first gate. The headline measures only the UMA universe &mdash; the markets whose resolution requires interpreting an external source.
+          We drop the Chainlink and Pyth markets at the first gate. The headline measures only the UMA share &mdash; the markets whose resolution requires interpreting an external source.
         </p>
       </section>
 

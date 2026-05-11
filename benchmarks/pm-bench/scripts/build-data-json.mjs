@@ -116,7 +116,10 @@ function build() {
   const closedIdx = loadClosedIndex();
   console.log(`Closed index: ${closedIdx.size} markets | window ${start}..${end} (${days.length} days)`);
 
-  const allRows = [];
+  // Per-day rows (one row per market per day it appeared in poll). Used for the
+  // per-day activity table — cross-day dupes are valid here (a market in the
+  // 24h window appears in poll N and poll N-1).
+  const allDayRows = [];
   const perDay = {};
   for (const date of days) {
     const file = path.resolve('data/markets', date, 'gate1-pass.jsonl');
@@ -134,7 +137,7 @@ function build() {
       const eventSlug = cl?.eventSlug || '';
       counts[bucket] = (counts[bucket] || 0) + 1;
       if (winner !== 'pending') resolved++;
-      allRows.push({
+      allDayRows.push({
         id: String(m.id), date,
         L1: h.L1, L2: h.L2, L3: h.L3, template: tpl,
         question: m.question ?? '', eventTitle: m.eventTitle ?? '', eventSlug,
@@ -145,7 +148,7 @@ function build() {
     }
     const solved = Object.entries(counts).filter(([b]) => SOLVED_BUCKETS.has(b)).reduce((s, [,n]) => s + n, 0);
     let directDeep = 0, directShallow = 0, alt = 0, unsolvable = 0;
-    for (const r of allRows) {
+    for (const r of allDayRows) {
       if (r.date !== date) continue;
       if (DIRECT_BUCKETS.has(r.bucket)) { if (isDeepUrl(r.eRS)) directDeep++; else directShallow++; }
       else if (ALT_BUCKETS.has(r.bucket)) alt++;
@@ -158,6 +161,53 @@ function build() {
       directDeep, directShallow, alt, unsolvable,
     };
   }
+
+  // Dedup by market id for the cumulative totals: a market resolving May 7 noon
+  // legitimately appears in both May 6's and May 7's poll (both polls catch
+  // markets ending in their next 24h). We count each unique market once.
+  const seen = new Set();
+  const allRows = [];
+  for (const r of allDayRows) {
+    if (seen.has(r.id)) continue;
+    seen.add(r.id);
+    allRows.push(r);
+  }
+  const dupCount = allDayRows.length - allRows.length;
+  if (dupCount > 0) console.log(`Deduped ${dupCount} cross-day duplicate market rows (${allDayRows.length} → ${allRows.length} unique).`);
+
+  // Compute the on-chain-feed exclusion stats (Chainlink + Pyth) across the
+  // whole window, deduped by id. This drives the hero footnote and methodology
+  // page so they can quote the actual share of Polymarket markets resolved by
+  // deterministic on-chain oracles.
+  const chainlinkIds = new Set();
+  const pythIds = new Set();
+  for (const date of days) {
+    for (const f of [`data/markets/${date}/gate1-drop-chainlink.jsonl`, `data/markets/${date}/gate1-drop-pyth.jsonl`]) {
+      const p = path.resolve(f);
+      if (!fs.existsSync(p)) continue;
+      for (const line of fs.readFileSync(p, 'utf-8').split('\n').filter(Boolean)) {
+        try {
+          const m = JSON.parse(line);
+          if (f.includes('chainlink')) chainlinkIds.add(String(m.id));
+          else pythIds.add(String(m.id));
+        } catch {}
+      }
+    }
+  }
+  const chainlink = chainlinkIds.size;
+  const pyth = pythIds.size;
+  const addressable = allRows.length;
+  const polledUniverse = chainlink + pyth + addressable;
+  const onchainFeedStats = {
+    chainlink, pyth,
+    chainlinkPlusPyth: chainlink + pyth,
+    addressable,
+    polledUniverse,
+    chainlinkPct: polledUniverse ? (100 * chainlink / polledUniverse) : 0,
+    pythPct: polledUniverse ? (100 * pyth / polledUniverse) : 0,
+    onchainFeedPct: polledUniverse ? (100 * (chainlink + pyth) / polledUniverse) : 0,
+    addressablePct: polledUniverse ? (100 * addressable / polledUniverse) : 0,
+  };
 
   // Templates
   const groups = new Map();
@@ -239,9 +289,10 @@ function build() {
     });
   }
 
-  // Headline
-  let totalPass = 0, totalSolved = 0;
-  for (const d of Object.values(perDay)) { totalPass += d.gate1Pass; totalSolved += d.solved; }
+  // Headline — computed against the deduped cumulative dataset, not the
+  // per-day rows. A market that appeared in 2 days' polls counts once.
+  const totalPass = allRows.length;
+  const totalSolved = allRows.filter(r => SOLVED_BUCKETS.has(r.bucket)).length;
   const headlinePct = totalPass ? (100 * totalSolved / totalPass) : 0;
 
   const data = {
@@ -251,12 +302,7 @@ function build() {
     domains,
     unsolvables,
     marketsByTemplate,
-    verificationLevels: {
-      directVerified: 108,
-      directVerifiedNote: '108 markets across May 7-10 dev window were Studio-deployed and outcome-matched (100/108). The remaining ~99.5% are inferred per-source-family.',
-      inferred: totalSolved - 108,
-      heuristic: Object.values(perDay).reduce((s, p) => s + (p.buckets?.subjective ?? 0) + (p.buckets?.misc ?? 0), 0),
-    },
+    onchainFeedStats,
     bucketLabels: BUCKET_LABELS,
     bucketColors: BUCKET_COLORS,
   };

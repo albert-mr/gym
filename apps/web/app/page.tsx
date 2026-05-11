@@ -31,7 +31,7 @@ export default function HomePage() {
           of every Polymarket market that has ended since {startLong} is within GenLayer&rsquo;s resolution coverage. <span className="text-foreground tabular-nums">{pm.meta.totalPass.toLocaleString()}</span> markets and counting.
         </p>
         <p className="text-xs text-muted-foreground/80 mt-4 max-w-xl">
-          *Excludes markets resolved by deterministic on-chain oracles (Chainlink, Pyth) &mdash; GenLayer is the substitute for human-resolved markets, not for already-automated price feeds.
+          *Polymarket&rsquo;s daily universe is roughly {pm.onchainFeedStats.onchainFeedPct.toFixed(0)}% on-chain price feeds (Chainlink {pm.onchainFeedStats.chainlinkPct.toFixed(0)}%, Pyth {pm.onchainFeedStats.pythPct.toFixed(1)}%) and {pm.onchainFeedStats.addressablePct.toFixed(0)}% markets that need human-style resolution. The headline measures GenLayer&rsquo;s coverage of the second group &mdash; the only one where an LLM oracle has a role.
         </p>
         <div className="mt-8">
           <Link href="/benchmarks/polymarket" className="text-sm underline underline-offset-4 hover:text-foreground text-foreground/80">Open the Polymarket benchmark &rarr;</Link>

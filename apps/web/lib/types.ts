@@ -89,11 +89,16 @@ export type BenchmarkData = {
   domains: DomainRow[];
   unsolvables: Unsolvable[];
   marketsByTemplate: Record<string, MarketRow[]>;
-  verificationLevels: {
-    directVerified: number;
-    directVerifiedNote: string;
-    inferred: number;
-    heuristic: number;
+  onchainFeedStats: {
+    chainlink: number;
+    pyth: number;
+    chainlinkPlusPyth: number;
+    addressable: number;
+    polledUniverse: number;
+    chainlinkPct: number;
+    pythPct: number;
+    onchainFeedPct: number;
+    addressablePct: number;
   };
   bucketLabels: Record<string, string>;
   bucketColors: Record<string, string>;

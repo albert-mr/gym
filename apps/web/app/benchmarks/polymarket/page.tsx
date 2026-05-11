@@ -19,7 +19,7 @@ export default function PolymarketBenchmarkPage() {
         </p>
       </header>
 
-      <HeadlineCard headlinePct={data.meta.headlinePct} totalPass={data.meta.totalPass} dates={data.meta.dates} />
+      <HeadlineCard data={data} />
 
       <section className="space-y-4">
         <h2 className="text-xl font-semibold tracking-tight">By day</h2>
