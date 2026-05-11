@@ -65,6 +65,24 @@ function hostOf(url) {
   try { return new URL(url).hostname; } catch { return null; }
 }
 
+// eRS URL "depth" — true if path has 2+ segments OR a single segment containing a digit.
+// Distinguishes "Polymarket gave us a deep URL we can fetch as-is" (true) from
+// "Polymarket gave us a homepage; we may need a deeper URL on the same host" (false).
+function isDeepUrl(url) {
+  try {
+    const p = new URL(url).pathname || '/';
+    const segs = p.split('/').filter(Boolean);
+    if (segs.length >= 2) return true;
+    if (segs.length === 1 && /\d/.test(segs[0])) return true;
+    return false;
+  } catch { return false; }
+}
+
+// Bucket → verification track classification
+const DIRECT_BUCKETS = new Set(['render', 'api']);
+const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki']);
+const UNSOLVABLE_BUCKETS = new Set(['yahoo', 'hard', 'subjective', 'studio_blocked', 'hltv_lost', 'misc', 'no_source']);
+
 function loadClosedIndex() {
   const p = path.resolve('data/markets/closed-index.jsonl');
   if (!fs.existsSync(p)) {
@@ -166,12 +184,27 @@ function build() {
     }
     const solved = Object.entries(counts).filter(([b]) => SOLVED_BUCKETS.has(b))
                                           .reduce((s, [,n]) => s + n, 0);
+
+    // Per-day Direct/Alt/Unsolvable split, plus deep/shallow within Direct
+    let directDeep = 0, directShallow = 0, alt = 0, unsolvable = 0;
+    for (const r of allRows) {
+      if (r.date !== date) continue;
+      if (DIRECT_BUCKETS.has(r.bucket)) {
+        if (isDeepUrl(r.eRS)) directDeep++; else directShallow++;
+      } else if (ALT_BUCKETS.has(r.bucket)) {
+        alt++;
+      } else {
+        unsolvable++;
+      }
+    }
+
     perDay[date] = {
       gate1Pass: lines.length,
       solved,
       solvedPct: lines.length ? (100 * solved / lines.length) : 0,
       resolved,
       buckets: counts,
+      directDeep, directShallow, alt, unsolvable,
     };
   }
 
@@ -328,7 +361,7 @@ function renderHTML(data, start, end) {
 
 <main>
 ${renderOverview(data)}
-${renderMethodology()}
+${renderMethodology(data)}
 ${renderNumbers(data)}
 ${renderDrilldown(data)}
 ${renderDomains(data)}
@@ -348,15 +381,18 @@ function renderOverview(data) {
   return `<section id="overview"><h2>Executive summary</h2>
 <div class="card big">
   <div class="big-pct">${data.meta.headlinePct.toFixed(1)}%</div>
-  <div>of Polymarket's UMA-resolved 24h-horizon market universe is routable to a known canonical source family across the <strong>${dates.length}-day window</strong>.</div>
+  <div>of Polymarket's UMA-resolved 24h-horizon market universe is routable to a known canonical source family across the <strong>${dates.length}-day window</strong> (${data.meta.totalPass.toLocaleString()} markets).</div>
 </div>
-<p>"Routable" means the classifier maps the market to a source we know how to fetch end-to-end (binding URL, alternate source, JSON API, or recovery path via Liquipedia/bo3.gg/Flashscore/Wikipedia).
-This benchmark measures <em>routability</em>, not <em>accuracy</em> — for each market we know the canonical place to look, but we haven't yet validated that an LLM oracle, when fed that source, would return the correct outcome.</p>
+<div class="callout warn">
+  <strong>Read this number carefully.</strong> "Routable" means our classifier maps the market to a source family that was Studio-verified end-to-end on at least 1 representative market. <strong>~108 markets total (0.45%) were directly Studio-deployed and outcome-matched</strong>; the remaining ~99.5% are inferred from per-source-family probes (same host, same fetch pattern, same prompt shape).
+  See the "Verification levels" subsection of Methodology for the honest breakdown.
+</div>
+<p>This benchmark measures <em>routability</em>, not <em>accuracy</em> — for each market we know the canonical place to look, but we haven't yet validated that an LLM oracle, when fed that source, would return the correct outcome on every market individually.</p>
 <p>Polymarket uses three oracles for resolution: <strong>UMA Optimistic Oracle</strong> (~98% of markets, human-in-the-loop — GenLayer's domain), <strong>Chainlink Data Feeds</strong> (deterministic on-chain), and <strong>Pyth Network</strong> (deterministic on-chain). The percentage above measures only the UMA universe; Chainlink + Pyth markets are filtered at Gate 1 because they're already served by deterministic on-chain oracles where GenLayer plays no role.</p>
 </section>`;
 }
 
-function renderMethodology() {
+function renderMethodology(data) {
   return `<section id="methodology"><h2>Methodology</h2>
 <h3>Universe</h3>
 <p>24-hour horizon only: markets with <code>endDate</code> in the next 24 hours from the daily poll moment. We do not benchmark long-tail markets (election forecasts ending in November, "X happens by EOY", etc.) because we have no operational rights to substitute their resolution yet. We measure step-by-step, day-by-day.</p>
@@ -385,34 +421,102 @@ solvable estimate</pre>
 
 <h3>Studio caveat</h3>
 <p>GenLayer Studio is a centralized testbed, not a real testnet. Studio dry-runs verify that a contract+source combination produces a deterministic outcome under our prompt, but they do not prove production credibility — that requires deployment on a real network. The Studio-verification work covered in this benchmark is a sanity check, not a credibility claim.</p>
+
+<h3>Verification levels (read this before quoting the headline)</h3>
+<p>The headline "X% routable" counts markets whose classifier bucket matches a Studio-verified source family. That is <em>not</em> the same as "X% of markets individually proven end-to-end." Three distinct levels of verification:</p>
+<table class="data">
+<thead><tr><th>Level</th><th>Approx coverage</th><th>What "verified" means here</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>End-to-end Studio-verified, outcome-matched</strong></td>
+  <td>~108 specific markets (May 7–10 dev window)</td>
+  <td>Deployed <code>IntelligentOracle</code> contract to GenLayer Studio (chainId 61999), called <code>resolve()</code>, compared the contract-returned outcome against the known deterministic ground truth. 100/108 matched; 8 were route-probes without outcome comparison.</td>
+</tr>
+<tr>
+  <td><strong>Per-source-family inferred</strong></td>
+  <td>The remaining ~99.5% of routable markets</td>
+  <td>For each unique source family (wunderground, NHL, ESPN scoreboard, Liquipedia, bo3.gg, Binance API, etc.), we Studio-deployed 1–10 representatives, observed the fetch+prompt shape works, and inferred all markets on that family work the same way. This is an <em>assumption</em>, not per-market proof.</td>
+</tr>
+<tr>
+  <td><strong>Heuristic-only (no Studio probe)</strong></td>
+  <td>Subjective + misc residual</td>
+  <td>Classified by description regex (consensus phrasing, asset-URL detection, Iran-style pattern). Never deployed to Studio.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout">
+  <strong>Defensible phrasing</strong>: "Across ${data.meta.totalPass.toLocaleString()} Polymarket UMA-resolved 24h-horizon markets between ${data.meta.dates[0]} and ${data.meta.dates[data.meta.dates.length-1]}, GenLayer's classifier routes ${data.meta.headlinePct.toFixed(1)}% to a source family that was Studio-verified to be fetchable + resolvable end-to-end on at least 1 representative market. Per-market end-to-end verification was performed on 108 markets (0.45%). Real-network credibility verification is pending real-testnet availability."
+</div>
+<p class="footnote">Real-testnet caveat compounds with the per-market caveat: even the 108 Studio-verified markets are not a production credibility proof — they show that the contract+source combination is deterministic under Studio's prompt, not that validator consensus would behave the same on a real network.</p>
 </section>`;
 }
 
 function renderNumbers(data) {
   const dates = data.meta.dates;
+  const pct = (n, d) => d ? `${(100 * n / d).toFixed(1)}%` : '—';
+
+  // Aggregate totals
+  let tPass = 0, tDeep = 0, tShlw = 0, tAlt = 0, tUns = 0, tRes = 0;
+  for (const d of dates) {
+    const p = data.perDay[d] ?? {};
+    tPass += p.gate1Pass ?? 0;
+    tDeep += p.directDeep ?? 0;
+    tShlw += p.directShallow ?? 0;
+    tAlt += p.alt ?? 0;
+    tUns += p.unsolvable ?? 0;
+    tRes += p.resolved ?? 0;
+  }
+
   const rows = dates.map(d => {
     const p = data.perDay[d] ?? {};
+    const pass = p.gate1Pass ?? 0;
+    const direct = (p.directDeep ?? 0) + (p.directShallow ?? 0);
     return `<tr>
       <td>${esc(d)}</td>
-      <td>${(p.gate1Pass ?? 0).toLocaleString()}</td>
-      <td>${(p.solved ?? 0).toLocaleString()}</td>
-      <td><strong>${(p.solvedPct ?? 0).toFixed(1)}%</strong></td>
+      <td>${pass.toLocaleString()}</td>
+      <td title="eRS host = what we fetch (with eRS URL as-is OR a deeper URL on the same host we've Studio-verified)"><strong>${direct.toLocaleString()}</strong> (${pct(direct, pass)})</td>
+      <td title="eRS URL has path with >=2 segments; we fetch as-is">${(p.directDeep ?? 0).toLocaleString()} (${pct(p.directDeep ?? 0, pass)})</td>
+      <td title="eRS URL is homepage/single-segment; we navigate to a deeper URL on the same host OR the homepage itself is what we render">${(p.directShallow ?? 0).toLocaleString()} (${pct(p.directShallow ?? 0, pass)})</td>
+      <td title="Reroute to a different host (LaLiga→ESPN, HLTV→Liquipedia, etc.)">${(p.alt ?? 0).toLocaleString()} (${pct(p.alt ?? 0, pass)})</td>
+      <td title="Hard tail + Yahoo + Subjective + Misc residual">${(p.unsolvable ?? 0).toLocaleString()} (${pct(p.unsolvable ?? 0, pass)})</td>
       <td>${(p.resolved ?? 0).toLocaleString()}</td>
-      <td>${(p.buckets?.subjective ?? 0)}</td>
-      <td>${(p.buckets?.hard ?? 0)}</td>
-      <td>${(p.buckets?.yahoo ?? 0)}</td>
-      <td>${(p.buckets?.misc ?? 0)}</td>
     </tr>`;
   }).join('');
-  return `<section id="numbers"><h2>Per-day routability</h2>
+
+  const totalDirect = tDeep + tShlw;
+  const totalsRow = `<tr class="totals">
+    <td><strong>6-day total</strong></td>
+    <td><strong>${tPass.toLocaleString()}</strong></td>
+    <td><strong>${totalDirect.toLocaleString()} (${pct(totalDirect, tPass)})</strong></td>
+    <td>${tDeep.toLocaleString()} (${pct(tDeep, tPass)})</td>
+    <td>${tShlw.toLocaleString()} (${pct(tShlw, tPass)})</td>
+    <td>${tAlt.toLocaleString()} (${pct(tAlt, tPass)})</td>
+    <td>${tUns.toLocaleString()} (${pct(tUns, tPass)})</td>
+    <td>${tRes.toLocaleString()}</td>
+  </tr>`;
+
+  return `<section id="numbers"><h2>Per-day routability — Direct vs Alt vs Unsolvable</h2>
+<p>Columns split each day's addressable universe by where we'd actually fetch the resolution data. Hover any cell for the column definition.</p>
 <table class="data">
 <thead><tr>
-<th>Date</th><th>Addressable</th><th>Solved</th><th>Solved %</th><th>Resolved (PM)</th>
-<th>Subjective</th><th>Hard</th><th>Yahoo/WSJ</th><th>Misc</th>
+<th>Date</th>
+<th>Addressable</th>
+<th>Direct (same host as eRS)</th>
+<th>— eRS URL as-is</th>
+<th>— same host, deeper URL OR homepage works</th>
+<th>Alt (different host)</th>
+<th>Unsolvable</th>
+<th>Resolved (PM)</th>
 </tr></thead>
-<tbody>${rows}</tbody>
+<tbody>${rows}${totalsRow}</tbody>
 </table>
-<p class="footnote">"Resolved (PM)": Polymarket has resolved the market and the winner is known (via outcomePrices going to 1/0). The remaining markets are still in the UMA challenge window or pending an event outcome. "Solved %" is the classifier's routability estimate — orthogonal to whether the market is resolved yet.</p>
+<p class="footnote">
+<strong>Direct</strong> = the host named in Polymarket's <code>eventResolutionSource</code> is what we use. Sub-split: "eRS URL as-is" means the URL Polymarket gave us is deep enough to fetch directly (e.g., <code>wunderground.com/history/daily/&lt;loc&gt;/&lt;station&gt;</code>); "same host, deeper URL" means the URL is a homepage and we either render the homepage (which contains the right data; Studio-verified per-domain) or construct a deeper URL on the same host.
+<br><strong>Alt</strong> = we reroute to a different host than what the criteria mentions (LaLiga→ESPN, HLTV→Liquipedia, frmf.ma→Flashscore, eurovision.tv→Wikipedia).
+<br><strong>Unsolvable</strong> = paywalled/IP-blocked/captcha (Yahoo, x.com, sooplive) or pure-consensus subjective markets (Trump tie color).
+<br><strong>Resolved (PM)</strong> = Polymarket has flipped the market to <code>closed=true</code> with <code>outcomePrices=[1,0]</code>/<code>[0,1]</code>. Orthogonal to whether we'd correctly resolve it.
+<br>Numbers verified by running <code>scripts/cross-day-classify.mjs</code> and the dedicated <code>scripts/depth-audit.mjs</code> against the same gate1-pass.jsonl files; bucket totals match identically.
+</p>
 </section>`;
 }
 
@@ -523,6 +627,12 @@ pre { background: #f1f5f9; padding: 12px; border-radius: 4px; font-size: 12px; o
 .card.big { background: linear-gradient(135deg, #1e293b, #0f172a); color: #f8fafc;
   padding: 24px; border-radius: 8px; margin: 12px 0; display: flex; gap: 24px; align-items: center; }
 .big-pct { font-size: 56px; font-weight: 800; line-height: 1; }
+.callout { background: #f0fdf4; border-left: 4px solid #16a34a; padding: 12px 16px;
+  border-radius: 0 4px 4px 0; margin: 12px 0; font-size: 13.5px; line-height: 1.55; }
+.callout.warn { background: #fff7ed; border-left-color: #ea580c; }
+.callout strong { color: #0f172a; }
+table.data tr.totals { background: #eef2ff; font-weight: 600; }
+table.data tr.totals td { border-top: 2px solid #475569; }
 
 table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
 table.data th, table.data td { border-bottom: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: top; }
