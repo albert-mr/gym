@@ -6,11 +6,14 @@ type Props = {
 
 export function HeadlineCard({ headlinePct, totalPass, dates }: Props) {
   return (
-    <div className="rounded-lg p-6 bg-gradient-to-br from-ink-700 to-ink-900 text-white flex items-center gap-6">
-      <div className="text-6xl font-extrabold leading-none tabular-nums">{headlinePct.toFixed(1)}%</div>
-      <div className="text-sm leading-relaxed">
-        of Polymarket&apos;s UMA-resolved 24h-horizon market universe is routable to a known canonical source family across the {dates.length}-day window ({totalPass.toLocaleString()} markets, {dates[0]} → {dates[dates.length-1]}).
+    <div className="border border-border rounded-2xl p-10 md:p-12">
+      <div className="text-xs uppercase tracking-widest text-muted-foreground mb-4">Resolution coverage · {dates[0]} → {dates[dates.length-1]}</div>
+      <div className="hero-number text-7xl md:text-8xl font-semibold tabular-nums tracking-tighter">
+        {headlinePct.toFixed(1)}%
       </div>
+      <p className="mt-6 text-base leading-relaxed text-muted-foreground max-w-xl">
+        of the <span className="text-foreground font-medium tabular-nums">{totalPass.toLocaleString()}</span> Polymarket markets resolving in the next 24 hours route to a source family with representative GenLayer Studio verification. This is a routability measure — not per-market accuracy, not production-network proof.
+      </p>
     </div>
   );
 }

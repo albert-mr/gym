@@ -1,60 +1,55 @@
-import type { BenchmarkData } from '../lib/types';
+import type { BenchmarkData } from '@/lib/types';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-export function VerificationCallout({ data }: { data: BenchmarkData }) {
-  return (
-    <div className="rounded border-l-4 border-orange-500 bg-orange-50 p-4 my-4 text-sm leading-relaxed">
-      <strong className="text-ink-900">Read this number carefully.</strong> &quot;Routable&quot; means our classifier maps the market to a source family that was Studio-verified end-to-end on at least 1 representative market.
-      {' '}<strong>~{data.verificationLevels.directVerified} markets total ({((100 * data.verificationLevels.directVerified) / data.meta.totalPass).toFixed(2)}%) were directly Studio-deployed and outcome-matched</strong>;
-      the remaining ~99% are inferred from per-source-family probes (same host, same fetch pattern, same prompt shape). See the verification levels table below.
-    </div>
-  );
-}
+// Used in /methodology only — not on the headline pages. The "how we verify" detail
+// for readers who want to interrogate the claim.
 
 export function VerificationLevelsTable({ data }: { data: BenchmarkData }) {
   const rows = [
     {
-      level: 'End-to-end Studio-verified, outcome-matched',
+      level: 'Studio-verified end-to-end',
       coverage: `~${data.verificationLevels.directVerified} markets`,
-      def: 'Deployed IntelligentOracle contract to GenLayer Studio (chainId 61999), called resolve(), compared output against known ground truth. 100/108 matched.',
+      def: 'IntelligentOracle contract deployed to GenLayer Studio, resolve() called, contract output compared against known ground truth. 100/108 matched on the May 7–10 dev sessions.',
     },
     {
       level: 'Per-source-family inferred',
       coverage: `~${data.verificationLevels.inferred.toLocaleString()} markets`,
-      def: 'For each unique source family (wunderground, NHL, ESPN scoreboard, Liquipedia, Binance API, etc.) we Studio-deployed 1–10 representatives and inferred all markets on that family behave the same way.',
+      def: 'For each source family (wunderground, NHL gamecenter, ESPN scoreboard, Liquipedia, Binance API, etc.) we Studio-deployed 1–10 representatives and inferred all markets on that family behave the same way. The bulk of the headline is this kind.',
     },
     {
-      level: 'Heuristic-only (no Studio probe)',
+      level: 'Classifier heuristic only',
       coverage: `${data.verificationLevels.heuristic.toLocaleString()} markets`,
-      def: 'Subjective + misc residual. Classified by description regex (consensus phrasing, asset-URL detection). Never deployed to Studio.',
+      def: 'Subjective / consensus markets and unclassified residual. Categorized by a description-text classifier. Never deployed to Studio.',
     },
   ];
   return (
-    <table className="w-full text-sm border-collapse">
-      <thead>
-        <tr className="bg-ink-100">
-          <th className="text-left p-2 border-b border-ink-200 font-semibold">Level</th>
-          <th className="text-left p-2 border-b border-ink-200 font-semibold w-44">Coverage</th>
-          <th className="text-left p-2 border-b border-ink-200 font-semibold">What &quot;verified&quot; means</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map(r => (
-          <tr key={r.level}>
-            <td className="p-2 border-b border-ink-200 align-top font-medium">{r.level}</td>
-            <td className="p-2 border-b border-ink-200 align-top text-ink-500">{r.coverage}</td>
-            <td className="p-2 border-b border-ink-200 align-top">{r.def}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="border border-border rounded-lg overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Verification level</TableHead>
+            <TableHead className="w-44">Coverage</TableHead>
+            <TableHead>What &quot;verified&quot; means</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map(r => (
+            <TableRow key={r.level}>
+              <TableCell className="font-medium align-top">{r.level}</TableCell>
+              <TableCell className="text-muted-foreground align-top tabular-nums text-sm">{r.coverage}</TableCell>
+              <TableCell className="text-sm text-muted-foreground align-top leading-relaxed">{r.def}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 
 export function DefensiblePhrasing({ data }: { data: BenchmarkData }) {
   return (
-    <div className="rounded border-l-4 border-green-600 bg-green-50 p-4 my-4 text-sm leading-relaxed">
-      <strong className="text-ink-900">Defensible phrasing.</strong>{' '}
-      &quot;Across {data.meta.totalPass.toLocaleString()} Polymarket UMA-resolved 24h-horizon markets between {data.meta.dates[0]} and {data.meta.dates[data.meta.dates.length-1]}, GenLayer&apos;s classifier routes {data.meta.headlinePct.toFixed(1)}% to a source family that was Studio-verified to be fetchable + resolvable end-to-end on at least 1 representative market. Per-market end-to-end verification was performed on {data.verificationLevels.directVerified} markets ({((100 * data.verificationLevels.directVerified) / data.meta.totalPass).toFixed(2)}%). Real-network credibility verification is pending real-testnet availability.&quot;
+    <div className="border-l-2 border-foreground/30 pl-4 py-2 italic text-base text-muted-foreground leading-relaxed">
+      &quot;Across {data.meta.totalPass.toLocaleString()} Polymarket markets resolving between {data.meta.dates[0]} and {data.meta.dates[data.meta.dates.length-1]}, GenLayer&apos;s classifier routes {data.meta.headlinePct.toFixed(1)}% to a source family that was Studio-verified end-to-end on at least one representative market. Per-market end-to-end verification was performed on {data.verificationLevels.directVerified} markets. Real-network credibility verification is pending real-testnet availability.&quot;
     </div>
   );
 }

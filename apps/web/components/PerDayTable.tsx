@@ -1,5 +1,12 @@
-import type { BenchmarkData } from '../lib/types';
-import { num, pct } from '../lib/format';
+import type { BenchmarkData } from '@/lib/types';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { num, pct } from '@/lib/format';
+
+function H({ label, tip }: { label: string; tip: string }) {
+  return (
+    <span title={tip} className="cursor-help underline decoration-dotted decoration-muted-foreground/40 underline-offset-4">{label}</span>
+  );
+}
 
 export function PerDayTable({ data }: { data: BenchmarkData }) {
   const dates = data.meta.dates;
@@ -11,50 +18,65 @@ export function PerDayTable({ data }: { data: BenchmarkData }) {
     tAlt += p.alt; tUns += p.unsolvable; tRes += p.resolved;
   }
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm border-collapse">
-        <thead>
-          <tr className="bg-ink-100">
-            <th className="text-left p-2 border-b border-ink-200 font-semibold">Date</th>
-            <th className="text-right p-2 border-b border-ink-200 font-semibold">Addressable</th>
-            <th className="text-right p-2 border-b border-ink-200 font-semibold" title="Same host as eRS (deep URL OR homepage works)">Direct</th>
-            <th className="text-right p-2 border-b border-ink-200 font-semibold" title="eRS URL has path with 2+ segments; fetched as-is">— eRS as-is</th>
-            <th className="text-right p-2 border-b border-ink-200 font-semibold" title="eRS is homepage; we navigate to deeper URL OR homepage works">— same host, deeper</th>
-            <th className="text-right p-2 border-b border-ink-200 font-semibold" title="Rerouted to different host (LaLiga→ESPN, HLTV→Liquipedia)">Alt</th>
-            <th className="text-right p-2 border-b border-ink-200 font-semibold" title="Hard tail, Yahoo, subjective, misc">Unsolvable</th>
-            <th className="text-right p-2 border-b border-ink-200 font-semibold" title="Polymarket has resolved (outcomePrices = [1,0] or [0,1])">Resolved</th>
-          </tr>
-        </thead>
-        <tbody className="font-mono tabular-nums">
+    <div className="border border-border rounded-lg overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-xs">Date</TableHead>
+            <TableHead className="text-xs text-right">Addressable</TableHead>
+            <TableHead className="text-xs text-right">
+              <H label="Direct source" tip="The source the resolution criteria names is the source we use — exact URL or a deeper page on the same host (Studio-verified per source family)." />
+            </TableHead>
+            <TableHead className="text-xs text-right">
+              <H label="Alternative source" tip="Named source isn't reachable (Cloudflare, JS-only, geo-block); we route to a verified alternate. LaLiga → ESPN, HLTV → Liquipedia, frmf.ma → Flashscore, eurovision.tv → Wikipedia." />
+            </TableHead>
+            <TableHead className="text-xs text-right">
+              <H label="Currently unresolvable" tip="Paywall, login, captcha, or pure-consensus subjective markets. Marked honestly; revisited as infrastructure improves." />
+            </TableHead>
+            <TableHead className="text-xs text-right">
+              <H label="Resolved on Polymarket" tip="Polymarket flipped the market to closed=true with outcomePrices=[1,0] or [0,1]. Orthogonal to whether we'd resolve correctly." />
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody className="tabular-nums">
           {dates.map(d => {
             const p = data.perDay[d];
             if (!p) return null;
             const direct = p.directDeep + p.directShallow;
             return (
-              <tr key={d} className="hover:bg-ink-50">
-                <td className="p-2 border-b border-ink-200 font-sans">{d}</td>
-                <td className="p-2 border-b border-ink-200 text-right">{num(p.gate1Pass)}</td>
-                <td className="p-2 border-b border-ink-200 text-right font-semibold">{num(direct)} <span className="text-ink-400 text-xs">({pct(direct, p.gate1Pass)})</span></td>
-                <td className="p-2 border-b border-ink-200 text-right text-ink-500">{num(p.directDeep)}</td>
-                <td className="p-2 border-b border-ink-200 text-right text-ink-500">{num(p.directShallow)}</td>
-                <td className="p-2 border-b border-ink-200 text-right">{num(p.alt)} <span className="text-ink-400 text-xs">({pct(p.alt, p.gate1Pass)})</span></td>
-                <td className="p-2 border-b border-ink-200 text-right">{num(p.unsolvable)} <span className="text-ink-400 text-xs">({pct(p.unsolvable, p.gate1Pass)})</span></td>
-                <td className="p-2 border-b border-ink-200 text-right text-ink-500">{num(p.resolved)}</td>
-              </tr>
+              <TableRow key={d}>
+                <TableCell className="font-medium">{d}</TableCell>
+                <TableCell className="text-right">{num(p.gate1Pass)}</TableCell>
+                <TableCell className="text-right">
+                  <span className="font-medium">{num(direct)}</span>{' '}
+                  <span className="text-muted-foreground text-xs">({pct(direct, p.gate1Pass)})</span>
+                </TableCell>
+                <TableCell className="text-right">
+                  {num(p.alt)} <span className="text-muted-foreground text-xs">({pct(p.alt, p.gate1Pass)})</span>
+                </TableCell>
+                <TableCell className="text-right">
+                  {num(p.unsolvable)} <span className="text-muted-foreground text-xs">({pct(p.unsolvable, p.gate1Pass)})</span>
+                </TableCell>
+                <TableCell className="text-right text-muted-foreground">{num(p.resolved)}</TableCell>
+              </TableRow>
             );
           })}
-          <tr className="bg-indigo-50 font-semibold">
-            <td className="p-2 border-t-2 border-ink-700 font-sans">Total</td>
-            <td className="p-2 border-t-2 border-ink-700 text-right">{num(tPass)}</td>
-            <td className="p-2 border-t-2 border-ink-700 text-right">{num(tDeep + tShlw)} <span className="text-ink-400 text-xs">({pct(tDeep+tShlw, tPass)})</span></td>
-            <td className="p-2 border-t-2 border-ink-700 text-right text-ink-500">{num(tDeep)}</td>
-            <td className="p-2 border-t-2 border-ink-700 text-right text-ink-500">{num(tShlw)}</td>
-            <td className="p-2 border-t-2 border-ink-700 text-right">{num(tAlt)} <span className="text-ink-400 text-xs">({pct(tAlt, tPass)})</span></td>
-            <td className="p-2 border-t-2 border-ink-700 text-right">{num(tUns)} <span className="text-ink-400 text-xs">({pct(tUns, tPass)})</span></td>
-            <td className="p-2 border-t-2 border-ink-700 text-right text-ink-500">{num(tRes)}</td>
-          </tr>
-        </tbody>
-      </table>
+          <TableRow className="bg-muted/40 font-medium border-t-2 border-foreground/20">
+            <TableCell>Total</TableCell>
+            <TableCell className="text-right">{num(tPass)}</TableCell>
+            <TableCell className="text-right">
+              {num(tDeep + tShlw)} <span className="text-muted-foreground text-xs">({pct(tDeep+tShlw, tPass)})</span>
+            </TableCell>
+            <TableCell className="text-right">
+              {num(tAlt)} <span className="text-muted-foreground text-xs">({pct(tAlt, tPass)})</span>
+            </TableCell>
+            <TableCell className="text-right">
+              {num(tUns)} <span className="text-muted-foreground text-xs">({pct(tUns, tPass)})</span>
+            </TableCell>
+            <TableCell className="text-right text-muted-foreground">{num(tRes)}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
   );
 }

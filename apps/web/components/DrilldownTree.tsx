@@ -1,14 +1,19 @@
 'use client';
 import { useMemo, useState } from 'react';
-import type { BenchmarkData, Template, MarketRow } from '../lib/types';
-import { SOLVED_BUCKETS } from '../lib/types';
+import type { BenchmarkData, Template, MarketRow } from '@/lib/types';
+import { SOLVED_BUCKETS } from '@/lib/types';
 import { BucketBadge } from './BucketBadge';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 type Props = { data: BenchmarkData };
 
 export function DrilldownTree({ data }: Props) {
-  const [date, setDate] = useState<string>('');
-  const [bucket, setBucket] = useState<string>('');
+  const [date, setDate] = useState<string>('all');
+  const [bucket, setBucket] = useState<string>('all');
   const [solvedOnly, setSolvedOnly] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
@@ -16,8 +21,8 @@ export function DrilldownTree({ data }: Props) {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return data.templates.filter(t => {
-      if (date && !t.dates.includes(date)) return false;
-      if (bucket && t.dominantBucket !== bucket) return false;
+      if (date !== 'all' && !t.dates.includes(date)) return false;
+      if (bucket !== 'all' && t.dominantBucket !== bucket) return false;
       if (solvedOnly && !SOLVED_BUCKETS.has(t.dominantBucket)) return false;
       if (q) {
         const hay = `${t.template} ${t.example.question} ${t.example.eRSHost} ${t.example.rebindHost} ${t.L1} ${t.L2} ${t.L3}`.toLowerCase();
@@ -37,114 +42,145 @@ export function DrilldownTree({ data }: Props) {
 
   return (
     <div>
-      <div className="flex flex-wrap gap-3 items-center mb-4 p-3 bg-ink-50 rounded text-xs">
-        <label className="flex items-center gap-1.5 text-ink-500">Date
-          <select className="border border-ink-200 rounded px-1.5 py-1 text-sm font-mono" value={date} onChange={e => setDate(e.target.value)}>
-            <option value="">all</option>
-            {data.meta.dates.map(d => <option key={d} value={d}>{d}</option>)}
-          </select>
-        </label>
-        <label className="flex items-center gap-1.5 text-ink-500">Bucket
-          <select className="border border-ink-200 rounded px-1.5 py-1 text-sm" value={bucket} onChange={e => setBucket(e.target.value)}>
-            <option value="">all</option>
-            {Object.entries(data.bucketLabels).map(([b, l]) => <option key={b} value={b}>{l}</option>)}
-          </select>
-        </label>
-        <label className="flex items-center gap-1.5 text-ink-500">
-          <input type="checkbox" checked={solvedOnly} onChange={e => setSolvedOnly(e.target.checked)} /> Solved only
-        </label>
-        <label className="flex items-center gap-1.5 text-ink-500 flex-1">Search
-          <input
-            type="text"
-            placeholder="question / template / host"
-            className="flex-1 border border-ink-200 rounded px-2 py-1 text-sm"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-        </label>
-        <button className="px-3 py-1 border border-ink-200 rounded bg-white text-sm hover:bg-ink-50" onClick={() => { setDate(''); setBucket(''); setSolvedOnly(false); setSearch(''); }}>Reset</button>
+      <div className="flex flex-wrap gap-3 items-end mb-6 p-4 bg-muted/40 border border-border rounded-lg">
+        <div className="space-y-1">
+          <label className="text-xs text-muted-foreground block">Date</label>
+          <Select value={date} onValueChange={(v) => setDate(v ?? 'all')}>
+            <SelectTrigger className="w-40 h-8 text-sm"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">all dates</SelectItem>
+              {data.meta.dates.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-1">
+          <label className="text-xs text-muted-foreground block">Source category</label>
+          <Select value={bucket} onValueChange={(v) => setBucket(v ?? 'all')}>
+            <SelectTrigger className="w-56 h-8 text-sm"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">all categories</SelectItem>
+              {Object.entries(data.bucketLabels).map(([b, l]) => <SelectItem key={b} value={b}>{l}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-center gap-2 h-8 pb-1">
+          <Checkbox id="solved-only" checked={solvedOnly} onCheckedChange={(c) => setSolvedOnly(c === true)} />
+          <label htmlFor="solved-only" className="text-sm text-muted-foreground cursor-pointer">Resolvable only</label>
+        </div>
+        <div className="space-y-1 flex-1 min-w-[200px]">
+          <label className="text-xs text-muted-foreground block">Search</label>
+          <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="question, template, host…" className="h-8 text-sm" />
+        </div>
+        <Button variant="ghost" size="sm" onClick={() => { setDate('all'); setBucket('all'); setSolvedOnly(false); setSearch(''); }}>Reset</Button>
       </div>
 
       {filtered.length === 0 && (
-        <div className="text-ink-500 italic py-6 text-center">No templates match these filters.</div>
+        <div className="text-muted-foreground italic py-12 text-center text-sm">No templates match these filters.</div>
       )}
 
-      <div className="space-y-2">
+      <div className="text-xs text-muted-foreground mb-4 tabular-nums">
+        {filtered.length.toLocaleString()} templates · {filtered.reduce((s, t) => s + t.count, 0).toLocaleString()} markets
+      </div>
+
+      <Accordion multiple defaultValue={[...nested.keys()]} className="w-full">
         {[...nested.entries()].sort((a, b) => sumMap(b[1]) - sumMap(a[1])).map(([L1, m1]) => (
-          <details key={L1} open className="text-sm">
-            <summary className="cursor-pointer font-semibold py-1">{L1} <span className="text-ink-400 font-normal">({sumMap(m1).toLocaleString()} markets)</span></summary>
-            {[...m1.entries()].sort((a, b) => sumMap(b[1]) - sumMap(a[1])).map(([L2, m2]) => (
-              <details key={L2} className="ml-4">
-                <summary className="cursor-pointer py-1 text-ink-700">{L2} <span className="text-ink-400 text-xs">({sumMap(m2).toLocaleString()})</span></summary>
-                {[...m2.entries()].sort((a, b) => sumArr(b[1]) - sumArr(a[1])).map(([L3, tpls]) => (
-                  <details key={L3} className="ml-4">
-                    <summary className="cursor-pointer py-1 text-ink-500">{L3} <span className="text-ink-400 text-xs">({sumArr(tpls).toLocaleString()} markets · {tpls.length} templates)</span></summary>
-                    <div className="ml-4 space-y-2 mt-2">
-                      {tpls.map(t => (
-                        <TemplateCard key={t.id} t={t} data={data} expanded={expanded.has(t.id)} onToggle={() => toggleExpanded(t.id)} />
+          <AccordionItem key={L1} value={L1}>
+            <AccordionTrigger className="text-base font-semibold hover:no-underline">
+              <span className="flex items-baseline gap-3">
+                {L1}
+                <span className="text-xs text-muted-foreground font-normal tabular-nums">{sumMap(m1).toLocaleString()} markets</span>
+              </span>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-2 pl-2">
+                {[...m1.entries()].sort((a, b) => sumMap(b[1]) - sumMap(a[1])).map(([L2, m2]) => (
+                  <details key={L2} className="group" open={m1.size <= 3}>
+                    <summary className="cursor-pointer py-1.5 text-sm font-medium text-foreground/90 hover:text-foreground select-none flex items-baseline gap-2">
+                      <span className="text-muted-foreground group-open:rotate-90 transition-transform inline-block">›</span>
+                      {L2}
+                      <span className="text-xs text-muted-foreground font-normal tabular-nums">{sumMap(m2).toLocaleString()}</span>
+                    </summary>
+                    <div className="ml-5 space-y-1.5">
+                      {[...m2.entries()].sort((a, b) => sumArr(b[1]) - sumArr(a[1])).map(([L3, tpls]) => (
+                        <details key={L3}>
+                          <summary className="cursor-pointer py-1 text-sm text-muted-foreground hover:text-foreground select-none flex items-baseline gap-2">
+                            <span className="text-muted-foreground">›</span>
+                            {L3}
+                            <span className="text-xs tabular-nums">{sumArr(tpls).toLocaleString()} · {tpls.length} templates</span>
+                          </summary>
+                          <div className="ml-5 space-y-2 mt-2 mb-3">
+                            {tpls.map(t => (
+                              <TemplateCard key={t.id} t={t} data={data} expanded={expanded.has(t.id)} onToggle={() => toggleExpanded(t.id)} />
+                            ))}
+                          </div>
+                        </details>
                       ))}
                     </div>
                   </details>
                 ))}
-              </details>
-            ))}
-          </details>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
         ))}
-      </div>
+      </Accordion>
     </div>
   );
 }
 
 function TemplateCard({ t, data, expanded, onToggle }: { t: Template; data: BenchmarkData; expanded: boolean; onToggle: () => void }) {
   const ex = t.example;
-  const winnerClass = ex.winner === 'pending' ? 'text-ink-400 italic' :
-    (ex.winner === 'Yes' || ex.winner === 'Up' || ex.winner === 'Over') ? 'text-green-700 font-semibold' :
-    'text-red-700 font-semibold';
-  const borderColor = data.bucketColors[t.dominantBucket] ?? '#cbd5e1';
   const markets = data.marketsByTemplate[t.id] ?? [];
   return (
-    <div className="rounded-r bg-ink-50 px-3 py-2 border-l-4" style={{ borderLeftColor: borderColor }}>
-      <div className="flex flex-wrap gap-2 items-center">
-        <code className="font-mono text-[12.5px] flex-1 min-w-[250px]">{t.template}</code>
+    <div className="border border-border rounded-lg p-3 bg-card">
+      <div className="flex flex-wrap gap-2 items-center mb-2">
+        <code className="font-mono text-[12.5px] flex-1 min-w-[280px] text-foreground/90">{t.template}</code>
         <BucketBadge bucket={t.dominantBucket} label={data.bucketLabels[t.dominantBucket] ?? t.dominantBucket} color={data.bucketColors[t.dominantBucket]} />
-        <span className="text-[11px] text-ink-500">{t.count.toLocaleString()} markets · {t.dates.length} day{t.dates.length===1?'':'s'} · hosts: {t.eRSHosts.slice(0,2).join(', ')}{t.eRSHosts.length>2 ? ` +${t.eRSHosts.length-2}` : ''}</span>
       </div>
-      <div className="mt-1.5 pl-2 border-l-2 border-ink-200 text-[12.5px] text-ink-500">
-        Example [{ex.date}]: <strong className="text-ink-900 font-normal">{ex.question}</strong>
-        {' · '}eRS <code className="bg-ink-100 px-1 rounded text-[11px]">{ex.eRS}</code>
-        {ex.rebindHost && ex.rebindHost !== ex.eRSHost && (<><>→ fetch <code className="bg-ink-100 px-1 rounded text-[11px]">{ex.rebindHost}</code></></>)}
-        {' · '}winner <span className={winnerClass}>{ex.winner}</span>
-        {ex.eventSlug && (<>{' · '}<a className="text-blue-600 hover:underline" href={`https://polymarket.com/event/${ex.eventSlug}`} target="_blank" rel="noopener noreferrer">Verify on Polymarket</a></>)}
+      <div className="text-xs text-muted-foreground tabular-nums mb-2">
+        {t.count.toLocaleString()} market{t.count===1?'':'s'} · {t.dates.length} day{t.dates.length===1?'':'s'} · hosts: <code className="text-foreground/70">{t.eRSHosts.slice(0,2).join(', ')}</code>{t.eRSHosts.length>2 ? ` +${t.eRSHosts.length-2}` : ''}
       </div>
-      <button className="mt-1 text-[11px] text-blue-600 hover:underline" onClick={onToggle}>
+      <div className="border-l-2 border-border pl-3 text-[13px] text-muted-foreground leading-relaxed">
+        <div className="text-foreground/90">{ex.question}</div>
+        <div className="mt-1 space-x-3 text-xs">
+          <span><span className="text-muted-foreground">source:</span> <code className="text-foreground/80">{ex.eRSHost || '—'}</code></span>
+          {ex.rebindHost && ex.rebindHost !== ex.eRSHost && (
+            <span><span className="text-muted-foreground">→ fetched:</span> <code className="text-foreground/80">{ex.rebindHost}</code></span>
+          )}
+          <span><span className="text-muted-foreground">winner:</span> <Winner w={ex.winner} /></span>
+          {ex.eventSlug && (
+            <a className="underline underline-offset-2 text-foreground/80 hover:text-foreground" href={`https://polymarket.com/event/${ex.eventSlug}`} target="_blank" rel="noopener noreferrer">verify on Polymarket ↗</a>
+          )}
+        </div>
+      </div>
+      <button className="mt-2 text-[11px] text-foreground/70 hover:text-foreground underline underline-offset-2" onClick={onToggle}>
         {expanded ? 'hide all' : `show all ${t.count} markets`}
       </button>
       {expanded && (
-        <div className="mt-2 pl-2 max-h-72 overflow-y-auto">
-          <table className="w-full text-[11.5px]">
+        <div className="mt-3 border-t border-border pt-2 max-h-72 overflow-y-auto">
+          <table className="w-full text-[12px] tabular-nums">
             <tbody>
-              {markets.map((m: MarketRow) => {
-                const w = m.winner === 'pending' ? 'text-ink-400 italic' :
-                  (m.winner === 'Yes' || m.winner === 'Up' || m.winner === 'Over') ? 'text-green-700 font-semibold' :
-                  'text-red-700 font-semibold';
-                return (
-                  <tr key={m.id}>
-                    <td className="py-0.5 px-1 border-b border-dotted border-ink-200">{m.date}</td>
-                    <td className="py-0.5 px-1 border-b border-dotted border-ink-200">{m.question}</td>
-                    <td className="py-0.5 px-1 border-b border-dotted border-ink-200"><code className="text-[10px]">{m.eRSHost}</code></td>
-                    <td className={`py-0.5 px-1 border-b border-dotted border-ink-200 ${w}`}>{m.winner}</td>
-                    <td className="py-0.5 px-1 border-b border-dotted border-ink-200">
-                      {m.slug && <a className="text-blue-600 hover:underline" href={`https://polymarket.com/event/${m.slug}`} target="_blank" rel="noopener noreferrer">link</a>}
-                    </td>
-                  </tr>
-                );
-              })}
+              {markets.map((m: MarketRow) => (
+                <tr key={m.id} className="hover:bg-muted/40">
+                  <td className="py-1 pr-2 text-muted-foreground text-xs">{m.date}</td>
+                  <td className="py-1 pr-2 text-foreground/90">{m.question}</td>
+                  <td className="py-1 pr-2"><code className="text-[11px] text-muted-foreground">{m.eRSHost}</code></td>
+                  <td className="py-1 pr-2"><Winner w={m.winner} /></td>
+                  <td className="py-1 pr-2">
+                    {m.slug && <a className="text-xs underline underline-offset-2 hover:text-foreground" href={`https://polymarket.com/event/${m.slug}`} target="_blank" rel="noopener noreferrer">verify ↗</a>}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       )}
     </div>
   );
+}
+
+function Winner({ w }: { w: string }) {
+  if (w === 'pending') return <span className="text-muted-foreground italic">pending</span>;
+  return <span className="text-foreground font-medium">{w}</span>;
 }
 
 function nest(templates: Template[]): Map<string, Map<string, Map<string, Template[]>>> {

@@ -1,31 +1,38 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Geist } from 'next/font/google';
+import { cn } from '@/lib/utils';
+
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: 'gym — GenLayer intelligent oracle benchmarks',
-  description: 'Open-source benchmarks for GenLayer\'s intelligent oracle. Polymarket routability, source accessibility, and more.',
+  title: 'gym — intelligent oracle benchmarks',
+  description: 'Open, reproducible benchmarks measuring what a decentralized LLM oracle can resolve. Pm-bench, sources-bench, and more.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
-        <header className="border-b border-ink-200 bg-white">
-          <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
-            <Link href="/" className="font-mono font-semibold text-ink-900 tracking-tight">gym <span className="text-ink-400">·</span> <span className="text-ink-500 font-normal">genlayer benchmarks</span></Link>
-            <nav className="flex gap-6 text-sm">
-              <Link className="text-ink-700 hover:text-ink-900" href="/benchmarks">Benchmarks</Link>
-              <Link className="text-ink-700 hover:text-ink-900" href="/about">About</Link>
-              <a className="text-ink-700 hover:text-ink-900" href="https://github.com/genlayer-foundation" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <html lang="en" className={cn('font-sans', geist.variable)}>
+      <body className="antialiased">
+        <header className="border-b border-border bg-background">
+          <div className="mx-auto max-w-5xl px-6 h-14 flex items-center justify-between">
+            <Link href="/" className="flex items-baseline gap-2">
+              <span className="font-semibold tracking-tight">gym</span>
+              <span className="text-xs text-muted-foreground">benchmarks for LLM-based oracles</span>
+            </Link>
+            <nav className="flex gap-7 text-sm text-muted-foreground">
+              <Link className="hover:text-foreground transition-colors" href="/benchmarks">Benchmarks</Link>
+              <Link className="hover:text-foreground transition-colors" href="/about">About</Link>
+              <a className="hover:text-foreground transition-colors" href="https://github.com/genlayer-foundation" target="_blank" rel="noopener noreferrer">GitHub</a>
             </nav>
           </div>
         </header>
-        <main>{children}</main>
-        <footer className="border-t border-ink-200 bg-white mt-24">
-          <div className="mx-auto max-w-6xl px-6 py-8 text-sm text-ink-500 flex justify-between">
-            <div>gym · GenLayer Foundation · open source</div>
-            <div>Data updated daily · static site</div>
+        <main className="min-h-[calc(100vh-3.5rem-5rem)]">{children}</main>
+        <footer className="border-t border-border bg-background mt-24">
+          <div className="mx-auto max-w-5xl px-6 py-8 text-xs text-muted-foreground flex justify-between">
+            <div>Open source · GenLayer Foundation · MIT</div>
+            <div>Every number traces to a committed file in the repo.</div>
           </div>
         </footer>
       </body>

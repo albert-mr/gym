@@ -5,15 +5,15 @@ type Props = {
   className?: string;
 };
 
+// A simple colored dot + label, kept lightweight so it works inside dense tables.
+// Color comes from the JSON's bucketColors map (in sync with the classifier).
 export function BucketBadge({ bucket, label, color, className = '' }: Props) {
   const text = label ?? bucket;
-  const bg = color ?? '#e2e8f0';
+  const dot = color ?? 'oklch(0.45 0 0)';
   return (
-    <span
-      className={`inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold text-ink-900 ${className}`}
-      style={{ backgroundColor: bg }}
-    >
-      {text}
+    <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${className}`}>
+      <span aria-hidden className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: dot }} />
+      <span className="text-foreground/90">{text}</span>
     </span>
   );
 }

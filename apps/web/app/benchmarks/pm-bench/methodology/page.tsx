@@ -1,75 +1,96 @@
-import { loadBenchmark } from '../../../../lib/data';
-import { VerificationLevelsTable, DefensiblePhrasing } from '../../../../components/VerificationLevels';
 import Link from 'next/link';
+import { loadBenchmark } from '@/lib/data';
+import { VerificationLevelsTable, DefensiblePhrasing } from '@/components/VerificationLevels';
 
 export default function MethodologyPage() {
   const data = loadBenchmark('pm-bench');
   return (
-    <div className="mx-auto max-w-3xl px-6 py-12 space-y-8">
-      <div className="text-sm text-ink-500 mb-1"><Link href="/benchmarks/pm-bench" className="hover:text-ink-700">← pm-bench</Link></div>
-      <h1 className="text-3xl font-bold text-ink-900">Methodology</h1>
+    <div className="mx-auto max-w-3xl px-6 py-16 space-y-12">
 
-      <section>
-        <h2 className="text-xl font-semibold text-ink-900 mb-2">Universe</h2>
-        <p className="text-ink-700 leading-relaxed">
-          24-hour horizon only: markets with <code className="bg-ink-100 px-1 rounded text-sm">endDate</code> in the next 24 hours from the daily poll moment. We don&apos;t benchmark long-tail markets (elections ending in November, &quot;X happens by EOY&quot;) because we have no operational rights to substitute their resolution yet.
+      <div>
+        <Link href="/benchmarks/pm-bench" className="text-sm text-muted-foreground hover:text-foreground">← pm-bench</Link>
+      </div>
+
+      <header className="space-y-3">
+        <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Methodology</p>
+        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">How we count what&apos;s resolvable</h1>
+        <p className="text-base text-muted-foreground leading-relaxed">The pipeline, the definitions, and the verification we&apos;ve actually done.</p>
+      </header>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold tracking-tight">Universe</h2>
+        <p className="text-base text-muted-foreground leading-relaxed">
+          We poll Polymarket&apos;s public API once per day and keep only the markets resolving in the next 24 hours. We don&apos;t score long-horizon markets here — they have a different risk profile.
         </p>
       </section>
 
-      <section>
-        <h2 className="text-xl font-semibold text-ink-900 mb-2">Gate funnel</h2>
-        <pre className="bg-ink-100 p-3 rounded text-xs overflow-x-auto leading-relaxed">{`Polled markets (gamma-api.polymarket.com/events?closed=false)
-  ↓ Gate 1a — drop Chainlink (data.chain.link, reference.chainlink.com)
-  ↓ Gate 1c — drop Pyth (pythdata.app, hermes.pyth.network)
-  ↓ Gate 1b — drop markets with no URL in eventResolutionSource or description
-gate1-pass — the addressable universe
-  ↓ Bucket classifier (per-domain heuristic; stand-in for the LLM source-adequacy rubric)
-solvable estimate`}</pre>
-        <p className="text-sm text-ink-500 leading-relaxed mt-3">
-          Polymarket integrates three on-chain oracles. UMA Optimistic Oracle (~98% of markets) is human-in-the-loop — that&apos;s the resolution GenLayer&apos;s intelligent oracle can substitute for.
-          Chainlink Data Feeds and Pyth Network are deterministic on-chain — GenLayer has no role. We exclude them at Gate 1 so the headline measures only the addressable universe.
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold tracking-tight">Polymarket has three oracles. We measure one.</h2>
+        <p className="text-base text-muted-foreground leading-relaxed">
+          Polymarket resolves markets through three on-chain oracles:
         </p>
-      </section>
-
-      <section>
-        <h2 className="text-xl font-semibold text-ink-900 mb-2">Bucket taxonomy</h2>
-        <ul className="space-y-1 text-sm text-ink-700 leading-relaxed">
-          <li><strong>render</strong> — direct fetch of the binding URL host via <code className="bg-ink-100 px-1 rounded text-xs">gl.nondet.web.render(mode=text, wait=10s)</code></li>
-          <li><strong>alt</strong> — binding host isn&apos;t fetchable directly; route to a Studio-verified alternate (LaLiga → ESPN esp.1, Bundesliga → ESPN ger.1, etc.)</li>
-          <li><strong>api</strong> — JSON endpoint via <code className="bg-ink-100 px-1 rounded text-xs">gl.nondet.web.get</code> (Binance, dotabuff)</li>
-          <li><strong>liquipedia_recover</strong> — HLTV (Cloudflare-walled) → Liquipedia</li>
-          <li><strong>bo3_recover</strong> — per-map total kills → bo3.gg</li>
-          <li><strong>frmf_via_flashscore</strong> — Moroccan football → Flashscore Botola</li>
-          <li><strong>eurovision_via_wiki</strong> — eurovision.tv (Cloudflare-walled) → Wikipedia</li>
-          <li><strong>subjective</strong> — requires consensus of credible reporting; no canonical source</li>
-          <li><strong>hard</strong> — paywall / login / captcha with no recovery (x.com, Yahoo Finance, sooplive)</li>
+        <ul className="space-y-2 text-base text-muted-foreground leading-relaxed list-disc pl-5">
+          <li><span className="text-foreground font-medium">UMA Optimistic Oracle</span> — ~98% of markets. A human proposer reads the source, the answer is challengeable for 2 hours. This is the resolution GenLayer&apos;s intelligent oracle can substitute for.</li>
+          <li><span className="text-foreground font-medium">Chainlink Data Feeds</span> — deterministic on-chain price feeds. No human in the loop. GenLayer has no role.</li>
+          <li><span className="text-foreground font-medium">Pyth Network</span> — deterministic high-frequency price oracle for stocks and commodities. No human in the loop. GenLayer has no role.</li>
         </ul>
-      </section>
-
-      <section>
-        <h2 className="text-xl font-semibold text-ink-900 mb-2">Studio caveat</h2>
-        <p className="text-ink-700 leading-relaxed">
-          GenLayer Studio is a centralized testbed, not a real testnet. Studio dry-runs verify that a contract+source combination produces a deterministic outcome under our prompt — they don&apos;t prove production credibility. That requires deployment on a real network. The Studio-verification work covered in this benchmark is a sanity check, not a credibility claim.
+        <p className="text-base text-muted-foreground leading-relaxed">
+          We drop the Chainlink and Pyth markets at the first gate. The headline measures only the UMA universe — the markets a human (or LLM oracle) actually has to resolve.
         </p>
       </section>
 
-      <section>
-        <h2 className="text-xl font-semibold text-ink-900 mb-2">Verification levels — read before quoting the headline</h2>
-        <p className="text-ink-700 leading-relaxed mb-3">
-          The headline &quot;X% routable&quot; counts markets whose classifier bucket matches a Studio-verified source family. That is <em>not</em> the same as &quot;X% of markets individually proven end-to-end&quot;.
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold tracking-tight">The pipeline</h2>
+        <pre className="bg-muted rounded-md p-4 text-xs font-mono leading-relaxed overflow-x-auto">{`Polled markets  (gamma-api.polymarket.com/events?closed=false)
+  ↓  drop Chainlink (data.chain.link, reference.chainlink.com)
+  ↓  drop Pyth (pythdata.app, hermes.pyth.network)
+  ↓  drop markets with no source URL in description
+addressable universe
+  ↓  classifier maps each market to a source family
+Direct source  ·  Alternative source  ·  Currently unresolvable`}</pre>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold tracking-tight">Three categories</h2>
+        <dl className="space-y-4 text-base text-muted-foreground leading-relaxed">
+          <div>
+            <dt className="font-medium text-foreground">Direct source</dt>
+            <dd>The source named in Polymarket&apos;s resolution criteria is the source we use. Sometimes that&apos;s the exact URL Polymarket provides; sometimes we navigate to a deeper page on the same host. Studio-verified per source family.</dd>
+          </div>
+          <div>
+            <dt className="font-medium text-foreground">Alternative source</dt>
+            <dd>The named source isn&apos;t reachable from validator infrastructure (Cloudflare-walled, JS-only, geo-blocked, anti-bot). We route to a Studio-verified alternate that contains the same fact. LaLiga → ESPN, HLTV → Liquipedia, Eurovision.tv → Wikipedia.</dd>
+          </div>
+          <div>
+            <dt className="font-medium text-foreground">Currently unresolvable</dt>
+            <dd>Paywall, login wall, captcha, or pure-consensus subjective markets with no canonical source. We mark these honestly and revisit when the infrastructure or methodology improves.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold tracking-tight">How verified is the headline?</h2>
+        <p className="text-base text-muted-foreground leading-relaxed">
+          The number on the home page counts every market whose classifier bucket matches a Studio-verified source family. That is not the same as &quot;every market individually proven end-to-end.&quot; Three distinct levels:
         </p>
         <VerificationLevelsTable data={data} />
+        <p className="text-sm text-muted-foreground mt-4">If you cite the number in a paper or post, here is the defensible phrasing:</p>
         <DefensiblePhrasing data={data} />
       </section>
 
-      <section>
-        <h2 className="text-xl font-semibold text-ink-900 mb-2">Known limitations</h2>
-        <ul className="space-y-2 text-sm text-ink-700 leading-relaxed list-disc pl-5">
-          <li><strong>Studio centralization</strong>: Studio dry-runs validate determinism + source under our exact prompt — they don&apos;t prove production credibility (that requires a real network).</li>
-          <li><strong>Gate 2 LLM rubric stubbed</strong>: in the production-target pipeline, Gate 2 is an LLM source-adequacy rubric applied per market. Currently approximated by the per-domain bucket classifier.</li>
-          <li><strong>Gate 3 IP probe stubbed</strong>: production should verify each binding URL is accessible from validator-equivalent infrastructure (SofaScore returns 403 to Studio&apos;s web.render IPs, etc.). Today we discover this case-by-case via Studio failures.</li>
-          <li><strong>No accuracy backtest yet</strong>: we measure <em>routability</em>, not <em>accuracy</em>. The next milestone is replaying closed markets with a local LLM and comparing the output to Polymarket&apos;s outcome.</li>
-          <li><strong>Pending Polymarket resolutions</strong>: a few percent of markets in the window haven&apos;t yet flipped to <code className="bg-ink-100 px-1 rounded text-xs">closed=true</code> (still in UMA challenge window). These show <code className="bg-ink-100 px-1 rounded text-xs">winner=pending</code>.</li>
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold tracking-tight">Studio is not a real testnet</h2>
+        <p className="text-base text-muted-foreground leading-relaxed">
+          GenLayer Studio is a centralized testbed. Studio dry-runs verify that a contract + source produces a deterministic outcome under our prompt — they do not prove production credibility under validator consensus. That requires deployment on a real network. We&apos;re explicit about this so the numbers above are read for what they are.
+        </p>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold tracking-tight">Open questions</h2>
+        <ul className="space-y-2 text-base text-muted-foreground leading-relaxed list-disc pl-5">
+          <li><span className="text-foreground font-medium">Accuracy backtest.</span> We measure routability, not accuracy. The next milestone is replaying closed markets through a local LLM and comparing the output to Polymarket&apos;s outcome.</li>
+          <li><span className="text-foreground font-medium">Validator-equivalent infrastructure.</span> Studio&apos;s web.render IPs get 403&apos;d by some hosts (SofaScore). The production answer should test against the same IPs validators would use.</li>
+          <li><span className="text-foreground font-medium">Currently-pending markets.</span> A few percent of recent markets haven&apos;t finished UMA&apos;s 2-hour challenge window. We label them <code className="bg-muted px-1 rounded text-sm">pending</code> and refresh daily.</li>
         </ul>
       </section>
     </div>

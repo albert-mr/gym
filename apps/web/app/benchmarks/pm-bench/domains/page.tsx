@@ -1,14 +1,21 @@
-import { loadBenchmark } from '../../../../lib/data';
-import { DomainTable } from '../../../../components/DomainTable';
 import Link from 'next/link';
+import { loadBenchmark } from '@/lib/data';
+import { DomainTable } from '@/components/DomainTable';
 
 export default function DomainsPage() {
   const data = loadBenchmark('pm-bench');
   return (
-    <div className="mx-auto max-w-4xl px-6 py-12">
-      <div className="text-sm text-ink-500 mb-1"><Link href="/benchmarks/pm-bench" className="hover:text-ink-700">← pm-bench</Link></div>
-      <h1 className="text-3xl font-bold text-ink-900 mb-2">Per-domain routing</h1>
-      <p className="text-ink-500 mb-6">Every host seen in <code className="bg-ink-100 px-1 rounded text-sm">eventResolutionSource</code> across the window, with its dominant classifier bucket and rebind target. {data.domains.length} hosts total.</p>
+    <div className="mx-auto max-w-4xl px-6 py-16">
+      <div className="mb-3">
+        <Link href="/benchmarks/pm-bench" className="text-sm text-muted-foreground hover:text-foreground">← pm-bench</Link>
+      </div>
+      <header className="mb-8 space-y-3">
+        <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Per-source routing</p>
+        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Source hosts and fetch targets</h1>
+        <p className="text-base text-muted-foreground max-w-2xl leading-relaxed">
+          {data.domains.length} unique source hosts appear in Polymarket&apos;s resolution criteria across this window. For each, the classifier assigns a category and a target host the oracle would fetch.
+        </p>
+      </header>
       <DomainTable data={data} />
     </div>
   );

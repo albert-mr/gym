@@ -1,27 +1,34 @@
-import type { BenchmarkData } from '../lib/types';
+import type { BenchmarkData } from '@/lib/types';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { BucketBadge } from './BucketBadge';
 
 export function DomainTable({ data }: { data: BenchmarkData }) {
   return (
-    <table className="w-full text-sm border-collapse">
-      <thead>
-        <tr className="bg-ink-100">
-          <th className="text-left p-2 border-b border-ink-200 font-semibold">Host</th>
-          <th className="text-right p-2 border-b border-ink-200 font-semibold">Markets</th>
-          <th className="text-left p-2 border-b border-ink-200 font-semibold">Bucket</th>
-          <th className="text-left p-2 border-b border-ink-200 font-semibold">Rebind / fetch target</th>
-        </tr>
-      </thead>
-      <tbody className="font-mono text-[12px]">
-        {data.domains.map(d => (
-          <tr key={d.host} className="hover:bg-ink-50">
-            <td className="p-2 border-b border-ink-200"><code>{d.host}</code></td>
-            <td className="p-2 border-b border-ink-200 text-right tabular-nums">{d.count.toLocaleString()}</td>
-            <td className="p-2 border-b border-ink-200"><BucketBadge bucket={d.dominantBucket} label={data.bucketLabels[d.dominantBucket] ?? d.dominantBucket} color={data.bucketColors[d.dominantBucket]} /></td>
-            <td className="p-2 border-b border-ink-200"><code>{d.rebind && d.rebind !== d.host ? d.rebind : '(direct)'}</code></td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="border border-border rounded-lg overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Source host</TableHead>
+            <TableHead className="text-right">Markets</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead>Fetched from</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody className="text-sm">
+          {data.domains.map(d => (
+            <TableRow key={d.host}>
+              <TableCell><code className="text-[12px]">{d.host}</code></TableCell>
+              <TableCell className="text-right tabular-nums">{d.count.toLocaleString()}</TableCell>
+              <TableCell>
+                <BucketBadge bucket={d.dominantBucket} label={data.bucketLabels[d.dominantBucket] ?? d.dominantBucket} color={data.bucketColors[d.dominantBucket]} />
+              </TableCell>
+              <TableCell>
+                <code className="text-[12px] text-muted-foreground">{d.rebind && d.rebind !== d.host ? d.rebind : '(same host)'}</code>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
