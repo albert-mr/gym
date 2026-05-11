@@ -6,13 +6,11 @@ Quantify what fraction of Polymarket's daily market universe a GenLayer intellig
 
 ## Universe definition
 
-Two universes are tracked daily:
+**Scope: 24-hour horizon only** — markets ending in the next 24 hours from the poll moment. ~2.5-9k markets per day depending on sports schedule. Sports + crypto + short-term events.
 
-1. **24-hour horizon** (operational): markets ending in the next 24 hours. ~6-9k markets/day. Sports + crypto + short-term events. The "what we'd resolve today" headline.
+Why only 24h: this is the only window where we can claim operational rights to substitute the resolution. Long-term markets (election forecasts ending Nov 2026, "X happens by EOY", etc.) have a fundamentally different risk profile and require a different treatment we are not yet equipped for. We measure step-by-step, day-by-day.
 
-2. **30-day horizon** (academic): markets ending in the next 30 days. ~18-22k markets/day. Includes long-term political, election, geopolitical, season-long, and tournament markets. The "full GenLayer-addressable universe" headline.
-
-Both are polled from `gamma-api.polymarket.com/events`, flattened to per-market rows, and saved as `data/markets[/-30d]/{date}/all.jsonl`.
+Polled from `gamma-api.polymarket.com/events`, flattened to per-market rows, saved as `data/markets/{date}/all.jsonl`.
 
 ## Gate funnel (current state)
 
@@ -144,4 +142,5 @@ NOT defensible without further work:
 - `data/benchmark-daily/snapshots.jsonl` — cross-day series
 - `data/benchmark-daily/domains-seen.json` — lifetime domain set
 - `data/markets/{date}/` — daily 24h-horizon poll + analyze artifacts
-- `data/markets-30d/{date}/` — daily 30-day-horizon poll + analyze artifacts
+<!-- 30-day-horizon and all-open universes removed 2026-05-11: scope is 24h-only by design -->
+

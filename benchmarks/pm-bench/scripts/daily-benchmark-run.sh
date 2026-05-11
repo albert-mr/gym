@@ -1,7 +1,11 @@
 #!/bin/bash
 # daily-benchmark-run.sh
-# One-shot daily benchmark: poll → analyze → snapshot for both 24h and 30-day horizons.
+# One-shot daily benchmark: poll → analyze → snapshot for the 24h-resolving market window.
 # Designed to be run by cron once per day.
+#
+# Scope: ONLY markets ending in the next 24 hours. We do not poll long-term markets
+# (30-day or all-open) because we measure routability day-by-day, not on a long-tail
+# universe we have no operational rights on yet.
 #
 # Usage:  bash scripts/daily-benchmark-run.sh
 #   Optionally:  DATE=2026-05-10 bash scripts/daily-benchmark-run.sh
@@ -10,23 +14,12 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 DATE="${DATE:-$(date -u +%Y-%m-%d)}"
-echo "=== Daily benchmark run for $DATE ==="
+echo "=== Daily benchmark run for $DATE (24h horizon) ==="
 echo
 
-# 24h horizon (operational)
-echo "--- 24h-horizon poll ---"
 npm run poll -- --date "$DATE" >/dev/null 2>&1
 npm run analyze >/dev/null 2>&1
 node scripts/benchmark-snapshot.mjs "$DATE" 24
-
-# 30-day horizon (academic)
-echo
-echo "--- 30-day-horizon poll ---"
-npm run poll -- --date "$DATE" --horizon-hours 720 --out-dir data/markets-30d >/dev/null 2>&1
-npm run analyze -- --in "data/markets-30d/$DATE/all.jsonl" --out-dir "data/markets-30d/$DATE" >/dev/null 2>&1
-# Update the symlink for classifier
-ln -sf "../markets-30d/$DATE" "data/markets/${DATE}-30d"
-node scripts/benchmark-snapshot.mjs "$DATE" 720
 
 echo
 echo "=== DONE for $DATE ==="
