@@ -14,7 +14,7 @@ export default function PolymarketBenchmarkPage() {
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Polymarket benchmark</p>
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Polymarket resolution coverage</h1>
         <p className="text-base text-muted-foreground max-w-2xl leading-relaxed">
-          Cumulative since {startLong}: every Polymarket market that has ended is added to the dataset, classified, and counted &mdash; excluding markets resolved by deterministic on-chain oracles (Chainlink, Pyth), which GenLayer is not the substitute for. One question: can GenLayer resolve this market? See <Link href="/benchmarks/polymarket/methodology" className="underline underline-offset-2 hover:text-foreground">methodology</Link> for the verification level behind that claim.
+          Cumulative since {startLong}: every Polymarket market that has ended is added to the dataset, classified, and counted. Markets resolved by deterministic on-chain oracles (Chainlink, Pyth) are excluded, because GenLayer is not the substitute for those. One question: can GenLayer resolve this market? See <Link href="/benchmarks/polymarket/methodology" className="underline underline-offset-2 hover:text-foreground">methodology</Link> for the verification level behind that claim.
         </p>
       </header>
 
@@ -26,7 +26,7 @@ export default function PolymarketBenchmarkPage() {
           className="group block border border-border rounded-xl p-6 md:p-7 transition-colors hover:border-foreground/40 hover:bg-muted/30"
         >
           <h3 className="text-lg font-semibold tracking-tight">Per-market audit trail</h3>
-          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">Every classified market with its routing decision &mdash; spot-check the headline.</p>
+          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">Every classified market with its routing decision. Spot-check the headline.</p>
           <span className="mt-4 inline-block text-sm text-muted-foreground group-hover:text-foreground transition-colors">
             Open <span className="inline-block transition-transform group-hover:translate-x-0.5">&rarr;</span>
           </span>

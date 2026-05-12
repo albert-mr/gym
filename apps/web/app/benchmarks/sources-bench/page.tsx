@@ -7,7 +7,7 @@ import type { DomainRow, BenchmarkData } from '@/lib/types';
 const WORKING_BUCKETS = new Set(['render','alt','api','liquipedia_recover','bo3_recover','frmf_via_flashscore','eurovision_via_wiki']);
 
 const FAILURE_REASONS: Record<string, string> = {
-  yahoo: 'Soft paywall — login wall behind the public URL.',
+  yahoo: 'Soft paywall: login wall behind the public URL.',
   hard: 'IP-blocked or Cloudflare-walled to validator infrastructure; no working alternate found.',
   studio_blocked: 'Returns HTTP 403 to Studio web.render IPs; no alternate available.',
   hltv_lost: 'No alternate path that contains the resolution data.',
@@ -63,7 +63,7 @@ export default function SourcesBenchPage() {
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Sources benchmark</p>
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">Source accessibility</h1>
         <p className="text-base text-muted-foreground max-w-2xl leading-relaxed">
-          Which web sources are reachable from validator-equivalent infrastructure, by category &mdash; and which ones are blocked, with the reason. Built from the {pm.domains.length} unique source hosts that appeared in Polymarket&apos;s resolution criteria across the cumulative dataset.
+          Which web sources are reachable from validator-equivalent infrastructure, by category, and which ones are blocked with the reason. Built from the {pm.domains.length} unique source hosts that appeared in Polymarket&apos;s resolution criteria across the cumulative dataset.
         </p>
         <p className="text-xs text-muted-foreground/80 max-w-2xl">
           v1 reuses the per-source verification work from the <Link href="/benchmarks/polymarket" className="underline underline-offset-2 hover:text-foreground">Polymarket benchmark</Link>. v2 will extend with category-specific seed lists (newspapers, government data, public APIs) probed independently.
