@@ -14,10 +14,8 @@ Public surface: `gym.genlayer.foundation` (forthcoming). The `apps/web/` Next.js
 apps/web/             Next.js 15 dashboard (shadcn/ui, Tailwind, TypeScript strict)
 benchmarks/
   pm-bench/           Polymarket benchmark (LIVE) — daily resolution coverage
-  sources-bench/      Sources benchmark (PLANNED)
 data/
   pm-bench/           Daily JSON the dashboard reads
-  sources-bench/
 tools/
   genvm-webdriver/    Vendored validator-equivalent fetcher
 ```
@@ -26,26 +24,20 @@ tools/
 
 The Polymarket benchmark headline is **forward-looking inference**: GenLayer has been Studio-verified end-to-end on representative markets per source family; we claim all markets on those families would resolve the same way. It's a model of what GenLayer can do, grounded in real Studio runs — not a record of every market individually executed.
 
-The methodology page documents three verification levels:
-
-1. Studio-verified end-to-end (~108 markets, outcome-matched)
-2. Per-source-family inferred (the rest)
-3. Classifier heuristic only (subjective + misc residual)
-
 Public copy on the dashboard should:
 - Say **GenLayer can resolve X%** (forward-looking capability) — not "GenLayer resolved" (past-tense fact).
 - Use **"Polymarket markets resolving in the next 24 hours"** — never "24-hour markets" (means something else).
 - Use display name **"Polymarket benchmark"**, not "pm-bench" (the latter is the codebase slug).
 - Use **"Direct source / Alternative source / Currently unresolvable"** for the three top-level categories.
-- Bury the verification-levels caveat in `/methodology`, not the headline pages.
+- Methodology page is the place for nuance; headline pages stay clean.
 
 ## Editing the dashboard copy
 
 - Hero headline: `apps/web/app/page.tsx`
 - Per-benchmark headline component: `apps/web/components/HeadlineCard.tsx`
 - Bucket display labels: `benchmarks/pm-bench/scripts/build-data-json.mjs` (`BUCKET_LABELS` const)
-- Verification levels: `apps/web/components/VerificationLevels.tsx` (only used on `/methodology`)
 - Per-day table: `apps/web/components/PerDayTable.tsx`
+- Methodology page copy: `apps/web/app/benchmarks/polymarket/methodology/page.tsx`
 
 After changing labels in `BUCKET_LABELS`, regenerate JSON: `node benchmarks/pm-bench/scripts/build-data-json.mjs`.
 
@@ -53,9 +45,9 @@ After changing labels in `BUCKET_LABELS`, regenerate JSON: `node benchmarks/pm-b
 
 ```bash
 # Daily refresh (manual; cron will automate this)
-pnpm --filter @gym/pm-bench daily       # poll today + analyze
-node benchmarks/pm-bench/scripts/poll-closed.mjs       # fetch resolution outcomes
-node benchmarks/pm-bench/scripts/build-data-json.mjs   # emit data/pm-bench/latest.json
+bash benchmarks/pm-bench/scripts/daily-benchmark-run.sh   # poll → analyze → snapshot for today
+node benchmarks/pm-bench/scripts/poll-closed.mjs          # fetch resolution outcomes
+node benchmarks/pm-bench/scripts/build-data-json.mjs      # emit data/pm-bench/latest.json
 
 # Dashboard
 pnpm --filter @gym/web dev              # http://localhost:3000

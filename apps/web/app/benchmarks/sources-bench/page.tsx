@@ -66,7 +66,7 @@ export default function SourcesBenchPage() {
           Which web sources are reachable from validator-equivalent infrastructure, by category &mdash; and which ones are blocked, with the reason. Built from the {pm.domains.length} unique source hosts that appeared in Polymarket&apos;s resolution criteria across the cumulative dataset.
         </p>
         <p className="text-xs text-muted-foreground/80 max-w-2xl">
-          v1 reuses the per-source verification work from the <Link href="/benchmarks/polymarket" className="underline underline-offset-2 hover:text-foreground">Polymarket benchmark</Link>. v2 will extend with category-specific seed lists (newspapers, government data, public APIs) probed independently &mdash; see the <a className="underline underline-offset-2 hover:text-foreground" href="https://github.com/genlayer-foundation" target="_blank" rel="noopener noreferrer">PLAN.md</a>.
+          v1 reuses the per-source verification work from the <Link href="/benchmarks/polymarket" className="underline underline-offset-2 hover:text-foreground">Polymarket benchmark</Link>. v2 will extend with category-specific seed lists (newspapers, government data, public APIs) probed independently.
         </p>
       </header>
 

@@ -42,12 +42,12 @@ Polymarket's daily universe is roughly 41% on-chain price feeds (Chainlink ~40%,
 ## Local development
 
 ```bash
-pnpm install                                          # workspace install
-pnpm --filter @gym/pm-bench daily                     # poll + analyze today
-node benchmarks/pm-bench/scripts/poll-closed.mjs      # fetch resolution outcomes
-node benchmarks/pm-bench/scripts/build-data-json.mjs  # emit data/pm-bench/latest.json
-pnpm --filter @gym/web dev                            # http://localhost:3000
-pnpm --filter @gym/web build                          # static export → apps/web/.next
+pnpm install                                                # workspace install
+bash benchmarks/pm-bench/scripts/daily-benchmark-run.sh     # poll + analyze today
+node benchmarks/pm-bench/scripts/poll-closed.mjs            # fetch resolution outcomes
+node benchmarks/pm-bench/scripts/build-data-json.mjs        # emit data/pm-bench/latest.json
+pnpm --filter @gym/web dev                                  # http://localhost:3000
+pnpm --filter @gym/web build                                # static export → apps/web/.next
 ```
 
 ## Roadmap
