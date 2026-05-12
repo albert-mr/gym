@@ -1,0 +1,417 @@
+{
+  "date": "2026-05-12",
+  "raw_rows": 6101,
+  "after_dedup": 6101,
+  "total_rows": 6101,
+  "unique_markets": 6101,
+  "unique_events": 3283,
+  "unique_templates": 277,
+  "unique_domains": 40,
+  "polled_at_min": "2026-05-12T09:08:12.457Z",
+  "polled_at_max": "2026-05-12T09:08:12.457Z",
+  "end_date_min": "2026-05-12T09:10:00Z",
+  "end_date_max": "2026-05-13T09:05:00Z",
+  "gate1_chainlink": {
+    "matched": 2728,
+    "pct": 44.7139813145386
+  },
+  "gate1_pyth": {
+    "matched": 42,
+    "pct": 0.6884117357810196
+  },
+  "gate1_no_url": {
+    "matched": 20,
+    "pct": 0.3278151122766759
+  },
+  "gate1_dropped": 2790,
+  "io_addressable_markets": 3311,
+  "io_addressable_templates": 250,
+  "io_addressable_events": 529,
+  "io_addressable_recurring": 771,
+  "io_addressable_non_recurring": 2540,
+  "io_unique_domains": 38,
+  "truly_io_shaped_markets": 3045,
+  "truly_io_shaped_templates": 213,
+  "kinds": [
+    {
+      "kind": "sports_match",
+      "label": "Sports match",
+      "markets": 1377,
+      "unique_templates": 51,
+      "unique_events": 169,
+      "recurring": 0,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "esports_match",
+      "label": "Esports match",
+      "markets": 1022,
+      "unique_templates": 85,
+      "unique_events": 85,
+      "recurring": 0,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "weather_forecast",
+      "label": "Weather forecast",
+      "markets": 437,
+      "unique_templates": 57,
+      "unique_events": 57,
+      "recurring": 437,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "crypto_price_feed",
+      "label": "Crypto price feed",
+      "markets": 228,
+      "unique_templates": 27,
+      "unique_events": 188,
+      "recurring": 219,
+      "deterministic_feed": true
+    },
+    {
+      "kind": "news_or_other",
+      "label": "News / other",
+      "markets": 209,
+      "unique_templates": 20,
+      "unique_events": 20,
+      "recurring": 115,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "stock_or_finance",
+      "label": "Stock close threshold",
+      "markets": 38,
+      "unique_templates": 10,
+      "unique_events": 10,
+      "recurring": 0,
+      "deterministic_feed": true
+    }
+  ],
+  "resolution_source_buckets": [
+    {
+      "domain": "data.chain.link",
+      "count": 2728,
+      "pct": 44.7139813145386
+    },
+    {
+      "domain": "www.twitch.tv",
+      "count": 594,
+      "pct": 9.736108834617276
+    },
+    {
+      "domain": "www.wunderground.com",
+      "count": 395,
+      "pct": 6.47434846746435
+    },
+    {
+      "domain": "kick.com",
+      "count": 247,
+      "pct": 4.048516636616948
+    },
+    {
+      "domain": "(empty)",
+      "count": 242,
+      "pct": 3.9665628585477792
+    },
+    {
+      "domain": "www.binance.com",
+      "count": 175,
+      "pct": 2.8683822324209145
+    },
+    {
+      "domain": "www.laliga.com",
+      "count": 148,
+      "pct": 2.425831830847402
+    },
+    {
+      "domain": "upl.ua",
+      "count": 136,
+      "pct": 2.2291427634813963
+    },
+    {
+      "domain": "www.fortunaliga.cz",
+      "count": 128,
+      "pct": 2.098016718570726
+    },
+    {
+      "domain": "www.cbf.com.br",
+      "count": 116,
+      "pct": 1.9013276512047206
+    },
+    {
+      "domain": "www.efa.com.eg",
+      "count": 108,
+      "pct": 1.7702016062940502
+    },
+    {
+      "domain": "spfl.co.uk",
+      "count": 102,
+      "pct": 1.6718570726110473
+    },
+    {
+      "domain": "www.kleague.com",
+      "count": 96,
+      "pct": 1.5735125389280447
+    },
+    {
+      "domain": "lfpb.com.bo",
+      "count": 96,
+      "pct": 1.5735125389280447
+    },
+    {
+      "domain": "x.com",
+      "count": 71,
+      "pct": 1.1637436485821997
+    },
+    {
+      "domain": "www.legaserieb.it",
+      "count": 68,
+      "pct": 1.1145713817406981
+    },
+    {
+      "domain": "dimayor.com.co",
+      "count": 68,
+      "pct": 1.1145713817406981
+    },
+    {
+      "domain": "www.slstat.com",
+      "count": 64,
+      "pct": 1.049008359285363
+    },
+    {
+      "domain": "liquipedia.net",
+      "count": 50,
+      "pct": 0.8195377806916898
+    },
+    {
+      "domain": "gol.gg",
+      "count": 46,
+      "pct": 0.7539747582363546
+    }
+  ],
+  "io_resolution_source_buckets": [
+    {
+      "domain": "www.twitch.tv",
+      "count": 594,
+      "pct": 17.940199335548172
+    },
+    {
+      "domain": "www.wunderground.com",
+      "count": 395,
+      "pct": 11.929930534581699
+    },
+    {
+      "domain": "kick.com",
+      "count": 247,
+      "pct": 7.459981878586531
+    },
+    {
+      "domain": "(empty)",
+      "count": 222,
+      "pct": 6.704922983992752
+    },
+    {
+      "domain": "www.binance.com",
+      "count": 175,
+      "pct": 5.2854122621564485
+    },
+    {
+      "domain": "www.laliga.com",
+      "count": 148,
+      "pct": 4.469948655995168
+    },
+    {
+      "domain": "upl.ua",
+      "count": 136,
+      "pct": 4.107520386590155
+    },
+    {
+      "domain": "www.fortunaliga.cz",
+      "count": 128,
+      "pct": 3.865901540320145
+    },
+    {
+      "domain": "www.cbf.com.br",
+      "count": 116,
+      "pct": 3.5034732709151313
+    },
+    {
+      "domain": "www.efa.com.eg",
+      "count": 108,
+      "pct": 3.261854424645122
+    },
+    {
+      "domain": "spfl.co.uk",
+      "count": 102,
+      "pct": 3.0806402899426155
+    },
+    {
+      "domain": "www.kleague.com",
+      "count": 96,
+      "pct": 2.899426155240109
+    },
+    {
+      "domain": "lfpb.com.bo",
+      "count": 96,
+      "pct": 2.899426155240109
+    },
+    {
+      "domain": "x.com",
+      "count": 71,
+      "pct": 2.14436726064633
+    },
+    {
+      "domain": "www.legaserieb.it",
+      "count": 68,
+      "pct": 2.0537601932950773
+    },
+    {
+      "domain": "dimayor.com.co",
+      "count": 68,
+      "pct": 2.0537601932950773
+    },
+    {
+      "domain": "www.slstat.com",
+      "count": 64,
+      "pct": 1.9329507701600726
+    },
+    {
+      "domain": "liquipedia.net",
+      "count": 50,
+      "pct": 1.5101177891875568
+    },
+    {
+      "domain": "gol.gg",
+      "count": 46,
+      "pct": 1.389308366052552
+    },
+    {
+      "domain": "www.afa.com.ar",
+      "count": 46,
+      "pct": 1.389308366052552
+    }
+  ],
+  "top_families": [
+    {
+      "template": "RC Celta de Vigo vs. Levante UD",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 51,
+      "recurring": false,
+      "domain": "www.laliga.com"
+    },
+    {
+      "template": "Real Betis Balompié vs. Elche CF",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 50,
+      "recurring": false,
+      "domain": "www.laliga.com"
+    },
+    {
+      "template": "CA Osasuna vs. Club Atlético de Madrid",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 47,
+      "recurring": false,
+      "domain": "www.laliga.com"
+    },
+    {
+      "template": "LoL: paiN Gaming Academy vs #REX (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 39,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "LoL: Top Esports vs Ninjas in Pyjamas (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 37,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "LoL: Invictus Gaming vs Bilibili Gaming (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 37,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "Dota #: Two Move vs Power Rangers (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 36,
+      "recurring": false,
+      "domain": "kick.com"
+    },
+    {
+      "template": "FK Oleksandriya vs. FK Zorya Luhansk",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 34,
+      "recurring": false,
+      "domain": "upl.ua"
+    },
+    {
+      "template": "FK Epitsentr Dunaivtsi vs. FK Polissia",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 34,
+      "recurring": false,
+      "domain": "upl.ua"
+    },
+    {
+      "template": "FK Metalist # Kharkiv vs. FK Karpaty Lviv",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 34,
+      "recurring": false,
+      "domain": "upl.ua"
+    },
+    {
+      "template": "RNK Veres Rivne vs. FK Kryvbas Kryvyi Rih",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 34,
+      "recurring": false,
+      "domain": "upl.ua"
+    },
+    {
+      "template": "Modena FC # vs. SS Juve Stabia",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 34,
+      "recurring": false,
+      "domain": "www.legaserieb.it"
+    },
+    {
+      "template": "Red Star FC vs. Rodez Aveyron Football",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 34,
+      "recurring": false,
+      "domain": "www.ligue2.fr"
+    },
+    {
+      "template": "Kilmarnock FC vs. Dundee FC",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 34,
+      "recurring": false,
+      "domain": "spfl.co.uk"
+    },
+    {
+      "template": "Dundee United FC vs. Livingston FC",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 34,
+      "recurring": false,
+      "domain": "spfl.co.uk"
+    }
+  ]
+}
