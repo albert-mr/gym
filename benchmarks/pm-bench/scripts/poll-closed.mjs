@@ -40,14 +40,22 @@ function winnerFromPrices(outcomes, prices) {
     return NaN;
   });
   if (nums.some(n => !Number.isFinite(n))) return null;
-  // Resolved: exactly one element is ~1.0, others ~0.0
   const max = Math.max(...nums);
   const min = Math.min(...nums);
+  // Clean winner: one element is ~1.0, others ~0.0
   if (max >= 0.999 && min <= 0.001) {
     const i = nums.indexOf(max);
     return outcomes[i];
   }
-  return null; // still trading or no clean resolution
+  // No-action settlement: Polymarket settled the market to 50/50 because the
+  // underlying event didn't happen (game cancelled, BO5 didn't reach game 5,
+  // postponed match, invalid prop, etc.). These markets ARE resolved on
+  // Polymarket — they just have no winner. Distinct from genuinely-pending
+  // markets still in the UMA challenge window.
+  if (nums.length === 2 && Math.abs(nums[0] - 0.5) < 0.05 && Math.abs(nums[1] - 0.5) < 0.05) {
+    return 'no action';
+  }
+  return null; // truly pending — still in UMA challenge window
 }
 
 function flattenEvent(ev) {

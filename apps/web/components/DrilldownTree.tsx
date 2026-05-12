@@ -179,7 +179,8 @@ function TemplateCard({ t, data, expanded, onToggle }: { t: Template; data: Benc
 }
 
 function Winner({ w }: { w: string }) {
-  if (w === 'pending') return <span className="text-muted-foreground italic">pending</span>;
+  if (w === 'pending') return <span className="text-muted-foreground italic" title="Polymarket has not yet flipped this market to closed=true. Likely still in the UMA proposal/challenge window, or the underlying event hasn't happened yet.">pending</span>;
+  if (w === 'no action') return <span className="text-muted-foreground italic" title="Polymarket settled this market to 50/50. The underlying event did not occur as the market assumed (cancelled match, BO series ended early, postponed game, etc.). Traders were refunded; no winner.">no action</span>;
   return <span className="text-foreground font-medium">{w}</span>;
 }
 
