@@ -3,10 +3,12 @@ import { loadBenchmark, loadComingSoon } from '@/lib/data';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { longDate } from '@/lib/format';
+import { buildSourcesTable } from '@/lib/sources-bench';
 
 export default function HomePage() {
   const pm = loadBenchmark('pm-bench');
   const _sources = loadComingSoon('sources-bench'); // placeholder data, kept for future shape parity
+  const sourcesTable = buildSourcesTable(pm.domains, pm.meta.generatedAt);
   return (
     <div className="mx-auto max-w-4xl px-6 py-16 space-y-14">
 
@@ -24,7 +26,7 @@ export default function HomePage() {
       {/* Benchmark cards. Each is its own self-contained headline. */}
       <section className="space-y-4">
         <PolymarketCard pm={pm} />
-        <SourcesCard pm={pm} />
+        <SourcesCard accessibleCount={sourcesTable.accessibleCount} total={sourcesTable.total} />
       </section>
 
       {/* Repo / contributing pointer */}
@@ -76,7 +78,7 @@ function PolymarketCard({ pm }: { pm: ReturnType<typeof loadBenchmark> }) {
   );
 }
 
-function SourcesCard({ pm }: { pm: ReturnType<typeof loadBenchmark> }) {
+function SourcesCard({ accessibleCount, total }: { accessibleCount: number; total: number }) {
   return (
     <Link href="/benchmarks/sources-bench" className="block group">
       <Card className="transition-colors group-hover:border-foreground/40">
@@ -87,17 +89,17 @@ function SourcesCard({ pm }: { pm: ReturnType<typeof loadBenchmark> }) {
           </div>
           <h2 className="text-xl font-semibold tracking-tight">Source accessibility</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Which web sources are reachable from validator-equivalent infrastructure, by category, and which ones are blocked with the failure reason.
+            Every web source GenLayer has classified, with reachability status and known alternatives. Copy as a prompt or download as JSON for AI wizards building intelligent contracts.
           </p>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex items-baseline gap-3 mt-2">
             <div className="hero-number text-6xl md:text-7xl font-semibold tabular-nums tracking-tighter">
-              {pm.domains.length}
+              {accessibleCount}
             </div>
             <div className="text-xs text-muted-foreground">
-              <div>unique sources tracked</div>
-              <div>by category and failure reason</div>
+              <div>accessible sources</div>
+              <div>of {total} classified</div>
             </div>
           </div>
           <div className="pt-1">

@@ -1,6 +1,6 @@
 {
   "name": "sources-bench",
-  "description": "A versioned dataset of web sources labeled accessible, partial, or blocked, with the blocking reason. Oracle contracts can use it to avoid sources that are unlikely to fetch reliably. Starts with newspapers, expands to the sources Polymarket markets actually depend on.",
-  "status": "planned",
+  "description": "A catalog of web sources GenLayer intelligent contracts can reach, grouped by category and shipped with a copy-for-agents prompt so builders can paste a ready-made source registry into any wizard.",
+  "status": "live",
   "link": "https://github.com/genlayer-foundation/gym/tree/main/benchmarks/sources-bench"
 }
