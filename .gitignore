@@ -42,3 +42,4 @@ benchmarks/pm-bench/data/markets/2026-05-10-30d
 # embedded API tokens (Fox Sports Nuxt SSR, etc.). Keep .txt/.jsonl only.
 benchmarks/pm-bench/data/markets/*/probe-samples/**/*.html
 benchmarks/pm-bench/data/markets/*/probe-samples/*.html
+.gstack/
