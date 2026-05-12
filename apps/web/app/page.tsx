@@ -19,7 +19,7 @@ export default function HomePage() {
           Where we measure what GenLayer can do.
         </h1>
         <p className="text-base text-muted-foreground leading-relaxed max-w-2xl">
-          Open benchmarks for the GenLayer ecosystem. One question per benchmark. All pipelines, daily data, classifiers, and dashboards in one repo &mdash; so any result can be reproduced or challenged.
+          Open benchmarks for the GenLayer ecosystem. One question per benchmark. All pipelines, daily data, classifiers, and dashboards in one repo, so any result can be reproduced or challenged.
         </p>
       </section>
 

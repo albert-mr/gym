@@ -295,6 +295,41 @@ function build() {
   const totalSolved = allRows.filter(r => SOLVED_BUCKETS.has(r.bucket)).length;
   const headlinePct = totalPass ? (100 * totalSolved / totalPass) : 0;
 
+  // Slim per-market export for the public download. One row per unique market.
+  // `namedSource` is the host Polymarket named in its resolution criteria;
+  // `verifiedSource` is the host GenLayer verified works for that market
+  // (equal to namedSource when accessible, different when we routed to an
+  // alternative, null when blocked because nothing was verified to work).
+  // `bucket` is the raw classifier label, kept for power users.
+  const statusOf = (bucket) => {
+    if (DIRECT_BUCKETS.has(bucket)) return 'accessible';
+    if (ALT_BUCKETS.has(bucket)) return 'alternative';
+    return 'blocked';
+  };
+  const downloadMarkets = allRows.map(r => {
+    const status = statusOf(r.bucket);
+    return {
+      id: r.id,
+      namedSource: r.eRSHost || null,
+      verifiedSource: status === 'blocked' ? null : (r.rebindHost || null),
+      status,
+      bucket: r.bucket,
+    };
+  });
+  const downloadCounts = { accessible: 0, alternative: 0, blocked: 0 };
+  for (const m of downloadMarkets) downloadCounts[m.status]++;
+  const downloadDoc = {
+    markets: downloadMarkets,
+    meta: {
+      generatedAt: new Date().toISOString(),
+      window: { start, end },
+      counts: { ...downloadCounts, total: downloadMarkets.length },
+      headlinePct,
+      schema: 'https://gym.genlayer.foundation/schema/polymarket-markets-v2',
+      notes: 'One row per unique Polymarket market across the window. `namedSource` is the host Polymarket names in its resolution criteria. `verifiedSource` is the host GenLayer verified works: equal to namedSource when the named host is accessible, a different host when we route to a verified alternative source (e.g. HLTV→Liquipedia, LaLiga→ESPN), and null when no source could be verified. `status` is the three-bucket rollup; `bucket` is the fine-grained classifier label that explains why a market is blocked (paywall, subjective, validator-IP block, etc.).',
+    },
+  };
+
   const data = {
     meta: { dates: days, generatedAt: new Date().toISOString(), totalPass, totalSolved, headlinePct, window: { start, end } },
     perDay,
@@ -317,6 +352,17 @@ function build() {
   const sizeMB = (fs.statSync(windowFile).size / 1024 / 1024).toFixed(2);
   console.log(`Wrote ${windowFile} (${sizeMB} MB)`);
   console.log(`Wrote ${latestFile} (copy)`);
+
+  // Slim public download: served by Next.js as a static asset at
+  // /data/pm-bench/markets.json. Lives under apps/web/public so it ships
+  // with the dashboard build; outAbs is <repo>/data/pm-bench, so ../.. is repo root.
+  const publicDir = path.resolve(outAbs, '..', '..', 'apps', 'web', 'public', 'data', 'pm-bench');
+  fs.mkdirSync(publicDir, { recursive: true });
+  const publicMarketsFile = path.join(publicDir, 'markets.json');
+  fs.writeFileSync(publicMarketsFile, JSON.stringify(downloadDoc) + '\n', 'utf8');
+  const downloadSizeMB = (fs.statSync(publicMarketsFile).size / 1024 / 1024).toFixed(2);
+  console.log(`Wrote ${publicMarketsFile} (${downloadSizeMB} MB, ${downloadMarkets.length} markets)`);
+
   console.log(`Templates: ${templates.length}, Markets: ${allRows.length}, Unsolvables: ${unsolvables.length}, Headline: ${headlinePct.toFixed(1)}%`);
 }
 
