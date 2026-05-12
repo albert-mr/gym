@@ -25,7 +25,7 @@ export function PerDayTable({ data }: { data: BenchmarkData }) {
             <TableHead className="text-xs">Date</TableHead>
             <TableHead className="text-xs text-right">Addressable</TableHead>
             <TableHead className="text-xs text-right">
-              <H label="Direct source" tip="The source the resolution criteria names is the source we use — exact URL or a deeper page on the same host (Studio-verified per source family)." />
+              <H label="Direct source" tip="The source the resolution criteria names is the source we use: either the exact URL, or a deeper page on the same host. Studio-verified per source family." />
             </TableHead>
             <TableHead className="text-xs text-right">
               <H label="Alternative source" tip="Named source isn't reachable (Cloudflare, JS-only, geo-block); we route to a verified alternate. LaLiga → ESPN, HLTV → Liquipedia, frmf.ma → Flashscore, eurovision.tv → Wikipedia." />

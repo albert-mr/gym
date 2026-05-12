@@ -18,7 +18,7 @@ export function HeadlineCard({ data }: Props) {
         of every Polymarket market that has ended since {startLong} is within GenLayer&rsquo;s resolution coverage. <span className="text-foreground tabular-nums">{data.meta.totalPass.toLocaleString()}</span> markets and counting.
       </p>
       <p className="text-xs text-muted-foreground/80 mt-3 max-w-xl">
-        *Polymarket&rsquo;s daily universe is roughly {s.onchainFeedPct.toFixed(0)}% on-chain price feeds (Chainlink {s.chainlinkPct.toFixed(0)}%, Pyth {s.pythPct.toFixed(1)}%) and {s.addressablePct.toFixed(0)}% markets that need human-style resolution. The headline measures GenLayer&rsquo;s coverage of the second group &mdash; the only one where an LLM oracle has a role.
+        *Polymarket&rsquo;s daily universe is roughly {s.onchainFeedPct.toFixed(0)}% on-chain price feeds (Chainlink {s.chainlinkPct.toFixed(0)}%, Pyth {s.pythPct.toFixed(1)}%) and {s.addressablePct.toFixed(0)}% markets that need human-style resolution. The headline measures GenLayer&rsquo;s coverage of the second group, the only one where an LLM oracle has a role.
       </p>
     </div>
   );

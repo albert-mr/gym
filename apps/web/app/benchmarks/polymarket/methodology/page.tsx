@@ -15,7 +15,7 @@ export default function MethodologyPage() {
       <header className="space-y-3">
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Methodology</p>
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">How GenLayer resolves Polymarket</h1>
-        <p className="text-base text-muted-foreground leading-relaxed">The universe, the pipeline, and the three resolution categories &mdash; in plain prose.</p>
+        <p className="text-base text-muted-foreground leading-relaxed">The universe, the pipeline, and the three resolution categories.</p>
       </header>
 
       <section className="space-y-3">
@@ -31,12 +31,12 @@ export default function MethodologyPage() {
           Polymarket settles markets through three on-chain oracles. The share each one takes across our daily polls (since {startLong}, {data.onchainFeedStats.polledUniverse.toLocaleString()} unique markets):
         </p>
         <ul className="space-y-2 text-base text-muted-foreground leading-relaxed list-disc pl-5">
-          <li><span className="text-foreground font-medium">UMA Optimistic Oracle &mdash; {data.onchainFeedStats.addressablePct.toFixed(0)}%.</span> A human proposer reads the source, the answer is challengeable for two hours. This is the resolution GenLayer&rsquo;s intelligent oracle substitutes for.</li>
-          <li><span className="text-foreground font-medium">Chainlink Data Feeds &mdash; {data.onchainFeedStats.chainlinkPct.toFixed(0)}%.</span> Deterministic on-chain price feeds (mostly recurring &ldquo;BTC Up or Down hourly&rdquo;-style markets). No human in the loop. GenLayer has no role.</li>
-          <li><span className="text-foreground font-medium">Pyth Network &mdash; {data.onchainFeedStats.pythPct.toFixed(1)}%.</span> Deterministic high-frequency price oracle for stocks and commodities. No human in the loop. GenLayer has no role.</li>
+          <li><span className="text-foreground font-medium">UMA Optimistic Oracle: {data.onchainFeedStats.addressablePct.toFixed(0)}%.</span> A human proposer reads the source, the answer is challengeable for two hours. This is the resolution GenLayer&rsquo;s intelligent oracle substitutes for.</li>
+          <li><span className="text-foreground font-medium">Chainlink Data Feeds: {data.onchainFeedStats.chainlinkPct.toFixed(0)}%.</span> Deterministic on-chain price feeds (mostly recurring &ldquo;BTC Up or Down hourly&rdquo;-style markets). No human in the loop. GenLayer has no role.</li>
+          <li><span className="text-foreground font-medium">Pyth Network: {data.onchainFeedStats.pythPct.toFixed(1)}%.</span> Deterministic high-frequency price oracle for stocks and commodities. No human in the loop. GenLayer has no role.</li>
         </ul>
         <p className="text-base text-muted-foreground leading-relaxed">
-          We drop the Chainlink and Pyth markets at the first gate. The headline measures only the UMA share &mdash; the markets whose resolution requires interpreting an external source.
+          We drop the Chainlink and Pyth markets at the first gate. The headline measures only the UMA share: the markets whose resolution requires interpreting an external source.
         </p>
       </section>
 
@@ -46,7 +46,7 @@ export default function MethodologyPage() {
           Each day we poll Polymarket&rsquo;s public API for markets resolving in the next 24 hours. Markets bound to deterministic on-chain price feeds (Chainlink, Pyth) are removed: GenLayer is not a substitute for these. Markets with no source URL anywhere in their resolution criteria are removed: there is nothing to resolve against. The remaining markets form the cumulative addressable universe.
         </p>
         <p className="text-base text-muted-foreground leading-relaxed">
-          Every market in that universe is then mapped to a source family GenLayer has end-to-end coverage for. The market lands in one of three categories &mdash; Direct source, Alternative source, or Currently unresolvable. The first two count toward the headline; the third does not.
+          Every market in that universe is then mapped to a source family GenLayer has end-to-end coverage for. The market lands in one of three categories: Direct source, Alternative source, or Currently unresolvable. The first two count toward the headline; the third does not.
         </p>
       </section>
 
@@ -59,11 +59,11 @@ export default function MethodologyPage() {
           </div>
           <div>
             <dt className="font-medium text-foreground">Alternative source</dt>
-            <dd>The named host is not reachable from validator infrastructure &mdash; Cloudflare-walled, JS-only, geo-blocked, or anti-bot-blocked. GenLayer routes to a verified alternate that contains the same resolution fact. LaLiga &rarr; ESPN, HLTV &rarr; Liquipedia, Eurovision.tv &rarr; Wikipedia, frmf.ma &rarr; Flashscore.</dd>
+            <dd>The named host is not reachable from validator infrastructure: Cloudflare-walled, JS-only, geo-blocked, or anti-bot-blocked. GenLayer routes to a verified alternate that contains the same resolution fact. LaLiga &rarr; ESPN, HLTV &rarr; Liquipedia, Eurovision.tv &rarr; Wikipedia, frmf.ma &rarr; Flashscore.</dd>
           </div>
           <div>
             <dt className="font-medium text-foreground">Currently unresolvable</dt>
-            <dd>Paywall, login wall, captcha, or pure-consensus subjective markets with no canonical source. We mark these honestly and revisit when the infrastructure or methodology improves &mdash; the <Link href="/benchmarks/sources-bench" className="underline underline-offset-2 hover:text-foreground">Sources benchmark</Link> tracks them by failure reason.</dd>
+            <dd>Paywall, login wall, captcha, or pure-consensus subjective markets with no canonical source. We mark these honestly and revisit when the infrastructure or methodology improves. The <Link href="/benchmarks/sources-bench" className="underline underline-offset-2 hover:text-foreground">Sources benchmark</Link> tracks them by failure reason.</dd>
           </div>
         </dl>
       </section>
@@ -74,7 +74,7 @@ export default function MethodologyPage() {
           <li><span className="text-foreground font-medium">Accuracy backtest.</span> The headline measures resolution coverage. The next milestone is replaying closed markets through a local LLM and comparing the output to Polymarket&rsquo;s settlement, then publishing per-category accuracy alongside coverage.</li>
           <li><span className="text-foreground font-medium">Validator-equivalent infrastructure.</span> Some hosts return HTTP 403 to certain validator IP ranges. The production answer should test against the same IPs validators would use, not a single development environment.</li>
           <li><span className="text-foreground font-medium">Currently-pending markets.</span> A few percent of recent markets have not finished UMA&rsquo;s 2-hour challenge window. We label them <code className="bg-muted px-1 rounded text-sm">pending</code> and refresh daily.</li>
-          <li><span className="text-foreground font-medium">Long-horizon markets.</span> Markets resolving further out than 24 hours are out of scope today. Whether to extend coverage there &mdash; and how &mdash; is open.</li>
+          <li><span className="text-foreground font-medium">Long-horizon markets.</span> Markets resolving further out than 24 hours are out of scope today. Whether to extend coverage, and how, is open.</li>
         </ul>
       </section>
 

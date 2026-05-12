@@ -17,7 +17,7 @@ export default function HomePage() {
           Where we measure what GenLayer can do.
         </h1>
         <p className="text-base text-muted-foreground leading-relaxed max-w-2xl">
-          Open benchmarks for the GenLayer ecosystem. One question per benchmark. All pipelines, daily data, classifiers, and dashboards in one repo &mdash; so any result can be reproduced or challenged.
+          Open benchmarks for the GenLayer ecosystem. One question per benchmark. All pipelines, daily data, classifiers, and dashboards in one repo, so any result can be reproduced or challenged.
         </p>
       </section>
 
@@ -87,7 +87,7 @@ function SourcesCard({ pm }: { pm: ReturnType<typeof loadBenchmark> }) {
           </div>
           <h2 className="text-xl font-semibold tracking-tight">Source accessibility</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Which web sources are reachable from validator-equivalent infrastructure, by category &mdash; and which ones are blocked, with the failure reason.
+            Which web sources are reachable from validator-equivalent infrastructure, by category, and which ones are blocked with the failure reason.
           </p>
         </CardHeader>
         <CardContent className="space-y-3">

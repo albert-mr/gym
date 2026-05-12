@@ -12,14 +12,14 @@ export default function AboutPage() {
       <section className="space-y-3">
         <h2 className="text-xl font-semibold tracking-tight">What this is</h2>
         <p className="text-base text-muted-foreground leading-relaxed">
-          GenLayer Gym hosts daily-refreshed benchmarks measuring what GenLayer can do across multiple surfaces — the intelligent oracle, source accessibility, and more as we build them. Each benchmark is self-contained: polling pipeline, daily raw data, classifier, and rendered dashboard live in one monorepo. Every number on the site traces to a committed file.
+          GenLayer Gym hosts daily-refreshed benchmarks measuring what GenLayer can do across multiple surfaces: the intelligent oracle, source accessibility, with more on the way. Each benchmark is self-contained: polling pipeline, daily raw data, classifier, and rendered dashboard live in one monorepo. Every number on the site traces to a committed file.
         </p>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold tracking-tight">Who runs it</h2>
         <p className="text-base text-muted-foreground leading-relaxed">
-          Maintained by the <a className="underline underline-offset-2 hover:text-foreground" href="https://genlayer.foundation" target="_blank" rel="noopener noreferrer">GenLayer Foundation</a>. Read GenLayer Gym as foundation-published benchmark evidence — not a marketing page.
+          Maintained by the <a className="underline underline-offset-2 hover:text-foreground" href="https://genlayer.foundation" target="_blank" rel="noopener noreferrer">GenLayer Foundation</a>. Read GenLayer Gym as foundation-published benchmark evidence, not a marketing page.
         </p>
       </section>
 
