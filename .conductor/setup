@@ -1,0 +1,38 @@
+#!/bin/sh
+
+set -eu
+
+cd "$(dirname "$0")/.."
+
+link_from_conductor_root() {
+  path="$1"
+
+  if [ -z "${CONDUCTOR_ROOT_PATH:-}" ]; then
+    return
+  fi
+
+  if [ -e "$path" ] || [ -L "$path" ]; then
+    return
+  fi
+
+  if [ ! -e "$CONDUCTOR_ROOT_PATH/$path" ]; then
+    return
+  fi
+
+  mkdir -p "$(dirname "$path")"
+  ln -s "$CONDUCTOR_ROOT_PATH/$path" "$path"
+  echo "Linked $path from $CONDUCTOR_ROOT_PATH"
+}
+
+link_from_conductor_root ".env"
+link_from_conductor_root ".env.local"
+link_from_conductor_root "apps/web/.env.local"
+
+if command -v pnpm >/dev/null 2>&1; then
+  pnpm install --frozen-lockfile
+elif command -v corepack >/dev/null 2>&1; then
+  corepack pnpm install --frozen-lockfile
+else
+  echo "pnpm is required. Install pnpm or enable Corepack for this Node installation." >&2
+  exit 1
+fi
