@@ -50,6 +50,18 @@ export default function PolymarketBenchmarkPage() {
           Each row is one day&rsquo;s contribution to the cumulative dataset, split into three routes: <span className="text-foreground">Direct source</span> (the host named in Polymarket&rsquo;s resolution criteria), <span className="text-foreground">Alternative source</span> (we route to a verified alternate when the named host isn&rsquo;t reachable), and <span className="text-foreground">Currently unresolvable</span> (paywall, login, captcha, or pure-consensus). Percentages use that day&rsquo;s addressable count as denominator. Column headers carry the precise definitions on hover.
         </p>
         <PerDayTable data={data} />
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <a
+            href="/data/pm-bench/markets.json"
+            download="polymarket-markets.json"
+            className="inline-flex items-center gap-2 text-sm border border-border rounded-md px-3 py-1.5 transition-colors hover:border-foreground/40 hover:bg-muted/30"
+          >
+            Download dataset (JSON)
+          </a>
+          <p className="text-xs text-muted-foreground">
+            One row per market: ID, the source Polymarket named, the source GenLayer verified works (the alternative, when we had to route to one), and whether it&rsquo;s accessible, an alternative source, or blocked.
+          </p>
+        </div>
       </section>
 
       <section className="pt-8 border-t border-border">
