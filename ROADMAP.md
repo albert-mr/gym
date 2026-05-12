@@ -1,150 +1,65 @@
-# Intelligent Oracle and GenLayer Gym Roadmap
+# GenLayer Gym — Roadmap
 
-**Status:** DRAFT
-**Author:** Albert Martinez
-**Date:** 2026-05-05
+**Last updated:** 2026-05-12
+**Maintainer:** Albert Martinez (GenLayer Foundation)
 
----
-
-## 0. TL;DR
-
-Two benchmarks plus one umbrella, all feeding Intelligent Oracle (`intelligentoracle.com`).
-
-1. **Polymarket benchmark.** Continuous monitor of upcoming PM markets, classifying each on GenLayer fit and IO addressability. PASS markets run through IO and get graded against Polymarket's settlement.
-2. **Sources benchmark.** Versioned dataset of web sources labeled accessible / partial / blocked + reason. Starts with newspapers, expands to the sources PM markets actually depend on.
-3. **GenLayer Gym** (`gym.genlayer.foundation`). W&B-style home for every benchmark, dataset, leaderboard, and run log. The two benches above are its v1 inhabitants.
-
-Goal: know which markets and which sources IO can serve, where it breaks, where to invest next.
+GenLayer Gym is the public, reproducible home for benchmarks measuring what GenLayer can do across the ecosystem. This roadmap is what's live, what's next, and what's deferred.
 
 ---
 
-## 1. Polymarket Benchmark
+## Current state
 
-### 1.1 Aim
+- **Dashboard** — `apps/web/` (Next.js 15 + shadcn/ui). 8 static routes, deploys to Vercel. Reads daily JSON from `data/<benchmark>/latest.json`.
+- **Polymarket benchmark** — Live. Cumulative since May 6, 2026: of 23,915 addressable Polymarket markets, 96.8% are within GenLayer's resolution coverage. Excludes the ~41% of Polymarket resolved by Chainlink/Pyth on-chain feeds.
+- **Sources benchmark** — Live (v1 derived from pm-bench). 78 unique source hosts tracked: 72 working, 6 blocked.
 
-Continuously classify all upcoming Polymarket markets on (a) IO addressability and (b) GenLayer fit. Run the PASS markets through Intelligent Oracle and check whether it works.
+## Headline framing
 
-### 1.2 How
+The Polymarket benchmark headline is **forward-looking inference**: GenLayer has been verified on representative markets per source family; we claim every market on those families would resolve the same way. It's a model of what GenLayer can do, not a per-market record. The dashboard's methodology page documents this in plain prose.
 
-Three gates funnel the upcoming-markets universe down to an addressable set. Rejected markets are not lost — they flow into the funnel breakdown so we can see where coverage is bleeding.
-
-```mermaid
-flowchart TD
-    A[Upcoming PM markets<br/>polled daily] --> B{Gate 1:<br/>GenLayer fit?}
-    B -- No --> O1[not-fit]
-    B -- Yes --> C{Gate 2:<br/>Has explicit source?}
-    C -- No --> O2[no-source]
-    C -- Yes --> D{Gate 3:<br/>Source accessible<br/>to validators?}
-    D -- No --> O3[inaccessible]
-    D -- Yes --> P[PASS<br/>run through Intelligent Oracle]
-
-    O1 -.-> FN[Funnel breakdown:<br/>counts + reasons per category]
-    O2 -.-> FN
-    O3 -.-> FN
-
-    classDef start fill:#FFFFFF,stroke:#424242,color:#1A1A1A
-    classDef gate fill:#FFD54F,stroke:#E65100,color:#1A1A1A
-    classDef out fill:#BDBDBD,stroke:#424242,color:#1A1A1A
-    classDef pass fill:#81C784,stroke:#1B5E20,color:#0A1F0A
-
-    class A start
-    class B,C,D gate
-    class O1,O2,O3,FN out
-    class P pass
-```
-
-Gate semantics:
-
-- **Gate 1 — GenLayer fit?** Reject markets already served by deterministic oracles (Chainlink-resolvable) or pure on-chain settlement. No GenLayer value-add.
-- **Gate 2 — Has explicit source?** Reject markets that don't specify (or surface via agentic search) a primary source we can resolve against. We rely on Polymarket's own source criteria; we do not independently judge credibility here.
-- **Gate 3 — Source accessible to validators?** Reject markets whose sources are paywalled, IP-blocked, captcha-walled, or login-only. *Possible unblock paths: TLSNotary, market-data feeds, TBD.*
-
-PASS markets are sent to Intelligent Oracle. We record what IO produces and, once Polymarket settles, whether IO got it right.
-
-### 1.3 Approach
-
-End-to-end pipeline, in order. Step 6 runs in parallel with all of the above.
-
-1. **Market polling.** Daily script that pulls Polymarket markets with end date in the next 24h (markets about to be finalized).
-
-2. **Market filtering.** Skill that runs gates 1 and 2 against each polled market — drop chainlink-resolvable / pure on-chain (Gate 1), drop markets without a Polymarket-specified or agentic-searchable source (Gate 2). Output is a `pass` / `not-fit` / `no-source` label and the funnel breakdown.
-
-3. **Launch Intelligent Oracle contract.** For every `pass` market, deploy a dedicated IO resolution contract via the factory pattern — one contract per resolution, isolated from shared-state contention.
-
-4. **Resolve market.** Skill triggered on the market's end date or when Polymarket marks it resolved. Runs agentic search if the source URL is missing or stale, then submits the URL into the IO contract from step 3. Gate 3 (accessibility) surfaces here — sources that validators cannot fetch are labeled `inaccessible` retroactively and dropped from the pass set.
-
-5. **Compare resolutions.** Script that, after Polymarket settles a market (deadline + ~48h, TBD), diffs IO's outcome against Polymarket's and records correctness, latency, and cost.
-
-6. **Review IO implementation.** Parallel workstream. Audit the IO contract — prompts, states, deploy pipeline — and ship fixes against IO as defects surface. Runs continuously alongside steps 1–5; defects feed back into the next IO release.
-
-### 1.4 Out of scope
-
-- Past markets. We do not backfill historical correctness; we grade what we attempt going forward.
+Future benchmarks must follow the same rule: the headline is what the system can do today, and the methodology page declares exactly what's been verified.
 
 ---
 
-## 2. Sources Benchmark
+## What's next
 
-### 2.1 Aim
+Priority order. Each item has a clear definition of done.
 
-Versioned, queryable dataset of web sources, each labeled accessible / partial / blocked + reason. Consumable by Intelligent Contracts at runtime to know what they can rely on before reaching out.
+### 1. Ship publicly
 
-### 2.2 How
+Deploy `apps/web/` to Vercel under `gym.genlayer.foundation`. Done when the dashboard is reachable on a public URL.
 
-Each source flows through an Intelligent Contract probe and lands in one of three buckets:
+### 2. Daily refresh automation
 
-- **accessible** — full content reachable from validator infrastructure.
-- **partial** — content reachable but degraded. Reason recorded: soft-paywall, JS-rendered subset, headers-only, partial body, etc.
-- **blocked** — content unreachable. Reason recorded: IP, captcha, paywall / payment, login, JS-only, robots.txt.
+GitHub Action on a cron: poll → analyze → poll-closed → build-data-json → commit `data/pm-bench/`. Done when the dashboard reflects yesterday's resolutions without manual work.
 
-### 2.3 Approach
+### 3. Accuracy backtest
 
-End-to-end pipeline. v1 ships newspapers; v2 extends with PM-derived sources.
+Replay every closed Polymarket market through a local LLM with the same prompt the intelligent oracle uses; compare the LLM's output against Polymarket's settlement. Turns the forward-looking-inference headline into a per-market accuracy claim.
 
-1. **Seed list compilation.** AI-generated list of newspaper articles, one per newspaper, multi-region (Polish, free, paywalled, etc.).
+Done when the dashboard's methodology page shows a real accuracy number per category, replacing the inferred number.
 
-2. **Probe.** An Intelligent Contract fetches each source from validator infrastructure, classifies it `accessible` / `partial` / `blocked`, and writes the label + reason on-chain.
+### 4. Sources benchmark v2
 
-3. **Ground-truth check.** Skill that pulls the same source via off-chain computer-use search and compares the result against what the IC fetched. Confirms the on-chain probe actually got the real content of the source, not a stripped-down or substituted page.
+Stand up an independent pipeline that probes sources directly (local webdriver + on-chain fetcher + ground-truth check), rather than deriving from pm-bench's domain table. Start with newspapers, expand to government data and public APIs.
 
-4. **Publish to Gym.** `sources-db` deployed as the Gym dataset. Filterable view by source, category, accessibility status, and block reason.
+Done when `/benchmarks/sources-bench` shows results from its own probes instead of pm-bench-derived data.
 
-5. **Extend with PM-derived sources.** Pull every source URL referenced by markets in `pm-bench`. Categorize (news, sports stats, government data, social, on-chain, public APIs). Dedupe against v1. Run the same probe. Merge into `sources-db`.
+### 5. Real-network credibility check
 
-### 2.4 Out of scope
-
-- Content correctness. We classify reachability, not whether the source's content is true.
-- Source ranking / quality scoring. Could become its own bench later; not part of v1.
+When GenLayer's real testnet is available, run the same source-family probes there and update the methodology page to reflect production-network results. Done when the dashboard distinguishes development-environment-verified from real-network-verified per source family.
 
 ---
 
-## 3. Intelligent Oracle
+## Out of scope
 
-### 3.1 What it is
-
-`intelligentoracle.com`. AI-powered oracle dApp on GenLayer. Headline: ~1h finality, <$1 per market. The benchmarks above exist to make those numbers measurable.
-
-### 3.2 In-flight work
-
-- **Wizard rewire** — read from the Gym source catalog; pick a verified source and wire it into a new market in one click.
-- **FAQ updates** — surface live numbers from `pm-bench` and `sources-db` so users see the evidence behind IO's claims.
-- **Factory pattern for resolutions** (R&D) — each resolution gets its own contract instance, isolated from shared-state contention.
-- **IO end-to-end skill (Skill.md)** — Cowork / Claude skill exposing the full IO flow so agents can drive IO without the UI; also unblocks scripted execution of the Polymarket benchmark.
+- **Backfilling historical Polymarket markets.** We grade what we attempt going forward, not history.
+- **Content-correctness scoring for sources.** Sources benchmark measures reachability, not whether the content is true.
+- **Cross-source quality / ranking.** A separate benchmark someday, not v1.
 
 ---
 
-## 4. GenLayer Gym
+## Adjacent work (lives elsewhere)
 
-`gym.genlayer.foundation`. Durable home for every benchmark, dataset, leaderboard, and run log. W&B-style: each bench has a versioned dataset, a public leaderboard, inspectable run logs.
-
----
-
-## 5. TLSNotary Market
-
-TLSNotary lets a third-party Notary participate in a TLS handshake without seeing the plaintext, then attest that a given response really came from a specific server at a specific time. The client redacts what it wants kept private and submits a cryptographic proof of the rest, which an Intelligent Contract can accept as admissible evidence — the IC never fetches the source itself. This unblocks Gate 3 for sources validators cannot reach directly: rate-limited APIs, paywalled or login-walled content, IP-gated dashboards, platforms with no clean public API.
-
-The canonical example is X (Twitter): high-value real-time signal, no usable public API. With TLSNotary, an agent submits a proof of "this exact tweet existed at this timestamp from this account" and the IC resolves on it. The pattern generalizes to any HTTPS API — bank statements, exchange price at a timestamp, gov data behind login, sportsbook lines. Anywhere a source is blocked at Gate 3, TLSNotary is the unblock path.
-
----
-
-*End of draft.*
+- **Intelligent Oracle** (`intelligentoracle.com`) — the AI-powered oracle dApp on GenLayer. Headline: ~1h finality, <$1 per market. GenLayer Gym exists to make those numbers measurable.
+- **TLSNotary work** — separate research workstream. When live, it becomes the unblock path for currently-unresolvable sources (paywalled, login-walled, IP-gated). Out of GenLayer Gym v1.

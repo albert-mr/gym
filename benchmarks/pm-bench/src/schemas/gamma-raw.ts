@@ -33,7 +33,7 @@ export const gammaRawMarketSchema = z
     question: z.string(),
     slug: z.string(),
     description: z.string().nullish(),
-    endDate: z.string(),
+    endDate: z.string().nullish(),
     startDate: z.string().nullish(),
     closed: z.boolean(),
     active: z.boolean(),

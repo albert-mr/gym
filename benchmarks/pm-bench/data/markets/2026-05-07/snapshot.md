@@ -1,4 +1,4 @@
-# pm-bench snapshot — 2026-05-07
+# pm-bench snapshot — 2026-05-11
 
 Universe: Polymarket markets resolving in the next 24h, `closed=false`.
 
@@ -21,17 +21,18 @@ Universe: Polymarket markets resolving in the next 24h, `closed=false`.
 | --- | ---: | ---: | ---: |
 | Total polled | +5,348 | 5,348 | 100.0% |
 | Drop: Chainlink-fed (Gate 1a) | -2,730 | 2,618 | 49.0% |
-| Drop: no URL anywhere (Gate 1b) | -69 | 2,549 | 47.7% |
+| Drop: Pyth Network (Gate 1c) | -42 | 2,576 | 48.2% |
+| Drop: no URL anywhere (Gate 1b) | -69 | 2,507 | 46.9% |
 
-**Post-Gate-1 (IO-addressable): 2,549 markets / 275 unique templates.**
-**Gate 1 dropped: 2,730 Chainlink-fed + 69 with no URL anywhere = 2,799 markets.**
+**Post-Gate-1 (IO-addressable): 2,507 markets / 253 unique templates.**
+**Gate 1 dropped: 2,730 Chainlink-fed + 69 with no URL anywhere = 2,841 markets.**
 
 ## Coverage scenarios
 
 | Scenario | Markets | Coverage | Description |
 | --- | ---: | ---: | --- |
-| One-off only | 1,764 | 33.0% | IO-addressable AND not tagged `recurring` (true novelty) |
-| Post-Gate-1 (deterministic exclusion) | 2,549 | 47.7% | Drop Chainlink-fed AND drop markets with no URL anywhere |
+| One-off only | 1,722 | 32.2% | IO-addressable AND not tagged `recurring` (true novelty) |
+| Post-Gate-1 (deterministic exclusion) | 2,507 | 46.9% | Drop Chainlink-fed AND drop markets with no URL anywhere |
 
 Gate 2 (the LLM/skill rubric on the residual) is reserved for a later pass — see PLAN.md §3.3.
 
@@ -39,19 +40,19 @@ Gate 2 (the LLM/skill rubric on the residual) is reserved for a later pass — s
 
 | Bucket | Markets | % of IO-addressable |
 | --- | ---: | ---: |
-| Recurring (templated, fans out daily) | 785 | 30.8% |
-| Non-recurring (true one-off) | 1,764 | 69.2% |
+| Recurring (templated, fans out daily) | 785 | 31.3% |
+| Non-recurring (true one-off) | 1,722 | 68.7% |
 
 ## Kinds of markets (within IO-addressable)
 
 | Kind | Markets | % | Templates | Events | Recurring | Note |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Esports match | 1,173 | 46.0% | 77 | 77 | 0 | IO-shaped |
-| Weather forecast | 430 | 16.9% | 57 | 57 | 430 | IO-shaped |
-| Sports match | 346 | 13.6% | 28 | 55 | 0 | IO-shaped |
-| Crypto price feed | 270 | 10.6% | 49 | 210 | 219 | deterministic feed (IO not useful) |
-| News / other | 258 | 10.1% | 20 | 23 | 136 | IO-shaped |
-| Stock close threshold | 72 | 2.8% | 44 | 44 | 0 | deterministic feed (IO not useful) |
+| Esports match | 1,173 | 46.8% | 77 | 77 | 0 | IO-shaped |
+| Weather forecast | 430 | 17.2% | 57 | 57 | 430 | IO-shaped |
+| Sports match | 346 | 13.8% | 28 | 55 | 0 | IO-shaped |
+| News / other | 258 | 10.3% | 20 | 23 | 136 | IO-shaped |
+| Crypto price feed | 228 | 9.1% | 27 | 188 | 219 | deterministic feed (IO not useful) |
+| Stock close threshold | 72 | 2.9% | 44 | 44 | 0 | deterministic feed (IO not useful) |
 
 **Truly IO-shaped (drop deterministic feeds): 2,207 markets / 182 unique templates.**
 
@@ -60,8 +61,8 @@ Gate 2 (the LLM/skill rubric on the residual) is reserved for a later pass — s
 - **Esports match** — `LoL: Dplus KIA vs KT Rolster (BO#)` (49), `LoL: HMBLE vs Colossal Gaming (BO#)` (39), `LoL: Weibo Gaming vs Team WE (BO#)` (37)
 - **Weather forecast** — `Lowest temperature in Hong Kong on May #?` (11), `Highest temperature in London on May #?` (11), `Highest temperature in Sao Paulo on May #?` (11)
 - **Sports match** — `Cavaliers vs. Pistons` (37), `Aston Villa FC vs. Nottingham Forest FC` (34), `SC Freiburg vs. SC Braga` (34)
-- **Crypto price feed** — `Bitcoin Up or Down` (24), `Ethereum Up or Down` (24), `Solana Up or Down` (24)
 - **News / other** — `## Free App in the US Apple App Store on May #?` (42), `What will be said on the next All-In Podcast? (May #)` (25), `Bitcoin above ___ on May #, #AM ET?` (20)
+- **Crypto price feed** — `Bitcoin Up or Down` (24), `Ethereum Up or Down` (24), `Solana Up or Down` (24)
 - **Stock close threshold** — `Apple (AAPL) closes above ___ on May #?` (5), `Microsoft (MSFT) closes above ___ on May #?` (5), `Amazon (AMZN) closes above ___ on May #?` (5)
 
 ## Gate 1 — deterministic exclusion

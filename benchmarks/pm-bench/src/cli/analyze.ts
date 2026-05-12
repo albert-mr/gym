@@ -3,7 +3,7 @@ import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { analyze } from "../analyze/analyze.js";
-import { hasAnyUrl, isGate1Match } from "../analyze/buckets.js";
+import { gate1Reason, hasAnyUrl, isGate1Match } from "../analyze/buckets.js";
 import { dedupeByLatestPoll, loadJsonl } from "../analyze/load.js";
 import { renderMarkdown } from "../analyze/render-markdown.js";
 import { requireDateArg } from "../lib/parse-date.js";
@@ -90,7 +90,8 @@ async function main(args: CliArgs): Promise<void> {
   await mkdir(outDir, { recursive: true });
   await writeFile(snapshotPath, md, "utf8");
 
-  const chainlinkRows = rows.filter((r) => isGate1Match(r.eventResolutionSource));
+  const chainlinkRows = rows.filter((r) => gate1Reason(r.eventResolutionSource) === "chainlink");
+  const pythRows = rows.filter((r) => gate1Reason(r.eventResolutionSource) === "pyth");
   const noUrlRows = rows.filter(
     (r) => !isGate1Match(r.eventResolutionSource) && !hasAnyUrl(r),
   );
@@ -100,9 +101,11 @@ async function main(args: CliArgs): Promise<void> {
 
   const passPath = resolve(outDir, "gate1-pass.jsonl");
   const dropChainlinkPath = resolve(outDir, "gate1-drop-chainlink.jsonl");
+  const dropPythPath = resolve(outDir, "gate1-drop-pyth.jsonl");
   const dropNoUrlPath = resolve(outDir, "gate1-drop-no-url.jsonl");
   await writeJsonl(passPath, passRows);
   await writeJsonl(dropChainlinkPath, chainlinkRows);
+  await writeJsonl(dropPythPath, pythRows);
   await writeJsonl(dropNoUrlPath, noUrlRows);
 
   const summary = {
@@ -119,6 +122,7 @@ async function main(args: CliArgs): Promise<void> {
     end_date_min: result.endDateMin,
     end_date_max: result.endDateMax,
     gate1_chainlink: { matched: result.gate1Chainlink.matched, pct: result.gate1Chainlink.pct },
+    gate1_pyth: { matched: result.gate1Pyth.matched, pct: result.gate1Pyth.pct },
     gate1_no_url: { matched: result.gate1NoUrl.matched, pct: result.gate1NoUrl.pct },
     gate1_dropped: result.gate1Dropped,
     io_addressable_markets: result.ioAddressableMarkets,
@@ -154,6 +158,7 @@ async function main(args: CliArgs): Promise<void> {
       summary_json: summaryPath,
       gate1_pass_jsonl: passPath,
       gate1_drop_chainlink_jsonl: dropChainlinkPath,
+      gate1_drop_pyth_jsonl: dropPythPath,
       gate1_drop_no_url_jsonl: dropNoUrlPath,
       raw_rows: raw.length,
       after_dedup: rows.length,

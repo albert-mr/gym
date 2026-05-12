@@ -1,0 +1,408 @@
+{
+  "date": "2026-05-11",
+  "raw_rows": 9446,
+  "after_dedup": 9446,
+  "total_rows": 9446,
+  "unique_markets": 9446,
+  "unique_events": 3591,
+  "unique_templates": 342,
+  "unique_domains": 50,
+  "polled_at_min": "2026-05-09T10:08:24.064Z",
+  "polled_at_max": "2026-05-09T10:08:24.064Z",
+  "end_date_min": "2026-05-09T10:10:00Z",
+  "end_date_max": "2026-05-10T10:00:00Z",
+  "gate1_chainlink": {
+    "matched": 2723,
+    "pct": 28.827016726656783
+  },
+  "gate1_pyth": {
+    "matched": 0,
+    "pct": 0
+  },
+  "gate1_no_url": {
+    "matched": 25,
+    "pct": 0.26466229091679017
+  },
+  "gate1_dropped": 2748,
+  "io_addressable_markets": 6698,
+  "io_addressable_templates": 337,
+  "io_addressable_events": 864,
+  "io_addressable_recurring": 650,
+  "io_addressable_non_recurring": 6048,
+  "io_unique_domains": 49,
+  "truly_io_shaped_markets": 6480,
+  "truly_io_shaped_templates": 319,
+  "kinds": [
+    {
+      "kind": "sports_match",
+      "label": "Sports match",
+      "markets": 4335,
+      "unique_templates": 179,
+      "unique_events": 540,
+      "recurring": 0,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "esports_match",
+      "label": "Esports match",
+      "markets": 1007,
+      "unique_templates": 64,
+      "unique_events": 64,
+      "recurring": 0,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "news_or_other",
+      "label": "News / other",
+      "markets": 733,
+      "unique_templates": 17,
+      "unique_events": 22,
+      "recurring": 33,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "weather_forecast",
+      "label": "Weather forecast",
+      "markets": 405,
+      "unique_templates": 59,
+      "unique_events": 59,
+      "recurring": 399,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "crypto_price_feed",
+      "label": "Crypto price feed",
+      "markets": 218,
+      "unique_templates": 18,
+      "unique_events": 179,
+      "recurring": 218,
+      "deterministic_feed": true
+    }
+  ],
+  "resolution_source_buckets": [
+    {
+      "domain": "data.chain.link",
+      "count": 2723,
+      "pct": 28.827016726656783
+    },
+    {
+      "domain": "www.twitch.tv",
+      "count": 719,
+      "pct": 7.611687486766885
+    },
+    {
+      "domain": "www.jleague.jp",
+      "count": 606,
+      "pct": 6.415413931822994
+    },
+    {
+      "domain": "www.pgatour.com",
+      "count": 423,
+      "pct": 4.47808596231209
+    },
+    {
+      "domain": "(empty)",
+      "count": 419,
+      "pct": 4.435739995765403
+    },
+    {
+      "domain": "www.mlssoccer.com",
+      "count": 384,
+      "pct": 4.065212788481897
+    },
+    {
+      "domain": "www.bundesliga.com",
+      "count": 379,
+      "pct": 4.012280330298539
+    },
+    {
+      "domain": "www.wunderground.com",
+      "count": 354,
+      "pct": 3.747618039381749
+    },
+    {
+      "domain": "www.premierleague.com",
+      "count": 299,
+      "pct": 3.1653609993648106
+    },
+    {
+      "domain": "www.cbf.com.br",
+      "count": 288,
+      "pct": 3.0489095913614226
+    },
+    {
+      "domain": "www.laliga.com",
+      "count": 267,
+      "pct": 2.826593266991319
+    },
+    {
+      "domain": "www.binance.com",
+      "count": 175,
+      "pct": 1.8526360364175314
+    },
+    {
+      "domain": "www.fortunaliga.cz",
+      "count": 160,
+      "pct": 1.693838661867457
+    },
+    {
+      "domain": "kick.com",
+      "count": 153,
+      "pct": 1.619733220410756
+    },
+    {
+      "domain": "www.legaseriea.it",
+      "count": 138,
+      "pct": 1.4609358458606818
+    },
+    {
+      "domain": "www.afa.com.ar",
+      "count": 136,
+      "pct": 1.4397628625873384
+    },
+    {
+      "domain": "www.ligue2.fr",
+      "count": 128,
+      "pct": 1.3550709294939658
+    },
+    {
+      "domain": "tff.org",
+      "count": 126,
+      "pct": 1.3338979462206226
+    },
+    {
+      "domain": "www.ufc.com",
+      "count": 121,
+      "pct": 1.2809654880372645
+    },
+    {
+      "domain": "www.dotabuff.com",
+      "count": 103,
+      "pct": 1.0904086385771756
+    }
+  ],
+  "io_resolution_source_buckets": [
+    {
+      "domain": "www.twitch.tv",
+      "count": 719,
+      "pct": 10.734547626157061
+    },
+    {
+      "domain": "www.jleague.jp",
+      "count": 606,
+      "pct": 9.04747685876381
+    },
+    {
+      "domain": "www.pgatour.com",
+      "count": 423,
+      "pct": 6.315318005374738
+    },
+    {
+      "domain": "(empty)",
+      "count": 394,
+      "pct": 5.88235294117647
+    },
+    {
+      "domain": "www.mlssoccer.com",
+      "count": 384,
+      "pct": 5.733054643177068
+    },
+    {
+      "domain": "www.bundesliga.com",
+      "count": 379,
+      "pct": 5.658405494177366
+    },
+    {
+      "domain": "www.wunderground.com",
+      "count": 354,
+      "pct": 5.28515974917886
+    },
+    {
+      "domain": "www.premierleague.com",
+      "count": 299,
+      "pct": 4.464019110182144
+    },
+    {
+      "domain": "www.cbf.com.br",
+      "count": 288,
+      "pct": 4.299790982382801
+    },
+    {
+      "domain": "www.laliga.com",
+      "count": 267,
+      "pct": 3.986264556584055
+    },
+    {
+      "domain": "www.binance.com",
+      "count": 175,
+      "pct": 2.612720214989549
+    },
+    {
+      "domain": "www.fortunaliga.cz",
+      "count": 160,
+      "pct": 2.388772767990445
+    },
+    {
+      "domain": "kick.com",
+      "count": 153,
+      "pct": 2.284263959390863
+    },
+    {
+      "domain": "www.legaseriea.it",
+      "count": 138,
+      "pct": 2.0603165123917586
+    },
+    {
+      "domain": "www.afa.com.ar",
+      "count": 136,
+      "pct": 2.030456852791878
+    },
+    {
+      "domain": "www.ligue2.fr",
+      "count": 128,
+      "pct": 1.911018214392356
+    },
+    {
+      "domain": "tff.org",
+      "count": 126,
+      "pct": 1.8811585547924752
+    },
+    {
+      "domain": "www.ufc.com",
+      "count": 121,
+      "pct": 1.806509405792774
+    },
+    {
+      "domain": "www.dotabuff.com",
+      "count": 103,
+      "pct": 1.5377724693938488
+    },
+    {
+      "domain": "www.slstat.com",
+      "count": 96,
+      "pct": 1.433263660794267
+    }
+  ],
+  "top_families": [
+    {
+      "template": "PGA Tour: Truist Championship Top #",
+      "kind": "news_or_other",
+      "kindLabel": "News / other",
+      "markets": 216,
+      "recurring": false,
+      "domain": "www.pgatour.com"
+    },
+    {
+      "template": "PGA Tour: ONEflight Myrtle Beach Classic Top #",
+      "kind": "news_or_other",
+      "kindLabel": "News / other",
+      "markets": 207,
+      "recurring": false,
+      "domain": "www.pgatour.com"
+    },
+    {
+      "template": "PGA Tour: Truist Championship Winner",
+      "kind": "news_or_other",
+      "kindLabel": "News / other",
+      "markets": 93,
+      "recurring": false,
+      "domain": "(empty)"
+    },
+    {
+      "template": "PGA Tour: ONEflight Myrtle Beach Classic Winner",
+      "kind": "news_or_other",
+      "kindLabel": "News / other",
+      "markets": 91,
+      "recurring": false,
+      "domain": "(empty)"
+    },
+    {
+      "template": "Liverpool FC vs. Chelsea FC",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 64,
+      "recurring": false,
+      "domain": "www.premierleague.com"
+    },
+    {
+      "template": "TSG # Hoffenheim vs. SV Werder Bremen",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 64,
+      "recurring": false,
+      "domain": "www.bundesliga.com"
+    },
+    {
+      "template": "Brighton & Hove Albion FC vs. Wolverhampton Wanderers FC",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 64,
+      "recurring": false,
+      "domain": "www.premierleague.com"
+    },
+    {
+      "template": "LoL: LOS vs Fluxo W#M (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 63,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "VfL Wolfsburg vs. FC Bayern München",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 61,
+      "recurring": false,
+      "domain": "www.bundesliga.com"
+    },
+    {
+      "template": "Fulham FC vs. AFC Bournemouth",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 59,
+      "recurring": false,
+      "domain": "www.premierleague.com"
+    },
+    {
+      "template": "VfB Stuttgart vs. Bayer # Leverkusen",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 58,
+      "recurring": false,
+      "domain": "www.bundesliga.com"
+    },
+    {
+      "template": "LoL: KT Rolster vs BNK FEARX (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 58,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "Sunderland AFC vs. Manchester United FC",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 57,
+      "recurring": false,
+      "domain": "www.premierleague.com"
+    },
+    {
+      "template": "Dota #: Yellow Submarine vs Tundra Esports (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 57,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "Club Atlético de Madrid vs. RC Celta de Vigo",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 56,
+      "recurring": false,
+      "domain": "www.laliga.com"
+    }
+  ]
+}

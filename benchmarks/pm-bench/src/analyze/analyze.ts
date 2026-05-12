@@ -1,8 +1,11 @@
 import type { PolledMarket } from "../schemas/polled-market.js";
 import {
+  GATE1_CHAINLINK_PREFIXES,
   GATE1_PREFIXES,
+  GATE1_PYTH_PREFIXES,
   domainOf,
   eventTitlePrefix,
+  gate1Reason,
   hasAnyUrl,
   isGate1Match,
   outcomeShape,
@@ -63,6 +66,7 @@ export interface AnalyzeResult {
   ioUniqueDomains: number;
   topFamilies: TopFamily[];
   gate1Chainlink: { matched: number; total: number; pct: number; prefixes: readonly string[] };
+  gate1Pyth: { matched: number; total: number; pct: number; prefixes: readonly string[] };
   gate1NoUrl: { matched: number; total: number; pct: number };
   gate1Dropped: number;
 
@@ -173,13 +177,15 @@ export function analyze(rows: PolledMarket[]): AnalyzeResult {
   );
   const uniqueDomains = domainCounts.size;
 
-  const gate1Chainlink = rows.filter((r) => isGate1Match(r.eventResolutionSource)).length;
+  const gate1Chainlink = rows.filter((r) => gate1Reason(r.eventResolutionSource) === "chainlink").length;
+  const gate1Pyth = rows.filter((r) => gate1Reason(r.eventResolutionSource) === "pyth").length;
   const afterChainlink = total - gate1Chainlink;
+  const afterPyth = afterChainlink - gate1Pyth;
   const gate1NoUrl = rows.filter(
     (r) => !isGate1Match(r.eventResolutionSource) && !hasAnyUrl(r),
   ).length;
-  const ioStrict = afterChainlink - gate1NoUrl;
-  const gate1Dropped = gate1Chainlink + gate1NoUrl;
+  const ioStrict = afterPyth - gate1NoUrl;
+  const gate1Dropped = gate1Chainlink + gate1Pyth + gate1NoUrl;
 
   const funnel: FunnelRow[] = [
     { step: "Total polled", delta: total, remaining: total, pctOfTotal: 100 },
@@ -188,6 +194,12 @@ export function analyze(rows: PolledMarket[]): AnalyzeResult {
       delta: -gate1Chainlink,
       remaining: afterChainlink,
       pctOfTotal: pct(afterChainlink, total),
+    },
+    {
+      step: "Drop: Pyth Network (Gate 1c)",
+      delta: -gate1Pyth,
+      remaining: afterPyth,
+      pctOfTotal: pct(afterPyth, total),
     },
     {
       step: "Drop: no URL anywhere (Gate 1b)",
@@ -332,7 +344,13 @@ export function analyze(rows: PolledMarket[]): AnalyzeResult {
       matched: gate1Chainlink,
       total,
       pct: pct(gate1Chainlink, total),
-      prefixes: GATE1_PREFIXES,
+      prefixes: GATE1_CHAINLINK_PREFIXES,
+    },
+    gate1Pyth: {
+      matched: gate1Pyth,
+      total,
+      pct: pct(gate1Pyth, total),
+      prefixes: GATE1_PYTH_PREFIXES,
     },
     gate1NoUrl: { matched: gate1NoUrl, total, pct: pct(gate1NoUrl, total) },
     gate1Dropped,

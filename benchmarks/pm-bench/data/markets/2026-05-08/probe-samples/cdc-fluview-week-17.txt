@@ -1,0 +1,544 @@
+Skip directly to site content
+Skip directly to search
+Skip directly to On This Page
+An official website of the United States government
+Here's how you know
+search
+FluView
+MENU
+For Everyone
+Current Week: U.S. Influenza Surveillance Report
+U.S. Influenza Surveillance: Purpose and Methods
+VIEW ALL
+HOME
+FluView
+Current Week: U.S. Influenza Surveillance Report
+U.S. Influenza Surveillance: Purpose and Methods
+VIEW MENU
+Weekly US Influenza Surveillance Report: Key Updates for Week 17, ending May 2, 2026
+For Everyone
+MAY 8, 2026
+KEY POINTS
+Seasonal influenza activity is low.
+Summary
+Viruses
+Clinical Lab
+3.1% (Trend )
+positive for influenza
+this week.
+Public Health Lab
+The most frequently reported
+viruses this week were influenza B.
+Illness
+Outpatient Respiratory Illness
+1.8% (Trend )
+of visits to a health care provider this week were for respiratory illness
+(below baseline).
+Activity Map
+0 moderate jurisdictions
+0 high jurisdictions
+FluSurv-NET
+86.0
+cumulative hospitalization rate
+per 100,000 population
+NHSN LTCF Respiratory
+Data
+3.8
+
+weekly hospitalization rate
+per 100,000 residents
+NHSN Hospital Respiratory Data
+1,573 (Trend )
+patients admitted to hospitals
+with influenza this week.
+NCHS Mortality
+0.1% (Trend )
+
+of deaths attributed to influenza this week.
+Pediatric Deaths
+3 influenza-associated deaths were reported this week for
+a total of 158 deaths this season.
+
+All data are preliminary and may change as more reports are received.
+
+Directional arrows indicate changes between the current week and the previous week. Additional information on the arrows can be found at the bottom of this page.
+
+A description of the CDC influenza surveillance system, including methodology and detailed descriptions of each data component is available on the surveillance methods page.
+
+Additional information on the current and previous influenza seasons for each surveillance component are available on FluView Interactive.
+
+Key Points
+
+Seasonal influenza activity is low.
+Influenza A(H3N2) viruses are the most frequently reported influenza viruses overall this season; however, influenza B viruses have been reported more frequently than influenza A viruses in recent weeks.
+Among 2,417 influenza A(H3N2) viruses collected since September 28, 2025, that underwent additional genetic characterization at CDC, 93.0% belonged to subclade K.
+The cumulative influenza-associated hospitalization rate overall in FluSurv-NET is the third highest since the 2010-2011 season. Children younger than 18 years have the second highest cumulative hospitalization rate for that age group since the 2010-2011 season.
+Three influenza-associated pediatric deaths occurring during the 2025-2026 season were reported to CDC this week, bringing the season total to 158 reported influenza-associated pediatric deaths.
+Among children who were eligible for influenza vaccination and with known vaccination status, approximately 85% of reported pediatric deaths this season have occurred in children who were not fully vaccinated against influenza.
+CDC's in-season severity assessment framework classified the season as moderate across all ages. CDC also assesses severity by three age groups: pediatric (0-17 years), adult (18-64 years), and older adults (≥65 years). At this point in the season, the pediatric age group is classified as having high severity, while both the adult and older adult age groups are classified as having moderate severity. These assessments are conducted each week during the season, and the season's severity assessment can change if activity should increase again.
+CDC estimates that there have been at least 32 million illnesses, 380,000 hospitalizations, and 24,000 deaths from flu so far this season.
+Influenza (flu) vaccination has been shown to reduce the risk of flu and its potentially serious complications. Approximately 135 million doses of influenza vaccine have been distributed in the United States this season.
+There are prescription flu antiviral drugs that can treat flu illness; those should be started as early as possible and are especially important for patients at higher risk for flu-related complications.1
+Influenza viruses are among several viruses contributing to respiratory disease activity. CDC provides updated, integrated information about COVID-19, flu, and respiratory syncytial virus (RSV) activity on a weekly basis.
+One human infection with an influenza A(H1N2) variant (v) virus was reported to CDC this week.
+No new avian influenza A(H5) virus infections were reported to CDC this week. To date, person-to-person transmission of influenza A(H5) viruses has not been identified in the United States.
+
+COVID-19, flu, and RSV activity
+U.S. virologic surveillance
+
+Nationally and in HHS regions 2, 6 and 9, the percentage of respiratory specimens testing positive for influenza virus in clinical laboratories remained stable (change < 0.5 percentage points) compared to the previous week. Percent positivity decreased in regions 1, 3, 5, 7 and 8 and slightly increased in regions 4 and 10 (change ≥ 0.5 percentage points), likely due to lower reporting this week compared to previous weeks. Percent positivity for influenza A viruses is low and influenza B percent positivity is trending downward nationally. Influenza B viruses were the most frequently reported influenza viruses by public health labs this week nationally, with the distribution of circulating viruses differing by HHS region. For regional and state level data and age group distribution, please visit FluView Interactive. Viruses known to be associated with recent receipt of live attenuated influenza vaccine (LAIV) or found upon further testing to be a vaccine virus are not included, as they are not circulating influenza viruses.
+
+Clinical Laboratories
+
+The results of tests performed by clinical laboratories nationwide are summarized below. Data from clinical laboratories (the percentage of specimens tested that are positive for influenza virus) are used to monitor whether influenza activity is increasing or decreasing.
+
+Week 17
+Data Cumulative since
+September 28, 2025
+(Week 40)
+No. of specimens tested 44,618 2,395,581
+No. of positive specimens (%) 1,363 (3.1%) 314,025 (13.1%)
+Positive specimens by type
+Influenza A 229 (16.8%) 222,559 (70.9%)
+Influenza B 1,134 (83.2%) 91,466 (29.1%)
+
+Public Health Laboratories
+
+The results of tests performed by public health laboratories nationwide are summarized below. Data from public health laboratories are used to monitor the proportion of circulating influenza viruses that belong to each influenza subtype/lineage.
+
+Week 17
+Data Cumulative since
+September 28, 2025
+(Week 40)
+No. of specimens tested 400 95,156
+No. of positive specimens 109 63,788
+Positive specimens by type/subtype
+
+Influenza A 47 (43.1%) 54,282 (85.1%)
+Subtyping Performed 44 (93.6%) 44,532 (82.0%)
+(H1N1)pdm09 17 (38.6%) 5,956 (13.4%)
+H3N2 27 (61.4%) 38,574 (86.6%)
+H3N2v† 0 0
+H5* 0 2 (<0.01%)
+Subtyping not performed 3 (6.4%) 9,750 (18.0%)
+Influenza B 62 (56.9%) 9,506 (14.9%)
+Lineage testing performed 26 (41.9%) 3,883 (40.8%)
+Yamagata lineage 0 0
+Victoria lineage 26 (100%) 3,883 (100%)
+Lineage not performed 36 (58.1%) 5,623 (59.2%)
+
+*These data reflect specimens tested, and the number determined to be positive for influenza viruses at the public health labs (specimens tested is not the same as cases). The data do not reflect specimens tested only at CDC and could include more than one specimen tested per person. For more information on the number of people infected with A/H5 viruses, please visit the "How CDC is monitoring influenza data among people to better understand the current avian influenza A (H5N1) situation"
+
+†When an influenza virus that normally circulates in swine (but not people) is detected in a person, it is called a "variant" influenza virus. Most human infections with variant influenza viruses occur following exposure to swine, but human-to-human transmission can occur. It is important to note that in most cases, variant influenza viruses have not shown the ability to spread easily and sustainably from human-to-human.
+
+*This graph reflects the number of specimens determined to be positive for influenza viruses at the public health lab (specimens tested is not the same as cases). It does not reflect specimens tested only at CDC and could include more than one specimen tested per person. Specimens tested as part of routine influenza surveillance as well as those tested as part of targeted testing for people exposed to avian influenza A(H5) are included.
+
+Additional virologic surveillance information for current and past seasons:
+Surveillance Methods | FluView Interactive: National, Regional, and State Data or Age Data
+Novel Influenza A Virus Infections
+
+One human infection with influenza A(H1N2) variant (v) virus was reported by the Nebraska Department of Health and Human Services.
+
+The patient, who is <18 years of age, initially developed respiratory illness during the week ending April 4, 2026 (Week 13). The patient sought healthcare during the week ending April 18, 2026 (Week 15) with worsening symptoms, was not hospitalized, and has recovered from their illness. An investigation by local and state public health officials did not identify direct or indirect swine contact by the patient. Additional investigation identified that a close contact developed mild respiratory illness on the same day as the case, but no cases of human infection with A(H1N2)v virus associated with this case have been identified.
+
+This is the second human infection with a variant influenza virus reported in the 2025-2026 season, and the first reported in 2026; both have been influenza A(H1N2)v viruses.
+
+When an influenza virus that normally circulates in swine (but not people) is detected in a person, it is called a "variant" influenza virus. Most human infections with variant influenza viruses occur following exposure to swine, but limited, non-sustained, human-to-human transmission has occurred. It is important to note that in most cases, variant influenza viruses have not shown the ability to spread easily and sustainably from person to person.
+
+Notification to WHO of this case was completed according to International Health Regulations (IHR). More information regarding IHR can be found at http://www.who.int/topics/international_health_regulations/en/
+.
+
+The CSTE position statement, which includes updated case definitions for confirmed, probable, and suspected cases, is available at http://www.cste.org/resource/resmgr/position_statements_files_2023/24-ID-09_Novel_Influenza_A.pdf
+.
+
+No confirmed human infections with influenza A(H5) virus were reported to CDC this week. To date, human-to-human transmission of avian influenza A(H5) virus (H5 bird flu) has not been identified in the United States.
+
+An up-to-date A(H5) human case summary during the current outbreak by state and exposure source is available at www.cdc.gov/bird-flu/situation-summary/index.html.
+
+Information about avian influenza is available at https://www.cdc.gov/flu/avianflu/index.htm. A(H5N1) virus interim recommendations for Prevention, Monitoring, and Public Health Investigations are available at https://www.cdc.gov/bird-flu/prevention/hpai-interim-recommendations.html.
+
+Additional information regarding human infections with novel influenza A viruses:
+Surveillance Methods | FluView Interactive
+Influenza Virus Characterization
+
+CDC performs genetic and antigenic characterization of U.S. viruses submitted from state and local public health laboratories according to the Right Size Roadmap submission guidance
+. These data are used to compare how similar the currently circulating influenza viruses are relative to the reference viruses representing the current influenza vaccines. The data are also used to monitor evolutionary changes that continually occur in influenza viruses circulating in humans. CDC also tests susceptibility of circulating influenza viruses to antiviral medications including the neuraminidase inhibitors (oseltamivir, zanamivir, and peramivir) and the polymerase acidic protein (PA) endonuclease inhibitor baloxavir. The HA clade and subclades were assigned using Nextclade (https://clades.nextstrain.org
+).
+
+CDC has genetically characterized 4,313 influenza viruses collected since September 28, 2025.
+
+Virus Subtype or Lineage
+
+Genetic Characterization
+
+Total No. of
+Subtype/Lineage
+Tested
+
+HA
+Clade
+
+Number (% of
+subtype/lineage
+tested)
+
+HA
+Subclade
+
+Number (% of
+subtype/lineage
+tested)
+
+A/H1
+887
+5a.2a 3 (0.3%) C.1.9.3 3 (0.3%)
+5a.2a.1 884 (99.7%) D.3.1 253 (28.5%)
+D.3.1.1 631 (71.1%)
+
+A/H3
+2,417
+2a.3a.1 2,417 (100%) J.2 6 (0.2%)
+J.2.2 5 (0.2%)
+
+J.2.3
+
+76 (3.1%)
+
+J.2.4
+
+83 (3.4%)
+
+K
+
+2,247 (93.0%)
+
+B/Victoria
+1,009
+
+3a.2
+1,009 (100%)
+C.3
+5 (0.5%)
+C.3.1 698 (69.2%)
+C.3.3 14 (1.4%)
+C.5.1 44 (4.4%)
+C.5.6 32 (3.2%)
+C.5.6.1 171 (16.9%)
+C.5.7 45 (4.5%)
+
+B/Yamagata
+
+0
+
+Y3
+
+0
+Y3 0
+
+CDC antigenically characterizes influenza viruses by hemagglutination inhibition (HI) assay (H1N1pdm09, H3N2, and B/Victoria viruses) or neutralization-based HINT
+(H3N2 viruses) using antisera from ferrets infected with reference viruses representing the recommended cell-based or recombinant influenza vaccines for the 2025-2026 Northern Hemisphere season. Antigenic differences between viruses are determined by comparing how well the antibodies raised against the vaccine reference viruses recognize the circulating viruses, which were grown in cell culture. Ferret antisera are useful because antibodies raised against a particular virus can often recognize small changes in the surface proteins of other viruses. In HI assays, viruses are deemed antigenically similar when their HI titer differences are less than or equal to 4-fold. In HINT, viruses with similar antigenic properties have antibody neutralization titer differences of less than 8-fold. Circulating viruses with antigenic testing results that show titer differences greater than 4-fold by HI or equal to or greater than 8-fold by HINT) are considered “low reactors” or antigenically drifted compared to the vaccine virus. From the recent genetically characterized viruses, a subset is selected for antigenic characterization based on identified genetic changes in their surface proteins. The subset tested may not be proportional to the number of such viruses circulating in the United States.
+
+Influenza A Viruses
+A(H1N1)pdm09: 223 A(H1N1)pdm09 viruses collected since September 28, 2025, were antigenically characterized by HI, and 220 (98.7%) were well-recognized (reacting at titers that were within 4-fold of the homologous virus titer) by ferret antisera to cell-grown A/Wisconsin/67/2022-like reference viruses representing the A(H1N1)pdm09 component for the cell- and recombinant-based influenza vaccines.
+A(H3N2): 355 A(H3N2) viruses collected since September 28, 2025, were antigenically characterized by HI or HINT, and 6 (1.7%) were well-recognized (reacting at titers that were within 4-fold of the homologous virus titer in HI or reacting at titers that were less than 8-fold of the homologous virus in HINT) by ferret antisera to cell-grown A/District Of Columbia/27/2023-like reference viruses representing the A(H3N2) component for the cell- and recombinant-based influenza vaccines.
+Influenza B Viruses
+B/Victoria: 142 influenza B/Victoria-lineage viruses collected since September 28, 2025, since were antigenically characterized by HI, and 48 (33.8%) were well-recognized (reacting at titers that were within 4-fold of the homologous virus titer) by ferret antisera to cell-grown B/Austria/1359417/2021-like reference viruses representing the B/Victoria component for the cell- and recombinant-based influenza vaccines.
+B/Yamagata: No influenza B/Yamagata-lineage viruses were available for antigenic characterization.
+
+Assessment of Virus Susceptibility to Antiviral Medications
+
+CDC assesses susceptibility of influenza viruses to the antiviral medications including the neuraminidase inhibitors (oseltamivir, zanamivir, and peramivir) and the PA endonuclease inhibitor baloxavir using next generation sequence analysis supplemented by laboratory assays. Information about antiviral susceptibility test methods can be found at U.S. Influenza Surveillance: Purpose and Methods | CDC.
+
+Viruses collected in the U.S. since September 28, 2025, were tested for antiviral susceptibility as follows:
+
+Antiviral Medication Total Viruses A/H1 A/H3 B/Victoria
+Neuraminidase Inhibitors Oseltamivir Viruses Tested 4,258 888 2,364 1,006
+Reduced Inhibition 15 (0.4%) 15 (1.7%) 0 0
+Highly Reduced Inhibition 10 (0.2%) 8 (0.9%) 2 (0.1%) 0
+Peramivir Viruses Tested 4,258 888 2,364 1,006
+Reduced Inhibition 2 (<0.1%) 0 0 2 (0.2%)
+Highly Reduced Inhibition 8 (0.2%) 8 (0.9%) 0 0
+Zanamivir Viruses Tested 4,258 888 2,364 1,006
+Reduced Inhibition 0 0 0 0
+Highly Reduced Inhibition 0 0 0 0
+PA Cap-Dependent Endonuclease Inhibitor Baloxavir Viruses Tested 4,184 852 2,344 988
+Decreased Susceptibility 0 0 0 0
+
+Eight A(H1N1)pdm09 viruses had NA-H275Y amino acid substitution conferring highly reduced inhibition by oseltamivir and peramivir. Fifteen A(H1N1)pdm09 viruses had amino acid substitutions NA-I223V and NA-S247N and showed reduced inhibition by oseltamivir. Two A(H3N2) viruses had amino acid substitution NA-E119V conferring highly reduced inhibition by oseltamivir. Two B viruses had amino acid substitution NA-M464T and showed reduced inhibition by peramivir.
+
+High levels of resistance to the adamantanes (amantadine and rimantadine) persist among influenza A(H1N1)pdm09 and influenza A(H3N2) viruses (the adamantanes are not effective against influenza B viruses). Therefore, use of these antivirals for treatment and prevention of influenza A virus infection is not recommended and data from adamantane resistance testing are not presented.
+
+Outpatient and Emergency Department Illness Surveillance
+Outpatient Respiratory Illness Visits
+
+The U.S. Outpatient Influenza-like Illness Surveillance Network (ILINet) monitors outpatient visits for respiratory illness referred to as influenza-like illness [ILI (fever plus cough or sore throat)], not laboratory-confirmed influenza, and will therefore capture respiratory illness visits due to infection with any pathogen that can present with similar symptoms, including influenza virus, SARS-CoV-2, and RSV. It is important to evaluate syndromic surveillance data, including that from ILINet, in the context of other sources of surveillance data to obtain a complete and accurate picture of influenza, SARS-CoV-2, and other respiratory virus activity.
+
+Nationally, during Week 17, 1.8% of patient visits reported through ILINet were due to respiratory illness that included fever plus a cough or sore throat, also referred to as ILI. This week’s national percentage remained stable (change of ≤ 0.1 percentage points) compared to Week 16 and is below the national baseline of 3.1% for the seventh consecutive week. ILI activity decreased (change of > 0.1 percentage points) in HHS regions 1 and 8 and remained stable in regions 2, 3, 4, 5, 6, 7, 9, and 10 compared to Week 16. All regions are below their respective baselines. Multiple respiratory viruses are co-circulating, and the relative contribution of influenza virus infection to ILI varies by location.
+
+*Some calendar years do not include an epidemiologic Week 53. In those years, the Week 53 value shown is the average between Week 52 and Week 1.
+
+**Effective October 3, 2021 (Week 40), the respiratory illness definition (fever plus cough or sore throat) no longer includes "without a known cause other than influenza."
+
+Outpatient Respiratory Illness Visits by Age Group
+
+About 70% of ILINet participants provide both the number of patient visits for respiratory illness and the total number of patient visits for the week broken out by age group. Based on these data, the percentage of visits for respiratory illness remained stable (change of ≤ 0.1 percentage points) in all age groups (0-4 years, 5-24 years, 25-49 years, 50-64 years, and 65 years and older) this week compared to the previous week.
+
+Outpatient Respiratory Illness Activity Map
+
+Data collected in ILINet are used to produce a measure of ILI activity* by state/jurisdiction and Core Based Statistical Areas (CBSA).
+
+Activity Level
+
+Number of Jurisdictions
+
+Number of CBSAs
+
+Week 17
+(Week ending
+May 2, 2026) Week 16
+(Week ending
+Apr. 25, 2026) Week 17
+(Week ending
+May 2, 2026) Week 16
+(Week ending
+Apr. 25, 2026)
+Very High 0 0 0 0
+High 0 0 0 1
+Moderate 0 0 4 4
+Low 0 1 22 30
+Minimal 54 53 683 679
+Insufficient Data 1 1 220 215
+
+*Data collected in ILINet may disproportionally represent certain populations within a jurisdiction or CBSA, and therefore, may not accurately depict the full picture of influenza activity for the entire jurisdiction or CBSA. Differences in the data presented here by CDC and independently by some health departments likely represent differing levels of data completeness with data presented by the health department likely being the more complete.
+
+Additional information about medically attended visits for ILI for current and past seasons:
+Surveillance Methods | FluView Interactive: National, Regional, and State Data or ILI Activity Map
+National Syndromic Surveillance System (NSSP)
+
+The national percentage of emergency department (ED) visits with a discharge diagnosis (DD) of influenza reported in NSSP was 0.3% during Week 17, which remained stable (change of ≤ 0.1 percentage points) compared to the previous week. Nationally, the percentage of ED visits with a DD of influenza decreased (change of > 0.1 percentage points) in the 0-4 years and 5-17 years age groups and remained stable among the 18-64 years and 65 years and older age groups this week compared to the previous week. The percentage of ED visits with a DD of influenza decreased in HHS region 1 and remained stable in all other regions (2, 3, 4, 5, 6, 7, 8, 9, and 10) this week compared to the previous week.
+
+Region
+National
+Region 1
+Region 2
+Region 3
+Region 4
+Region 5
+Region 6
+Region 7
+Region 8
+Region 9
+Region 10
+Season
+2025-2026x2024-2025x
+Skip Over Chart Container
+2.0%
+4.0%
+6.0%
+8.0%
+10.0%
+12.0%
+14.0%
+16.0%
+18.0%
+20.0%
+Percent of Emergency Department Visits for Influenza
+Week 40 of 2024
+Week 42 of 2024
+Week 44 of 2024
+Week 46 of 2024
+Week 48 of 2024
+Week 50 of 2024
+Week 52 of 2024
+Week 2 of 2025
+Week 4 of 2025
+Week 6 of 2025
+Week 8 of 2025
+Week 10 of 2025
+Week 12 of 2025
+Week 14 of 2025
+Week 16 of 2025
+Week 18 of 2025
+Week 20 of 2025
+Week 22 of 2025
+Week 24 of 2025
+Week 26 of 2025
+Week 28 of 2025
+Week 30 of 2025
+Week 32 of 2025
+Week 34 of 2025
+Week 36 of 2025
+Week 38 of 2025
+Week 40 of 2025
+Week 42 of 2025
+Week 44 of 2025
+Week 46 of 2025
+Week 48 of 2025
+Week 50 of 2025
+Week 52 of 2025
+Week 1 of 2026
+Week 3 of 2026
+Week 5 of 2026
+Week 7 of 2026
+Week 9 of 2026
+Week 11 of 2026
+Week 13 of 2026
+Week 15 of 2026
+Week 17 of 2026
+Age Group
+All ages
+0-4 years
+5-17 years
+18-64 years
+65+
+Skip Data Table
+Data Table
+Download Data (CSV)
+Skipped data table.
+Additional information about emergency department visits for flu for current and past seasons:‎‎‎
+Surveillance Methods | Emergency Department Visits for COVID-19, flu, and RSV
+Hospitalization surveillance
+FluSurv-Net
+
+Influenza-Associated Hospitalizations: The Influenza Hospitalization Surveillance Network (FluSurv-NET) conducts population-based surveillance for laboratory-confirmed influenza-related hospitalizations in select counties in 14 states and represents approximately 10% of the U.S. population. FluSurv-NET hospitalization data are preliminary. As data are received each week, prior case counts and rates are updated accordingly.
+
+A total of 29,963 laboratory-confirmed influenza-associated hospitalizations were reported by FluSurv-NET sites between October 1, 2025, and May 2, 2026. The weekly hospitalization rate observed during Week 17 was 0.2 per 100,000 population, which decreased from a rate of 0.5 per 100,000 population last week. After accounting for reporting delays, the estimated rate during Week 17 likely ranges from 0.3 to 0.4. The cumulative hospitalization rate observed in Week 17 was 86.0 per 100,000 population, which is the third highest cumulative rate thus far since the 2010-2011 season.
+
+Among all hospitalizations, 26,399 (88.1%) were associated with influenza A virus, 3,395 (11.3%) with influenza B virus, 41 (0.1%) with influenza A virus and influenza B virus co-infection, and 128 (0.4%) with influenza virus for which the type was not determined. Among those with influenza A subtype information, 7,117 (87.9%) were A(H3N2), and 978 (12.1%) were A(H1N1)pdm09.
+
+When examining rates by age, the highest rate of hospitalization per 100,000 population was among adults aged 65 and older (274.2), followed by children aged 0-4 years (97.3), adults aged 50-64 years (75.3), children aged 5-17 years (41.0), and adults aged 18-49 years (34.9).
+
+Among children, the peak weekly rate was the highest going back to the 2010-2011 season in Week 52 (7.1). The cumulative rate for pediatric cases was the second highest since 2010-2011 (55.4). Among children, rates were highest among infants aged less than 1 year (149.9), followed by children aged 1-4 years (84.4).
+
+When examining age-adjusted rates by race and ethnicity, the highest rate of hospitalization per 100,000 population was among non-Hispanic Black persons (143.9), followed by American Indian or Alaska Native persons (100.8), Hispanic persons (81.2), non-Hispanic White persons (74.4), and Asian and/or Pacific Islander persons (39.8).
+
+Information on underlying medical conditions was available on patients admitted through April 30, 2026. Among 3,876 hospitalized adults with information on underlying medical conditions, 95.9% had at least one reported underlying medical condition; the most commonly reported were hypertension, cardiovascular disease, chronic metabolic disease, and chronic lung disease. Among 3,565 hospitalized women of childbearing age (15-49 years) with information on pregnancy status, 29.4% were pregnant. Among 1,671 hospitalized children with information on underlying medical conditions, 56.1% had at least one reported underlying medical condition; the most commonly reported was asthma, followed by neurologic disorder, and obesity.
+
+Additional FluSurv-NET data are available on FluView Interactive including hospitalization rates for the current and past seasons by age, sex, and race/ethnicity (http://gis.cdc.gov/GRASP/Fluview/FluHospRates.html) as well as data on patient characteristics at: (http://gis.cdc.gov/grasp/fluview/FluHospChars.html.)
+
+FluSurv-NET data are used to generate national estimates of the total numbers of influenza cases, medical visits, hospitalizations and deaths. This season, CDC is reporting preliminary cumulative in-season estimates, which are available at Estimated US Flu Disease Burden | Flu Burden | CDC.
+
+**In this figure, weekly rates for all seasons prior to the 2025-26 season reflect end-of-season rates. For the 2025-26 season, rates for recent hospital admissions are subject to reporting delays and are shown as a dashed line for the current season. As hospitalization data are received each week, prior case counts and rates are updated accordingly.
+
+Additional FluSurv-NET hospitalization surveillance information for current and past seasons and additional age groups:
+Surveillance Methods | FluView Interactive: Rates by Age, Sex, and Race/Ethnicity or Data on Patient Characteristics | RESP-NET Interactive
+National Healthcare Safety Network (NHSN) Hospital Respiratory Data
+
+Hospitals report to NHSN the weekly number of patients with laboratory-confirmed influenza who were admitted to the hospital. Nationally, during Week 17, 1,573 laboratory-confirmed influenza-associated hospitalizations were reported. This week's influenza-associated hospital admission rate (0.5 per 100,000 population) remained stable (difference of < 0.2) compared to Week 16.
+
+Laboratory-confirmed influenza-associated hospital admission rates per 100,000 population remained stable in all ten HHS regions this week compared to the previous week. Regional admission rates during Week 17 ranged from 0.2 (Region 7) to 0.8 (Region 3).
+
+When examining rates by age for Week 17, the 65+ age group decreased and all age groups remained stable compared to the previous week. The highest hospital admission rate per 100,000 population was among those 65 years and older (1.0), followed by the 0-4 years age group (0.8), and the 50-64 years age group (0.4).
+
+Additional NHSN Hospital Respiratory Data information:
+Surveillance Methods | Additional Data | FluView Interactive
+National Healthcare Safety Network (NHSN) Long-Term Care Respiratory Pathogens & Vaccination Module
+
+Long-term care facilities (LTCFs [e.g., Nursing homes/skilled nursing facilities]) report respiratory pathogen (e.g., COVID-19, influenza, and RSV) data, including vaccination, cases, and hospitalizations among residents, to the NHSN Long-Term Care Respiratory Pathogens & Vaccination Module.
+
+Nationally, during Week 17, the hospitalization rate for residents with a positive influenza test in the prior 10 days was 3.8 per 100,000 residents. The national rate and the rate in all ten HHS regions are low.
+
+View LargerDownload
+National Healthcare Safety Network (NHSN) Long-Term Care Respiratory Pathogens & Vaccination Module
+Mortality surveillance
+National Center for Health Statistics (NCHS) Mortality Surveillance
+
+Based on NCHS mortality surveillance data available on May 7, 2026, 0.1% of the deaths that occurred during the week ending May 2, 2026 (Week 17) were due to influenza. This percentage remained stable (< 0.1 percentage point change) compared to Week 16. The data presented are preliminary and may change as more data are received and processed.
+
+Additional pneumonia, influenza and COVID-19 mortality surveillance information for current and past seasons:
+Surveillance Methods | FluView Interactive
+Influenza-Associated Pediatric Mortality
+
+Three influenza-associated pediatric deaths occurring during the 2025-2026 season were reported to CDC during Week 17. The deaths occurred during weeks 4, 7 and 15 (the weeks ending January 31, 2026, February 21, 2026, and April 18, 2026). Two of the deaths were associated with influenza A(H3N2) viruses and one death was associated with an influenza B virus with no lineage determined. Among children who were eligible for influenza vaccination and had a known vaccination status, approximately 85% of reported pediatric deaths this season occurred in children who were not fully vaccinated against influenza.
+
+Additional pediatric mortality surveillance information for current and past seasons:
+Surveillance Methods | FluView Interactive
+
+All data in this report are preliminary and may change as more reports are received.
+
+A description of the CDC influenza surveillance system, including methodology and detailed descriptions of each data component, is available on the surveillance methods page.1
+
+Additional information on the current and previous influenza seasons for each surveillance component are available on FluView Interactive.
+
+Additional National and International Influenza Surveillance Information
+Indicators Status by System
+
+Increasing:
+Decreasing:
+Stable:
+
+Clinical Labs: Up or down arrows indicate a change of greater than or equal to 0.5 percentage points in the percent of specimens positive for influenza compared to the previous week.
+Outpatient Respiratory Illness (ILINet): Up or down arrows indicate a change of greater than 0.1 percentage points in the percent of visits due to respiratory illness (ILI) compared to the previous week.
+NHSN Hospitalizations: Up or down arrows indicate change of greater than or equal to 0.2 in the rate of hospital admissions or greater than or equal to 691 patients admitted with laboratory-confirmed influenza compared to the previous week.
+NHSN Long- Term Care (LTC): Up or down arrows indicate change of greater than or equal to 5% in hospitalization rates for residents in LTC facilities who were hospitalized with laboratory-confirmed influenza compared to the previous week.
+NCHS Mortality: Up or down arrows indicate change of greater than 0.1 percentage points of the percent of deaths due to influenza compared to the previous week.
+
+Additional surveillance information
+
+FluView Interactive: FluView includes enhanced web-based interactive applications that can provide dynamic visuals of the influenza data collected and analyzed by CDC. These FluView Interactive applications allow people to create customized, visual interpretations of influenza data, as well as make comparisons across flu seasons, regions, age groups and a variety of other demographics.
+
+National Institute for Occupational Safety and Health: Monthly surveillance data on the prevalence of health-related workplace absenteeism among full-time workers in the United States are available from NIOSH.
+
+U.S. State and local influenza surveillance: Select a jurisdiction below to access the latest local influenza information.
+
+state links
+Alabama Alaska Arizona Arkansas California
+Colorado Connecticut Delaware District of Columbia Florida
+Georgia Hawaii Idaho Illinois Indiana
+Iowa Kansas Kentucky Louisiana Maine
+Maryland Massachusetts Michigan Minnesota Mississippi
+Missouri Montana Nebraska Nevada
+New Hampshire
+
+New Jersey New Mexico New York North Carolina North Dakota
+Ohio Oklahoma Oregon Pennsylvania Rhode Island
+South Carolina South Dakota Tennessee Texas Utah
+Vermont Virginia Washington West Virginia Wisconsin
+Wyoming New York City Puerto Rico Virgin Islands
+
+Public Health Agency of Canada:
+The most up-to-date influenza information from Canada is available in Canada's weekly FluWatch report
+.
+
+Public Health England:
+The most up-to-date influenza information from the United Kingdom is available from Public Health England
+.
+
+Any links provided to non-Federal organizations are provided solely as a service to our users. These links do not constitute an endorsement of these organizations or their programs by CDC or the Federal Government, and none should be inferred. CDC is not responsible for the content of the individual organization web pages found at these links.
+
+A description of the CDC influenza surveillance system, including methodology and detailed descriptions of each data component is available on the surveillance methods page.
+
+ON THIS PAGE
+Summary
+U.S. virologic surveillance
+Influenza Virus Characterization
+Outpatient and Emergency Department Illness Surveillance
+Hospitalization surveillance
+Show More
+Past Weekly Report
+SOURCES
+PRINT
+SHARE
+RELATED PAGES
+Current Week: U.S. Influenza Surveillance Report
+Key Updates for Week 14, ending April 11, 2026
+Key Updates for Week 15, ending April 18, 2026
+Key Updates for Week 16, ending April 25, 2026
+Past Weekly Report
+Weekly US Map: Influenza Summary Update
+FluView
+
+Weekly U.S. Influenza Surveillance Report
+
+View All
+Current Week: U.S. Influenza Surveillance Report
+U.S. Influenza Surveillance: Purpose and Methods
+Sign up for Email Updates
+Contact Us
+About CDC
+Policies
+Languages
+Archive
+
+HHS.GOV USA.GOV
+17
