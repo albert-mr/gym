@@ -30,7 +30,7 @@ export default function HomePage() {
       {/* Repo / contributing pointer */}
       <section className="space-y-2 text-sm text-muted-foreground border-t border-border pt-8">
         <p>
-          Each benchmark is self-contained. <Link href="/about" className="underline underline-offset-2 hover:text-foreground">How it&rsquo;s built</Link> &middot; <a href="https://github.com/genlayer-foundation" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-foreground">contribute on GitHub</a>.
+          Each benchmark is self-contained. <Link href="/about" className="underline underline-offset-2 hover:text-foreground">How it&rsquo;s built</Link>.
         </p>
       </section>
 

@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import type { BenchmarkData, Template, MarketRow } from '@/lib/types';
 import { SOLVED_BUCKETS } from '@/lib/types';
 import { BucketBadge } from './BucketBadge';
@@ -33,6 +33,14 @@ export function DrilldownTree({ data }: Props) {
   }, [data.templates, date, bucket, solvedOnly, search]);
 
   const nested = useMemo(() => nest(filtered), [filtered]);
+  const allL1s = useMemo(() => [...nested.keys()], [nested]);
+  const l1Signature = allL1s.join('|');
+  const [openL1, setOpenL1] = useState<string[]>(allL1s);
+  const prevSignature = useRef(l1Signature);
+  if (prevSignature.current !== l1Signature) {
+    prevSignature.current = l1Signature;
+    setOpenL1(allL1s);
+  }
 
   const toggleExpanded = (tplId: string) => {
     const next = new Set(expanded);
@@ -82,7 +90,7 @@ export function DrilldownTree({ data }: Props) {
         {filtered.length.toLocaleString()} templates · {filtered.reduce((s, t) => s + t.count, 0).toLocaleString()} markets
       </div>
 
-      <Accordion multiple defaultValue={[...nested.keys()]} className="w-full">
+      <Accordion multiple value={openL1} onValueChange={(v) => setOpenL1(v as string[])} className="w-full">
         {[...nested.entries()].sort((a, b) => sumMap(b[1]) - sumMap(a[1])).map(([L1, m1]) => (
           <AccordionItem key={L1} value={L1}>
             <AccordionTrigger className="text-base font-semibold hover:no-underline">

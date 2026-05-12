@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { loadBenchmark } from '@/lib/data';
 import { HeadlineCard } from '@/components/HeadlineCard';
 import { PerDayTable } from '@/components/PerDayTable';
-import { buttonVariants } from '@/components/ui/button';
 import { longDate } from '@/lib/format';
 
 export default function PolymarketBenchmarkPage() {
@@ -21,6 +20,30 @@ export default function PolymarketBenchmarkPage() {
 
       <HeadlineCard data={data} />
 
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Link
+          href="/benchmarks/polymarket/drilldown"
+          className="group block border border-border rounded-xl p-6 md:p-7 transition-colors hover:border-foreground/40 hover:bg-muted/30"
+        >
+          <h3 className="text-lg font-semibold tracking-tight">Per-market audit trail</h3>
+          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">Every classified market with its routing decision &mdash; spot-check the headline.</p>
+          <span className="mt-4 inline-block text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+            Open <span className="inline-block transition-transform group-hover:translate-x-0.5">&rarr;</span>
+          </span>
+        </Link>
+
+        <Link
+          href="/benchmarks/polymarket/domains"
+          className="group block border border-border rounded-xl p-6 md:p-7 transition-colors hover:border-foreground/40 hover:bg-muted/30"
+        >
+          <h3 className="text-lg font-semibold tracking-tight">Per-source routing</h3>
+          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">The matrix of which source resolves which market, by source family.</p>
+          <span className="mt-4 inline-block text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+            Open <span className="inline-block transition-transform group-hover:translate-x-0.5">&rarr;</span>
+          </span>
+        </Link>
+      </section>
+
       <section className="space-y-4">
         <h2 className="text-xl font-semibold tracking-tight">By day</h2>
         <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
@@ -29,17 +52,10 @@ export default function PolymarketBenchmarkPage() {
         <PerDayTable data={data} />
       </section>
 
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold tracking-tight">How we collect the dataset</h2>
-        <p className="text-base text-muted-foreground leading-relaxed max-w-2xl">
-          Each day we poll Polymarket and keep the markets ending in the next 24 hours &mdash; the horizon where GenLayer could act in the same role as the human UMA proposer (read the stated source, submit a proposed outcome). Those daily slices accumulate into the cumulative dataset shown above. Markets resolving further out (election forecasts in November, &ldquo;X happens by end of year&rdquo;) have a different risk profile and need different treatment; they&rsquo;re out of scope for this benchmark.
+      <section className="pt-8 border-t border-border">
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          Behind every number on this page: classifier rules, verification levels, and source-by-source decisions. <Link href="/benchmarks/polymarket/methodology" className="underline underline-offset-2 hover:text-foreground">Read the methodology &rarr;</Link>
         </p>
-      </section>
-
-      <section className="flex flex-wrap gap-3 pt-4">
-        <Link href="/benchmarks/polymarket/drilldown" className={buttonVariants({ size: 'lg' })}>View market-level audit trail</Link>
-        <Link href="/benchmarks/polymarket/methodology" className={buttonVariants({ variant: 'outline', size: 'lg' })}>Methodology</Link>
-        <Link href="/benchmarks/polymarket/domains" className={buttonVariants({ variant: 'outline', size: 'lg' })}>Per-source routing</Link>
       </section>
     </div>
   );
