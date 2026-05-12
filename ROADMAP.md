@@ -1,23 +1,23 @@
 # GenLayer Gym — Roadmap
 
-**Last updated:** 2026-05-11
-**Maintainer:** Albert Martinez (@GenLayer Foundation)
+**Last updated:** 2026-05-12
+**Maintainer:** Albert Martinez (GenLayer Foundation)
 
-GenLayer Gym is the open, reproducible home for benchmarks measuring what GenLayer can do across the ecosystem. This roadmap captures what's live, what's next, and what's deferred.
+GenLayer Gym is the public, reproducible home for benchmarks measuring what GenLayer can do across the ecosystem. This roadmap is what's live, what's next, and what's deferred.
 
 ---
 
 ## Current state
 
-- **Dashboard** — `apps/web/` (Next.js 15 + shadcn/ui). 9 SSG routes, static export, deploys to Vercel. Reads daily JSON from `data/<benchmark>/latest.json`. Tagline: *where we measure what GenLayer can do.*
-- **Polymarket benchmark** — Live. Daily classification of every Polymarket market resolving in the next 24 hours through a deterministic gate funnel + per-source-family classifier. Headline: ~97% of the addressable universe can be resolved by GenLayer's intelligent oracle.
-- **Sources benchmark** — Planned. Plan locked in [`benchmarks/sources-bench/PLAN.md`](./benchmarks/sources-bench/PLAN.md); pipeline not yet built.
+- **Dashboard** — `apps/web/` (Next.js 15 + shadcn/ui). 8 static routes, deploys to Vercel. Reads daily JSON from `data/<benchmark>/latest.json`.
+- **Polymarket benchmark** — Live. Cumulative since May 6, 2026: of 23,915 addressable Polymarket markets, 96.8% are within GenLayer's resolution coverage. Excludes the ~41% of Polymarket resolved by Chainlink/Pyth on-chain feeds.
+- **Sources benchmark** — Live (v1 derived from pm-bench). 78 unique source hosts tracked: 72 working, 6 blocked.
 
 ## Headline framing
 
-The Polymarket benchmark's "97%" is **forward-looking inference**: GenLayer has been Studio-verified end-to-end on representative markets per source family; we claim every market on those families would resolve the same way. It's a model of what GenLayer can do, grounded in real Studio runs — not a per-market record. Three verification levels are documented on the dashboard's `/methodology` page.
+The Polymarket benchmark headline is **forward-looking inference**: GenLayer has been verified on representative markets per source family; we claim every market on those families would resolve the same way. It's a model of what GenLayer can do, not a per-market record. The dashboard's methodology page documents this in plain prose.
 
-This framing locks the bar for any future benchmark: the headline is what the system can do today, and the methodology page declares exactly how each market in the count was verified.
+Future benchmarks must follow the same rule: the headline is what the system can do today, and the methodology page declares exactly what's been verified.
 
 ---
 
@@ -27,7 +27,7 @@ Priority order. Each item has a clear definition of done.
 
 ### 1. Ship publicly
 
-Deploy `apps/web/` to Vercel under `gym.genlayer.foundation`. Done when the dashboard is reachable on a public URL and shares cleanly.
+Deploy `apps/web/` to Vercel under `gym.genlayer.foundation`. Done when the dashboard is reachable on a public URL.
 
 ### 2. Daily refresh automation
 
@@ -35,17 +35,19 @@ GitHub Action on a cron: poll → analyze → poll-closed → build-data-json �
 
 ### 3. Accuracy backtest
 
-Replay every closed Polymarket market through a local LLM with the same prompt the intelligent oracle uses; compare the LLM's output against Polymarket's settlement. This turns the forward-looking-inference headline into a per-market accuracy claim. Needs a storage layer (Supabase or extended JSONL) and budget for LLM calls. Estimated 2–3 days of work.
+Replay every closed Polymarket market through a local LLM with the same prompt the intelligent oracle uses; compare the LLM's output against Polymarket's settlement. Turns the forward-looking-inference headline into a per-market accuracy claim.
 
 Done when the dashboard's methodology page shows a real accuracy number per category, replacing the inferred number.
 
-### 4. Sources benchmark v1
+### 4. Sources benchmark v2
 
-Stand up the pipeline described in [`benchmarks/sources-bench/PLAN.md`](./benchmarks/sources-bench/PLAN.md). Start with newspapers, verify via local webdriver, ground-truth-check off-chain, publish a count-by-category dashboard page. Done when `/benchmarks/sources-bench` shows real data instead of a placeholder.
+Stand up an independent pipeline that probes sources directly (local webdriver + on-chain fetcher + ground-truth check), rather than deriving from pm-bench's domain table. Start with newspapers, expand to government data and public APIs.
+
+Done when `/benchmarks/sources-bench` shows results from its own probes instead of pm-bench-derived data.
 
 ### 5. Real-network credibility check
 
-The Polymarket benchmark currently anchors on Studio (centralized testbed). When GenLayer's real testnet is available, run the same source-family probes there and update the methodology page to reflect production-network results. Done when the dashboard distinguishes "Studio-verified" from "real-network-verified" per source family.
+When GenLayer's real testnet is available, run the same source-family probes there and update the methodology page to reflect production-network results. Done when the dashboard distinguishes development-environment-verified from real-network-verified per source family.
 
 ---
 
@@ -53,18 +55,11 @@ The Polymarket benchmark currently anchors on Studio (centralized testbed). When
 
 - **Backfilling historical Polymarket markets.** We grade what we attempt going forward, not history.
 - **Content-correctness scoring for sources.** Sources benchmark measures reachability, not whether the content is true.
-- **Auto-filing IO defect issues against `intelligent-oracle`.** Manual digest, then maybe later.
 - **Cross-source quality / ranking.** A separate benchmark someday, not v1.
 
 ---
 
 ## Adjacent work (lives elsewhere)
 
-- **Intelligent Oracle** (`intelligentoracle.com`) — the AI-powered oracle dApp on GenLayer. Headline: ~1h finality, <$1 per market. GenLayer Gym exists to make those numbers measurable; its FAQ surfaces live numbers from this repo.
-- **TLSNotary work** — separate research workstream. When live, it becomes the Gate 3 unblock path for currently-unresolvable sources (paywalled, login-walled, IP-gated). Out of GenLayer Gym v1.
-
----
-
-## How to contribute a benchmark
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for the data contract and folder conventions.
+- **Intelligent Oracle** (`intelligentoracle.com`) — the AI-powered oracle dApp on GenLayer. Headline: ~1h finality, <$1 per market. GenLayer Gym exists to make those numbers measurable.
+- **TLSNotary work** — separate research workstream. When live, it becomes the unblock path for currently-unresolvable sources (paywalled, login-walled, IP-gated). Out of GenLayer Gym v1.

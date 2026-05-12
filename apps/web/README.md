@@ -13,7 +13,7 @@ pnpm --filter @gym/web build    # static export under .next
 ## Data source
 
 Each page reads `data/<benchmark>/latest.json` via `lib/data.ts` (`loadBenchmark(name)`).
-Regenerate the JSON by running `build-data-json.mjs` in the benchmark's folder, e.g.:
+Regenerate the JSON by running `build-data-json.mjs` in the benchmark's folder:
 
 ```bash
 node benchmarks/pm-bench/scripts/build-data-json.mjs
@@ -32,22 +32,15 @@ The dashboard never fetches Polymarket directly — all data is committed JSON.
 
 | Route | Purpose |
 |---|---|
-| `/` | Story-first homepage with the live headline pulled from `data/pm-bench/latest.json` |
-| `/benchmarks` | Index of all benchmarks |
+| `/` | Benchmarks landing — one card per benchmark, each with its own headline |
 | `/benchmarks/polymarket` | Polymarket benchmark — story + per-day table |
 | `/benchmarks/polymarket/drilldown` | Market-level audit trail (filterable client component) |
-| `/benchmarks/polymarket/methodology` | Verification levels, defensible phrasing, gate funnel |
+| `/benchmarks/polymarket/methodology` | Pipeline, three-oracle breakdown, three categories, open questions |
 | `/benchmarks/polymarket/domains` | Per-source routing |
-| `/benchmarks/sources-bench` | Planned benchmark placeholder |
-| `/about` | About + contribution guide |
+| `/benchmarks/sources-bench` | Sources benchmark — working vs blocked, by category, with failure reason |
+| `/about` | About + repo pointer |
 
-## Adding a benchmark route
-
-See repo-root [CONTRIBUTING.md](../../CONTRIBUTING.md). The short version:
-
-1. Make sure your benchmark emits `data/<name>/latest.json` matching `lib/types.ts > BenchmarkData`.
-2. Create `app/benchmarks/<name>/page.tsx`. Reuse `HeadlineCard`, `PerDayTable`, `DrilldownTree`, etc.
-3. Add a card in `app/benchmarks/page.tsx`.
+`/benchmarks` 308-redirects to `/`.
 
 ## Deploy
 
@@ -55,5 +48,5 @@ Vercel:
 - Root directory: `apps/web`
 - Framework preset: Next.js
 - Build command: `pnpm build`
-- Install command: leave default (Vercel auto-detects pnpm-workspace.yaml at repo root and runs `pnpm install`)
+- Install command: leave default (Vercel auto-detects `pnpm-workspace.yaml` at repo root and runs `pnpm install`)
 - Node: 20+

@@ -2,7 +2,7 @@
 
 **Where we measure what GenLayer can do.**
 
-Open benchmarks for the GenLayer ecosystem — public, reproducible, daily-refreshed. One benchmark per question. All pipelines, daily snapshots, classifiers, and dashboards live in this repo so any number can be reproduced or challenged.
+Public benchmarks for the GenLayer ecosystem. Daily-refreshed, reproducible, every number traceable to a committed file. Maintained by the [GenLayer Foundation](https://genlayer.foundation).
 
 Public surface: `gym.genlayer.foundation` (forthcoming).
 
@@ -13,48 +13,38 @@ Public surface: `gym.genlayer.foundation` (forthcoming).
 ```
 gym/
 ├── apps/
-│   └── web/                   # Next.js dashboard — gym.genlayer.foundation
+│   └── web/                   # Next.js dashboard at gym.genlayer.foundation
 ├── benchmarks/
 │   ├── pm-bench/              # Polymarket benchmark — daily resolution coverage
-│   └── sources-bench/         # Sources benchmark — accessibility registry (planned)
+│   └── sources-bench/         # Sources benchmark — accessibility registry
 ├── data/
 │   ├── pm-bench/              # Daily JSON the dashboard reads
 │   └── sources-bench/
-├── tools/
-│   └── genvm-webdriver/       # Vendored GenVM browser-render (validator-equivalent)
-└── README.md / ROADMAP.md / BENCHMARK-METHODOLOGY.md
+└── tools/
+    └── genvm-webdriver/       # Vendored GenVM browser-render (validator-equivalent)
 ```
 
-Each benchmark is self-contained: poll → analyze → classify → emit JSON. The dashboard
-reads `data/<benchmark>/latest.json` at build time. Push to main triggers a Vercel rebuild.
+Each benchmark is self-contained: poll → analyze → classify → emit JSON. The dashboard reads `data/<benchmark>/latest.json` at build time. Push to `main` triggers a Vercel rebuild.
 
 ## Live benchmarks
 
-| Benchmark | Question | Status | Headline |
-|---|---|---|---|
-| **Polymarket benchmark** (`benchmarks/pm-bench/`) | What fraction of Polymarket markets resolving in the next 24 hours can GenLayer resolve? | Live | ~97% |
-| **Sources benchmark** (`benchmarks/sources-bench/`) | Which web sources are accessible from validator infrastructure? | Planned | — |
+| Benchmark | Question | Headline |
+|---|---|---|
+| **Polymarket benchmark** | What fraction of Polymarket markets resolving in the next 24 hours can GenLayer resolve? | ~96.8% (cumulative since May 6, 2026; excludes Chainlink/Pyth) |
+| **Sources benchmark** | Which web sources are reachable from validator-equivalent infrastructure? | 72 working / 6 blocked (out of 78 unique hosts) |
 
-## How to read the headline
+## How to read the headlines
 
-The Polymarket benchmark's "97%" is forward-looking inference: GenLayer has been Studio-verified end-to-end on representative markets per source family; we claim all markets on those families would resolve the same way. It's a model of what GenLayer can do, grounded in real Studio runs — not a record of every market individually executed.
+The Polymarket benchmark's `96.8%` is **forward-looking inference**: GenLayer has been Studio-verified on representative markets per source family; we claim every market on those families would resolve the same way. The methodology page on the dashboard documents this in plain prose.
 
-Full verification levels and defensible phrasing live in the dashboard's [methodology page](./apps/web/app/benchmarks/polymarket/methodology/page.tsx) and [BENCHMARK-METHODOLOGY.md](./benchmarks/pm-bench/BENCHMARK-METHODOLOGY.md).
-
-## Adding a benchmark
-
-1. Create `benchmarks/<name>/` with a poller that produces daily JSONL snapshots under `benchmarks/<name>/data/`.
-2. Add a builder script that emits `data/<name>/latest.json` matching the `BenchmarkData` type in `apps/web/lib/types.ts`.
-3. Add a route under `apps/web/app/benchmarks/<name>/`.
-4. Open a PR. Vercel deploys a preview automatically.
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for the data contract and conventions.
+Polymarket's daily universe is roughly 41% on-chain price feeds (Chainlink ~40%, Pyth ~1%) and 59% markets that need human-style resolution. The headline measures only the second group — the only one where an LLM oracle has a role.
 
 ## Local development
 
 ```bash
-pnpm install                                          # installs all workspace packages
+pnpm install                                          # workspace install
 pnpm --filter @gym/pm-bench daily                     # poll + analyze today
+node benchmarks/pm-bench/scripts/poll-closed.mjs      # fetch resolution outcomes
 node benchmarks/pm-bench/scripts/build-data-json.mjs  # emit data/pm-bench/latest.json
 pnpm --filter @gym/web dev                            # http://localhost:3000
 pnpm --filter @gym/web build                          # static export → apps/web/.next
@@ -66,4 +56,4 @@ See [ROADMAP.md](./ROADMAP.md).
 
 ## License
 
-MIT. Maintained by the [GenLayer Foundation](https://genlayer.foundation).
+MIT. Maintained by the GenLayer Foundation. This is foundation-published benchmark evidence — not an open-contribution project.
