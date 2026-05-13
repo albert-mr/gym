@@ -23,6 +23,7 @@ const BUCKET_LABELS = {
   bo3_recover: 'Alternate: bo3.gg',
   frmf_via_flashscore: 'Alternate: Flashscore',
   eurovision_via_wiki: 'Alternate: Wikipedia',
+  cricinfo_via_espn: 'Alternate: ESPN Cricket',
   studio_blocked: 'Blocked by validator infrastructure',
   hltv_lost: 'No alternate available',
   yahoo: 'Paywalled',
@@ -39,6 +40,7 @@ const BUCKET_COLORS = {
   bo3_recover: '#ca8a04',
   frmf_via_flashscore: '#84cc16',
   eurovision_via_wiki: '#4d7c0f',
+  cricinfo_via_espn: '#a3e635',
   studio_blocked: '#dc2626',
   hltv_lost: '#dc2626',
   yahoo: '#ea580c',
@@ -49,7 +51,7 @@ const BUCKET_COLORS = {
 };
 
 const DIRECT_BUCKETS = new Set(['render', 'api']);
-const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki']);
+const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki', 'cricinfo_via_espn']);
 
 function parseArgs(argv) {
   const out = { start: '2026-05-06', end: '2026-05-10', outDir: '../../data/pm-bench' };
