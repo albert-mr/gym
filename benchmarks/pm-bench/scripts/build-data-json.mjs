@@ -294,6 +294,11 @@ function build() {
   const totalPass = allRows.length;
   const totalSolved = allRows.filter(r => SOLVED_BUCKETS.has(r.bucket)).length;
   const headlinePct = totalPass ? (100 * totalSolved / totalPass) : 0;
+  // "Resolved correctly %" is identical to headlinePct until Bradbury runs
+  // per-market on-chain and we start tracking GenLayer ↔ Polymarket
+  // disagreements. The cleanest cut (Direct + verified Alt) should stay 100%
+  // until a real disagreement appears.
+  const resolvedCorrectlyPct = headlinePct;
 
   // Slim per-market export for the public download. One row per unique market.
   // `namedSource` is the host Polymarket named in its resolution criteria;
@@ -310,10 +315,14 @@ function build() {
     const status = statusOf(r.bucket);
     return {
       id: r.id,
+      date: r.date,
+      slug: r.eventSlug || '',
+      question: r.question || '',
       namedSource: r.eRSHost || null,
       verifiedSource: status === 'blocked' ? null : (r.rebindHost || null),
       status,
       bucket: r.bucket,
+      winner: r.winner,
     };
   });
   const downloadCounts = { accessible: 0, alternative: 0, blocked: 0 };
@@ -325,13 +334,14 @@ function build() {
       window: { start, end },
       counts: { ...downloadCounts, total: downloadMarkets.length },
       headlinePct,
-      schema: 'https://gym.genlayer.foundation/schema/polymarket-markets-v2',
-      notes: 'One row per unique Polymarket market across the window. `namedSource` is the host Polymarket names in its resolution criteria. `verifiedSource` is the host GenLayer verified works: equal to namedSource when the named host is accessible, a different host when we route to a verified alternative source (e.g. HLTV→Liquipedia, LaLiga→ESPN), and null when no source could be verified. `status` is the three-bucket rollup; `bucket` is the fine-grained classifier label that explains why a market is blocked (paywall, subjective, validator-IP block, etc.).',
+      resolvedCorrectlyPct,
+      schema: 'https://gym.genlayer.foundation/schema/polymarket-markets-v3',
+      notes: 'One row per unique Polymarket market across the window. `namedSource` is the host Polymarket names in its resolution criteria. `verifiedSource` is the host GenLayer verified works: equal to namedSource when the named host is accessible, a different host when we route to a verified alternative source (e.g. HLTV→Liquipedia, LaLiga→ESPN), and null when no source could be verified. `status` is the three-bucket rollup; `bucket` is the fine-grained classifier label that explains why a market is blocked. `slug` is the Polymarket event slug used to construct polymarket.com URLs. `winner` is Polymarket\'s settlement outcome (or "pending" before settlement).',
     },
   };
 
   const data = {
-    meta: { dates: days, generatedAt: new Date().toISOString(), totalPass, totalSolved, headlinePct, window: { start, end } },
+    meta: { dates: days, generatedAt: new Date().toISOString(), totalPass, totalSolved, headlinePct, resolvedCorrectlyPct, window: { start, end } },
     perDay,
     templates,
     domains,

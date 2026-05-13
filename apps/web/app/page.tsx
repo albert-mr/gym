@@ -53,7 +53,7 @@ function PolymarketCard({ pm }: { pm: ReturnType<typeof loadBenchmark> }) {
           </div>
           <h2 className="text-xl font-semibold tracking-tight">Polymarket resolution coverage</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Of every Polymarket market that has ended since {startLong}, what fraction is within GenLayer&rsquo;s resolution coverage?
+            <span className="text-foreground">GenLayer&rsquo;s Intelligent Oracle on Polymarket.</span> Of every Polymarket market that has ended since {startLong}, what fraction can the Intelligent Oracle resolve from public sources?
           </p>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -67,7 +67,7 @@ function PolymarketCard({ pm }: { pm: ReturnType<typeof loadBenchmark> }) {
             </div>
           </div>
           <p className="text-xs text-muted-foreground/80 max-w-xl">
-            *Polymarket&rsquo;s daily universe is roughly {s.onchainFeedPct.toFixed(0)}% on-chain price feeds (Chainlink {s.chainlinkPct.toFixed(0)}%, Pyth {s.pythPct.toFixed(1)}%) and {s.addressablePct.toFixed(0)}% markets that need human-style resolution. The headline measures GenLayer&rsquo;s coverage of the second group.
+            *Polymarket&rsquo;s daily universe is roughly {s.onchainFeedPct.toFixed(0)}% on-chain price feeds (Chainlink {s.chainlinkPct.toFixed(0)}%, Pyth {s.pythPct.toFixed(1)}%) and {s.addressablePct.toFixed(0)}% markets that need human-style resolution. The headline measures the Intelligent Oracle&rsquo;s coverage of the second group.
           </p>
           <div className="pt-1">
             <span className="text-sm text-foreground/80 group-hover:text-foreground underline underline-offset-4">Open the benchmark &rarr;</span>

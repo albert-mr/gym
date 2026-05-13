@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { loadBenchmark } from '@/lib/data';
 import { DrilldownTree } from '@/components/DrilldownTree';
@@ -16,7 +17,9 @@ export default function DrilldownPage() {
           {data.meta.totalPass.toLocaleString()} addressable markets, grouped by source category → domain area → competition or asset → repeated question pattern. Each leaf shows one representative example you can verify on Polymarket. Filter by date, source category, or text.
         </p>
       </header>
-      <DrilldownTree data={data} />
+      <Suspense fallback={<div className="text-muted-foreground text-sm italic py-12 text-center">Loading filters…</div>}>
+        <DrilldownTree data={data} />
+      </Suspense>
     </div>
   );
 }

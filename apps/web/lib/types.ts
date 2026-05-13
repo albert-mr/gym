@@ -82,6 +82,7 @@ export type BenchmarkData = {
     totalPass: number;
     totalSolved: number;
     headlinePct: number;
+    resolvedCorrectlyPct: number;
     window: { start: string; end: string };
   };
   perDay: Record<string, PerDay>;
@@ -109,6 +110,34 @@ export type ComingSoonData = {
   description: string;
   status: 'planned' | 'in-progress';
   link?: string;
+};
+
+// Per-market detail row from apps/web/public/data/pm-bench/markets.json.
+// Used by the per-market detail page at /benchmarks/polymarket/markets/[slug]
+// and by the downloadable dataset for API consumers.
+export type MarketDetail = {
+  id: string;
+  date: string;
+  slug: string;
+  question: string;
+  namedSource: string | null;
+  verifiedSource: string | null;
+  status: 'accessible' | 'alternative' | 'blocked';
+  bucket: string;
+  winner: Winner;
+};
+
+export type MarketsDoc = {
+  markets: MarketDetail[];
+  meta: {
+    generatedAt: string;
+    window: { start: string; end: string };
+    counts: { accessible: number; alternative: number; blocked: number; total: number };
+    headlinePct: number;
+    resolvedCorrectlyPct: number;
+    schema: string;
+    notes: string;
+  };
 };
 
 export const DIRECT_BUCKETS = new Set(['render', 'api']);
