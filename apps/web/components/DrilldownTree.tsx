@@ -127,11 +127,9 @@ function TemplateCard({ t, data, expanded, onToggle }: { t: Template; data: Benc
             <span><span className="text-muted-foreground">→ fetched:</span> <code className="text-foreground/80">{ex.rebindHost}</code></span>
           )}
           <span><span className="text-muted-foreground">winner:</span> <Winner w={ex.winner} /></span>
+          <Link className="underline underline-offset-2 text-foreground/80 hover:text-foreground" href={`/benchmarks/polymarket/markets/${ex.eventSlug || ex.id}`}>view details</Link>
           {ex.eventSlug && (
-            <>
-              <Link className="underline underline-offset-2 text-foreground/80 hover:text-foreground" href={`/benchmarks/polymarket/markets/${ex.eventSlug}`}>view details</Link>
-              <a className="underline underline-offset-2 text-foreground/80 hover:text-foreground" href={`https://polymarket.com/event/${ex.eventSlug}`} target="_blank" rel="noopener noreferrer">verify on Polymarket ↗</a>
-            </>
+            <a className="underline underline-offset-2 text-foreground/80 hover:text-foreground" href={`https://polymarket.com/event/${ex.eventSlug}`} target="_blank" rel="noopener noreferrer">verify on Polymarket ↗</a>
           )}
         </div>
       </div>
@@ -149,12 +147,12 @@ function TemplateCard({ t, data, expanded, onToggle }: { t: Template; data: Benc
                   <td className="py-1 pr-2"><code className="text-[11px] text-muted-foreground">{m.eRSHost}</code></td>
                   <td className="py-1 pr-2"><Winner w={m.winner} /></td>
                   <td className="py-1 pr-2 whitespace-nowrap">
-                    {m.slug && (
-                      <span className="inline-flex gap-2">
-                        <Link className="text-xs underline underline-offset-2 hover:text-foreground" href={`/benchmarks/polymarket/markets/${m.slug}`}>details</Link>
-                        <a className="text-xs underline underline-offset-2 hover:text-foreground" href={`https://polymarket.com/event/${m.slug}`} target="_blank" rel="noopener noreferrer">verify ↗</a>
-                      </span>
-                    )}
+                    <span className="inline-flex gap-2">
+                      <Link className="text-xs underline underline-offset-2 hover:text-foreground" href={`/benchmarks/polymarket/markets/${m.slug || m.id}`}>details</Link>
+                      {m.eventSlug && (
+                        <a className="text-xs underline underline-offset-2 hover:text-foreground" href={`https://polymarket.com/event/${m.eventSlug}`} target="_blank" rel="noopener noreferrer">verify ↗</a>
+                      )}
+                    </span>
                   </td>
                 </tr>
               ))}

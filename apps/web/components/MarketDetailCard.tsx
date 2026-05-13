@@ -128,10 +128,10 @@ export function MarketDetailCard({ market, bucketLabels, bucketColors }: Props) 
       <section className="space-y-3">
         <h2 className="text-sm font-medium text-foreground uppercase tracking-wider">Receipts</h2>
         <ul className="space-y-2 text-sm">
-          {market.slug && (
+          {market.eventSlug && (
             <li>
               <a
-                href={`https://polymarket.com/event/${market.slug}`}
+                href={`https://polymarket.com/event/${market.eventSlug}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-foreground/90 underline underline-offset-2 hover:text-foreground"

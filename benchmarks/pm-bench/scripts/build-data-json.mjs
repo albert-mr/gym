@@ -285,7 +285,11 @@ function build() {
     marketsByTemplate[tplId].push({
       id: r.id, date: r.date, question: r.question,
       eRSHost: r.eRSHost, rebindHost: r.rebindHost,
-      bucket: r.bucket, winner: r.winner, slug: r.eventSlug,
+      bucket: r.bucket, winner: r.winner,
+      // slug is the URL slug for /markets/[slug] — always populated.
+      // eventSlug is the Polymarket event slug (empty for pending markets).
+      slug: r.eventSlug || r.id,
+      eventSlug: r.eventSlug || '',
     });
   }
 
@@ -316,7 +320,10 @@ function build() {
     return {
       id: r.id,
       date: r.date,
-      slug: r.eventSlug || '',
+      // slug = URL slug (always populated, falls back to id for pending markets)
+      // eventSlug = real Polymarket event slug used by the polymarket.com verify link (empty for pending)
+      slug: r.eventSlug || r.id,
+      eventSlug: r.eventSlug || '',
       question: r.question || '',
       namedSource: r.eRSHost || null,
       verifiedSource: status === 'blocked' ? null : (r.rebindHost || null),

@@ -5,16 +5,16 @@ import type { BenchmarkData } from '@/lib/types';
 import {
   type ExplorerFilterState,
   type StatusFilter,
-  type FamilyFilter,
   defaultExplorerFilters,
   filtersToParams,
   paramsToFilters,
+  BUCKET_GROUPS,
+  bucketsToUmbrellaId,
 } from '@/lib/explorer-filters';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 type Props = {
   data: BenchmarkData;
@@ -27,8 +27,9 @@ const ALL_BUCKET_TOKEN = 'all';
 // Pure presentational filter bar driven by props. Parent owns state and the
 // URL-sync side effect; this component only renders controls and emits diffs.
 export function ExplorerFilters({ data, value, onChange }: Props) {
-  const bucketSelectValue =
-    value.buckets.length === 0 ? ALL_BUCKET_TOKEN : value.buckets.length === 1 ? value.buckets[0] : '__multi__';
+  const bucketSelectValue = value.buckets.length === 0
+    ? ALL_BUCKET_TOKEN
+    : (bucketsToUmbrellaId(value.buckets) ?? '__multi__');
 
   const hostOptions = [...data.domains]
     .filter(d => d.host && d.host !== '(none)')
@@ -39,8 +40,7 @@ export function ExplorerFilters({ data, value, onChange }: Props) {
   const reset = () => onChange(defaultExplorerFilters);
 
   return (
-    <TooltipProvider>
-      <div className="flex flex-wrap gap-3 items-end p-4 bg-muted/40 border border-border rounded-lg">
+    <div className="flex flex-wrap gap-3 items-end p-4 bg-muted/40 border border-border rounded-lg">
         <div className="space-y-1">
           <label className="text-xs text-muted-foreground block">Date</label>
           <Select value={value.date} onValueChange={(v) => onChange({ ...value, date: v ?? 'all' })}>
@@ -57,14 +57,27 @@ export function ExplorerFilters({ data, value, onChange }: Props) {
           <Select
             value={bucketSelectValue}
             onValueChange={(v) => {
-              if (!v || v === ALL_BUCKET_TOKEN) onChange({ ...value, buckets: [] });
-              else if (v !== '__multi__') onChange({ ...value, buckets: [v] });
+              if (!v || v === ALL_BUCKET_TOKEN) { onChange({ ...value, buckets: [] }); return; }
+              if (v === '__multi__') return;
+              const group = BUCKET_GROUPS.find(g => g.id === v);
+              if (group) onChange({ ...value, buckets: [...group.buckets] });
             }}
           >
             <SelectTrigger className="w-56 h-8 text-sm"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL_BUCKET_TOKEN}>all categories</SelectItem>
-              {Object.entries(data.bucketLabels).map(([b, l]) => <SelectItem key={b} value={b}>{l}</SelectItem>)}
+              <SelectItem value={ALL_BUCKET_TOKEN}>All Categories</SelectItem>
+              {BUCKET_GROUPS.map(g => <SelectItem key={g.id} value={g.id}>{g.label}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-xs text-muted-foreground block">Source host</label>
+          <Select value={value.host} onValueChange={(v) => onChange({ ...value, host: v ?? 'all' })}>
+            <SelectTrigger className="w-52 h-8 text-sm"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">all hosts</SelectItem>
+              {hostOptions.map(h => <SelectItem key={h} value={h}>{h}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
@@ -82,41 +95,6 @@ export function ExplorerFilters({ data, value, onChange }: Props) {
           </Select>
         </div>
 
-        <div className="space-y-1">
-          <label className="text-xs text-muted-foreground block flex items-center gap-1">
-            On-chain feed family
-            <Tooltip>
-              <TooltipTrigger
-                className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full border border-muted-foreground/40 text-[9px] text-muted-foreground cursor-help"
-                aria-label="About on-chain feed filter"
-              >?</TooltipTrigger>
-              <TooltipContent>
-                Chainlink and Pyth markets are excluded from this view — they&apos;re already filtered out before classification.
-              </TooltipContent>
-            </Tooltip>
-          </label>
-          <Select value={value.family} onValueChange={(v) => onChange({ ...value, family: (v ?? 'all') as FamilyFilter })}>
-            <SelectTrigger className="w-52 h-8 text-sm"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="no-chainlink">Exclude Chainlink</SelectItem>
-              <SelectItem value="no-pyth">Exclude Pyth</SelectItem>
-              <SelectItem value="no-both">Exclude both</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-xs text-muted-foreground block">Source host</label>
-          <Select value={value.host} onValueChange={(v) => onChange({ ...value, host: v ?? 'all' })}>
-            <SelectTrigger className="w-52 h-8 text-sm"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">all hosts</SelectItem>
-              {hostOptions.map(h => <SelectItem key={h} value={h}>{h}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
-
         <div className="flex items-center gap-2 h-8 pb-1">
           <Checkbox id="solved-only" checked={value.solvedOnly} onCheckedChange={(c) => onChange({ ...value, solvedOnly: c === true })} />
           <label htmlFor="solved-only" className="text-sm text-muted-foreground cursor-pointer">Resolvable only</label>
@@ -129,7 +107,6 @@ export function ExplorerFilters({ data, value, onChange }: Props) {
 
         <Button variant="ghost" size="sm" onClick={reset}>Reset</Button>
       </div>
-    </TooltipProvider>
   );
 }
 

@@ -81,9 +81,7 @@ export function MarketsList({ data, filters }: Props) {
                   </td>
                   <td className="px-3 py-2 text-xs">{m.winner === 'pending' ? <span className="italic text-muted-foreground">pending</span> : m.winner}</td>
                   <td className="px-3 py-2 text-right">
-                    {m.slug && (
-                      <Link href={`/benchmarks/polymarket/markets/${m.slug}`} className="text-xs underline underline-offset-2 hover:text-foreground">details &rarr;</Link>
-                    )}
+                    <Link href={`/benchmarks/polymarket/markets/${m.slug || m.id}`} className="text-xs underline underline-offset-2 hover:text-foreground">details &rarr;</Link>
                   </td>
                 </tr>
               ))}

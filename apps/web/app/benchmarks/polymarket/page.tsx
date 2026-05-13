@@ -23,14 +23,6 @@ export default function PolymarketBenchmarkPage() {
 
       <PipelineFunnel data={data} />
 
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold tracking-tight">Daily activity</h2>
-        <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
-          Each row is one day&rsquo;s contribution to the cumulative dataset. Cells deep-link into the explorer.
-        </p>
-        <PerDayTable data={data} />
-      </section>
-
       <section className="space-y-3">
         <h2 className="text-xl font-semibold tracking-tight">The three categories</h2>
         <ul className="space-y-2 text-base text-muted-foreground leading-relaxed list-disc pl-5">
@@ -47,9 +39,17 @@ export default function PolymarketBenchmarkPage() {
           </li>
           <li>
             <span className="text-foreground font-medium">Currently held.</span>{' '}
-            Paywall, login wall, captcha, or pure-consensus markets we do not ship best-effort scraping for. They wait for the resolution mode they need (TLS notary, official APIs).
+            Paywall, login wall, captcha, or pure-consensus markets we do not ship best-effort scraping for. They wait for the resolution mode they need (<Link href="/benchmarks/polymarket/methodology#tls-notary" className="underline underline-offset-2 hover:text-foreground">TLS notary</Link>, official APIs).
           </li>
         </ul>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold tracking-tight">Daily activity</h2>
+        <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
+          Each row is one day&rsquo;s contribution to the cumulative dataset. Cells deep-link into the explorer.
+        </p>
+        <PerDayTable data={data} />
       </section>
 
       <section className="space-y-3" id="bradbury-callout">

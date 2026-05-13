@@ -16,17 +16,14 @@ export default function MethodologyPage() {
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Methodology</p>
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">How GenLayer&rsquo;s Intelligent Oracle resolves Polymarket</h1>
         <p className="text-base text-muted-foreground leading-relaxed">
-          The full pipeline, the gates, and the open questions. The landing covers the narrative; this page is the reference.
+          A short reference. The landing page has the narrative.
         </p>
       </header>
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold tracking-tight">The pipeline</h2>
         <p className="text-base text-muted-foreground leading-relaxed">
-          Cumulative since {startLong}. Each day at the same UTC moment, we poll Polymarket&rsquo;s public API for every market resolving in the next 24 hours and add the new markets to the cumulative dataset. The Intelligent Oracle then runs each market through three gates. Markets that pass land in one of three buckets: Direct source, Alternative source, or Currently held.
-        </p>
-        <p className="text-base text-muted-foreground leading-relaxed">
-          The classifier rules live in <code className="bg-muted px-1 rounded text-sm">benchmarks/pm-bench/scripts/cross-day-classify.mjs</code>. The source-family hierarchy and alternate-routing table live in <code className="bg-muted px-1 rounded text-sm">benchmarks/pm-bench/scripts/lib/hierarchy.mjs</code>. Until we inline a public-facing <code className="bg-muted px-1 rounded text-sm">skills.md</code>, the source tree is the spec.
+          Cumulative since {startLong}. Once a day we poll Polymarket for every market resolving in the next 24 hours, then run each one through three gates. Markets land in Direct source, Alternative source, or Currently held.
         </p>
       </section>
 
@@ -35,41 +32,51 @@ export default function MethodologyPage() {
         <div className="space-y-5 text-base text-muted-foreground leading-relaxed">
           <div>
             <p className="text-foreground font-medium">Gate 1 &mdash; on-chain feed filter.</p>
-            <p>Tests whether the market is bound to a deterministic on-chain price feed (Chainlink, Pyth). If yes, we hand the market back &mdash; the chain already has the answer. The Intelligent Oracle has no role.</p>
+            <p>Is the market bound to an on-chain price feed (Chainlink, Pyth)? If yes, the chain has the answer and we step out.</p>
           </div>
           <div>
-            <p className="text-foreground font-medium">Gate 2 &mdash; source URL presence.</p>
-            <p>Tests whether the resolution criteria name an explicit source URL the Intelligent Oracle can fetch. Markets without a named source are set aside for a future agentic-search release; we do not ship best-effort scraping.</p>
+            <p className="text-foreground font-medium">Gate 2 &mdash; source URL.</p>
+            <p>Do the resolution criteria name a source URL we can fetch? Markets without one wait for a later agentic-search release. We don&rsquo;t ship best-effort scraping.</p>
           </div>
           <div>
-            <p className="text-foreground font-medium">Gate 3 &mdash; source accessibility.</p>
-            <p>Tests whether the named source host is reachable from validator-range infrastructure. When the host blocks validator traffic, the Intelligent Oracle routes to a verified alternate that contains the same fact. When no alternate exists (paywall, login wall, captcha, pure-consensus subjective markets), we surface the market in the <span className="italic">Currently held</span> bucket honestly &mdash; we do not claim to handle it yet.</p>
+            <p className="text-foreground font-medium">Gate 3 &mdash; accessibility.</p>
+            <p>Can a validator reach the named source? If the host blocks validator traffic, we route to a verified alternate with the same fact. If no alternate exists &mdash; paywall, login, captcha, pure-consensus subjective market &mdash; the market goes to Currently held.</p>
           </div>
           <div>
             <p className="text-foreground font-medium">Off-chain step &mdash; deeper-page agent.</p>
-            <p>Some markets name a source host rather than a specific URL. An off-chain agent navigates to the specific page and hands that URL to the Intelligent Oracle. The agent step is off-chain; the Intelligent Oracle step is on-chain.</p>
+            <p>When a market names a host but not a specific URL, an off-chain agent picks the page and hands the URL to the Intelligent Oracle. The agent runs off-chain; the oracle runs on-chain.</p>
           </div>
         </div>
         <div id="alt-source-disclaimer" className="rounded-md border border-muted bg-muted/40 p-4 text-sm text-muted-foreground leading-relaxed mt-6">
-          <span className="text-foreground font-medium">* On the alternate.</span> The alternate is currently chosen by an agent, not a hardened whitelist. Anyone publishing a blog post could in principle pass this gate. The hardened version &mdash; reputation, multi-source consensus, Polymarket-approved alternates &mdash; is an open product decision.
+          <span className="text-foreground font-medium">* On the alternate.</span> The alternate is currently agent-chosen, not a hardened whitelist. Anyone publishing a blog post could in principle pass this gate. Reputation and approved-alternate lists are still open product work.
         </div>
       </section>
 
       <section className="space-y-3" id="bradbury">
         <h2 className="text-xl font-semibold tracking-tight">Bradbury</h2>
         <p className="text-base text-muted-foreground leading-relaxed">
-          Bradbury is GenLayer&rsquo;s controlled IP pool that mirrors the IP ranges real validators use. Studio&rsquo;s <code className="bg-muted px-1 rounded text-sm">web.render</code> IPs are not representative of validator behavior &mdash; some hosts (e.g. sofascore.com) return HTTP 403 to Studio while accepting validator-range traffic. Bradbury makes Studio runs faithful to production and surfaces per-validator on-chain transactions on every per-market detail page once the rollout completes.
+          Bradbury is a controlled IP pool that mirrors the ranges real validators use. Studio doesn&rsquo;t see the web the way a validator does &mdash; some hosts return 403 to Studio while accepting validator traffic. Bradbury closes that gap, and once the rollout completes it surfaces per-validator on-chain transactions on every per-market detail page.
+        </p>
+      </section>
+
+      <section className="space-y-3" id="tls-notary">
+        <h2 className="text-xl font-semibold tracking-tight">TLS notary</h2>
+        <p className="text-base text-muted-foreground leading-relaxed">
+          A TLS notary proves a validator actually fetched specific content from a specific HTTPS origin. It is the cryptographic receipt for a paywalled, logged-in, or otherwise non-public page: the validator performs the fetch using its own credentials and walks away with a signed proof that the content came from that exact origin, at that time. Other validators verify the proof without re-fetching, which matters when the source is rate-limited, IP-locked, or behind a session.
+        </p>
+        <p className="text-base text-muted-foreground leading-relaxed">
+          It is the resolution mode that unblocks most of what is in <span className="text-foreground">Currently held</span> today: WSJ paywalls, NYT metered articles, login-gated sports and finance sites. We don&rsquo;t ship it yet. It lands on the roadmap alongside hardened alternates and the accuracy backtest.
         </p>
       </section>
 
       <section className="space-y-3" id="open-questions">
         <h2 className="text-xl font-semibold tracking-tight">Open questions</h2>
         <ul className="space-y-2 text-base text-muted-foreground leading-relaxed list-disc pl-5">
-          <li><span className="text-foreground font-medium">Accuracy backtest.</span> The headline measures resolution coverage. The next milestone is replaying closed markets through the Intelligent Oracle on Bradbury and comparing the output to Polymarket&rsquo;s settlement, then publishing per-category accuracy alongside coverage.</li>
-          <li><span className="text-foreground font-medium">Hardened alternate sources.</span> The alternate is currently agent-chosen, not a hardened whitelist (see the alternate disclaimer above). Reputation, multi-source consensus, and Polymarket-approved alternates are all open product decisions.</li>
-          <li><span className="text-foreground font-medium">Bradbury production deployment.</span> Moving Intelligent Oracle runs from Studio to Bradbury makes per-validator on-chain transactions visible on the per-market detail page and removes the Studio-vs-validator IP discrepancy.</li>
-          <li><span className="text-foreground font-medium">Currently-pending markets.</span> A few percent of recent markets have not finished UMA&rsquo;s 2-hour challenge window. We label them <code className="bg-muted px-1 rounded text-sm">pending</code> and refresh daily.</li>
-          <li><span className="text-foreground font-medium">Long-horizon markets.</span> Markets resolving further out than 24 hours are out of scope today. Whether to extend coverage, and how (agentic search? different resolution mode?), is open.</li>
+          <li><span className="text-foreground font-medium">Accuracy backtest.</span> Today the headline is coverage. Next is replaying closed markets through the oracle on Bradbury and publishing per-category accuracy alongside it.</li>
+          <li><span className="text-foreground font-medium">Hardened alternates.</span> The alternate is agent-chosen; a vetted list is still open product work.</li>
+          <li><span className="text-foreground font-medium">Bradbury in production.</span> Moves runs out of Studio and exposes per-validator transactions on the detail pages.</li>
+          <li><span className="text-foreground font-medium">Pending markets.</span> A few percent are still inside UMA&rsquo;s 2-hour challenge window. We refresh daily.</li>
+          <li><span className="text-foreground font-medium">Longer horizons.</span> Markets resolving beyond 24 hours are out of scope today.</li>
         </ul>
       </section>
 

@@ -72,7 +72,8 @@ export type MarketRow = {
   rebindHost: string;
   bucket: string;
   winner: Winner;
-  slug: string;
+  slug: string;        // URL slug for /markets/[slug] (always populated, falls back to id)
+  eventSlug: string;   // Polymarket event slug (empty for pending markets)
 };
 
 export type BenchmarkData = {
@@ -118,7 +119,8 @@ export type ComingSoonData = {
 export type MarketDetail = {
   id: string;
   date: string;
-  slug: string;
+  slug: string;        // URL slug for /markets/[slug] (always populated, falls back to id)
+  eventSlug: string;   // Polymarket event slug (empty for pending markets)
   question: string;
   namedSource: string | null;
   verifiedSource: string | null;
