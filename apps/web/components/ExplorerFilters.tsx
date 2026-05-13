@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import type { BenchmarkData } from '@/lib/types';
 import {
@@ -141,7 +141,7 @@ export function useExplorerFilters() {
   const pathname = usePathname();
   const hydrated = useRef(false);
 
-  const [state, setState] = useStateOnce<ExplorerFilterState>(defaultExplorerFilters);
+  const [state, setState] = useState<ExplorerFilterState>(defaultExplorerFilters);
 
   useEffect(() => {
     if (hydrated.current) return;
@@ -157,11 +157,4 @@ export function useExplorerFilters() {
   }, [router, pathname, setState]);
 
   return { filters: state, setFilters };
-}
-
-// useState wrapper that React expects (kept separate so the hook ordering is
-// stable across calls).
-import { useState } from 'react';
-function useStateOnce<T>(initial: T) {
-  return useState<T>(initial);
 }
