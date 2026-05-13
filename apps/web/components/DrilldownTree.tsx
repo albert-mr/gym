@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { BenchmarkData, Template, MarketRow } from '@/lib/types';
 import { SOLVED_BUCKETS } from '@/lib/types';
 import { BucketBadge } from './BucketBadge';
@@ -9,9 +9,29 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
-type Props = { data: BenchmarkData };
+export function DrilldownTree() {
+  const [data, setData] = useState<BenchmarkData | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
-export function DrilldownTree({ data }: Props) {
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/data/pm-bench/latest.json')
+      .then(r => { if (!r.ok) throw new Error(`fetch failed: ${r.status}`); return r.json(); })
+      .then(d => { if (!cancelled) setData(d as BenchmarkData); })
+      .catch(e => { if (!cancelled) setLoadError(e.message ?? 'failed to load'); });
+    return () => { cancelled = true; };
+  }, []);
+
+  if (loadError) {
+    return <div className="text-sm text-destructive py-12">Failed to load data: {loadError}</div>;
+  }
+  if (!data) {
+    return <div className="text-sm text-muted-foreground py-12 text-center" role="status">Loading market data…</div>;
+  }
+  return <DrilldownTreeView data={data} />;
+}
+
+function DrilldownTreeView({ data }: { data: BenchmarkData }) {
   const [date, setDate] = useState<string>('all');
   const [bucket, setBucket] = useState<string>('all');
   const [solvedOnly, setSolvedOnly] = useState<boolean>(false);

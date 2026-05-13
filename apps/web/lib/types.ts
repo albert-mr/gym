@@ -112,6 +112,6 @@ export type ComingSoonData = {
 };
 
 export const DIRECT_BUCKETS = new Set(['render', 'api']);
-export const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki']);
+export const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki', 'cricinfo_via_espn']);
 export const UNSOLVABLE_BUCKETS = new Set(['hard', 'yahoo', 'subjective', 'misc', 'no_source', 'studio_blocked', 'hltv_lost']);
-export const SOLVED_BUCKETS = new Set(['render', 'alt', 'api', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki']);
+export const SOLVED_BUCKETS = new Set(['render', 'alt', 'api', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki', 'cricinfo_via_espn']);

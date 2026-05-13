@@ -23,6 +23,7 @@ const BUCKET_LABELS = {
   bo3_recover: 'Alternate: bo3.gg',
   frmf_via_flashscore: 'Alternate: Flashscore',
   eurovision_via_wiki: 'Alternate: Wikipedia',
+  cricinfo_via_espn: 'Alternate: ESPN Cricket',
   studio_blocked: 'Blocked by validator infrastructure',
   hltv_lost: 'No alternate available',
   yahoo: 'Paywalled',
@@ -39,6 +40,7 @@ const BUCKET_COLORS = {
   bo3_recover: '#ca8a04',
   frmf_via_flashscore: '#84cc16',
   eurovision_via_wiki: '#4d7c0f',
+  cricinfo_via_espn: '#a3e635',
   studio_blocked: '#dc2626',
   hltv_lost: '#dc2626',
   yahoo: '#ea580c',
@@ -49,7 +51,7 @@ const BUCKET_COLORS = {
 };
 
 const DIRECT_BUCKETS = new Set(['render', 'api']);
-const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki']);
+const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki', 'cricinfo_via_espn']);
 
 function parseArgs(argv) {
   const out = { start: '2026-05-06', end: '2026-05-10', outDir: '../../data/pm-bench' };
@@ -362,6 +364,14 @@ function build() {
   fs.writeFileSync(publicMarketsFile, JSON.stringify(downloadDoc) + '\n', 'utf8');
   const downloadSizeMB = (fs.statSync(publicMarketsFile).size / 1024 / 1024).toFixed(2);
   console.log(`Wrote ${publicMarketsFile} (${downloadSizeMB} MB, ${downloadMarkets.length} markets)`);
+
+  // Full BenchmarkData also exposed as a static asset so the drilldown page can
+  // fetch it client-side instead of inlining 12MB of markets into prerendered
+  // HTML (which previously bloated drilldown.html past Vercel's deploy limits).
+  const publicLatestFile = path.join(publicDir, 'latest.json');
+  fs.writeFileSync(publicLatestFile, JSON.stringify(data) + '\n', 'utf8');
+  const publicLatestMB = (fs.statSync(publicLatestFile).size / 1024 / 1024).toFixed(2);
+  console.log(`Wrote ${publicLatestFile} (${publicLatestMB} MB, for client-side drilldown)`);
 
   console.log(`Templates: ${templates.length}, Markets: ${allRows.length}, Unsolvables: ${unsolvables.length}, Headline: ${headlinePct.toFixed(1)}%`);
 }
