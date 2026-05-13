@@ -9,6 +9,7 @@ type SliceKey = 'chainlink' | 'pyth' | 'direct' | 'alt' | 'held';
 type Slice = {
   key: SliceKey;
   label: string;
+  shortLabel: string;
   count: number;
   color: string;
   buckets?: string;
@@ -40,6 +41,7 @@ export function PipelinePie({ data }: { data: BenchmarkData }) {
     {
       key: 'direct',
       label: 'Direct source',
+      shortLabel: 'direct',
       count: direct,
       color: '#10b981',
       buckets: 'render,api',
@@ -48,6 +50,7 @@ export function PipelinePie({ data }: { data: BenchmarkData }) {
     {
       key: 'alt',
       label: 'Alternative source',
+      shortLabel: 'alternate',
       count: alt,
       color: '#84cc16',
       buckets: 'alt,liquipedia_recover,bo3_recover,frmf_via_flashscore,eurovision_via_wiki',
@@ -56,6 +59,7 @@ export function PipelinePie({ data }: { data: BenchmarkData }) {
     {
       key: 'held',
       label: 'Held for later',
+      shortLabel: 'held',
       count: held,
       color: '#f59e0b',
       buckets: 'hard,yahoo,subjective,misc,no_source,studio_blocked,hltv_lost',
@@ -64,6 +68,7 @@ export function PipelinePie({ data }: { data: BenchmarkData }) {
     {
       key: 'chainlink',
       label: 'Chainlink (handed back)',
+      shortLabel: 'chainlink',
       count: s.chainlink,
       color: '#7c3aed',
       note: 'Resolved by on-chain price feed. The Intelligent Oracle has no role.',
@@ -71,6 +76,7 @@ export function PipelinePie({ data }: { data: BenchmarkData }) {
     {
       key: 'pyth',
       label: 'Pyth (handed back)',
+      shortLabel: 'pyth',
       count: s.pyth,
       color: '#0ea5e9',
       note: 'Resolved by on-chain price feed. The Intelligent Oracle has no role.',
@@ -94,7 +100,7 @@ export function PipelinePie({ data }: { data: BenchmarkData }) {
 
   const focusSlice = hovered ? slices.find(sl => sl.key === hovered) : null;
   const centerCount = focusSlice ? focusSlice.count : total;
-  const centerLabel = focusSlice ? focusSlice.label.toLowerCase() : 'polled markets';
+  const centerLabel = focusSlice ? focusSlice.shortLabel : 'polled markets';
 
   return (
     <div className="border border-border rounded-lg p-5 md:p-6 space-y-4">
@@ -163,11 +169,11 @@ export function PipelinePie({ data }: { data: BenchmarkData }) {
                 />
               );
             })}
-            <circle cx={cx} cy={cy} r={r * 0.5} fill="white" pointerEvents="none" />
-            <text x={cx} y={cy - 4} textAnchor="middle" fontSize="15" fontWeight="600" fill="currentColor" className="tabular-nums" pointerEvents="none">
+            <circle cx={cx} cy={cy} r={r * 0.58} fill="white" pointerEvents="none" />
+            <text x={cx} y={cy - 2} textAnchor="middle" fontSize="17" fontWeight="600" fill="currentColor" className="tabular-nums" pointerEvents="none">
               {centerCount.toLocaleString()}
             </text>
-            <text x={cx} y={cy + 12} textAnchor="middle" fontSize="9" fill="currentColor" fillOpacity="0.6" className="uppercase tracking-wider" pointerEvents="none">
+            <text x={cx} y={cy + 16} textAnchor="middle" fontSize="9" fill="currentColor" fillOpacity="0.6" className="uppercase tracking-wider" pointerEvents="none">
               {centerLabel}
             </text>
           </svg>
