@@ -5,6 +5,9 @@ import type { BenchmarkData } from '@/lib/types';
 import { DIRECT_BUCKETS, ALT_BUCKETS } from '@/lib/types';
 
 type SliceKey = 'chainlink' | 'pyth' | 'direct' | 'alt' | 'held';
+// Funnel rows can pair multiple slices under one hover label (the "we hand
+// on-chain oracles back" row highlights both Chainlink and Pyth slices).
+export type PieHoverKey = SliceKey | 'onchain';
 
 type Slice = {
   key: SliceKey;
@@ -30,9 +33,27 @@ function bucketSums(data: BenchmarkData) {
   return { direct, alt, held };
 }
 
-export function PipelinePie({ data, embedded = false }: { data: BenchmarkData; embedded?: boolean }) {
+function isSliceActive(slice: SliceKey, hovered: PieHoverKey | null): boolean {
+  if (hovered === null) return false;
+  if (hovered === 'onchain') return slice === 'chainlink' || slice === 'pyth';
+  return hovered === slice;
+}
+
+type Props = {
+  data: BenchmarkData;
+  embedded?: boolean;
+  hovered?: PieHoverKey | null;
+  onHover?: (next: PieHoverKey | null) => void;
+};
+
+export function PipelinePie({ data, embedded = false, hovered: hoveredProp, onHover }: Props) {
   const router = useRouter();
-  const [hovered, setHovered] = useState<SliceKey | null>(null);
+  const [internalHovered, setInternalHovered] = useState<PieHoverKey | null>(null);
+  const hovered = hoveredProp !== undefined ? hoveredProp : internalHovered;
+  const setHovered = (next: PieHoverKey | null) => {
+    if (onHover) onHover(next);
+    else setInternalHovered(next);
+  };
 
   const s = data.onchainFeedStats;
   const { direct, alt, held } = bucketSums(data);
@@ -98,9 +119,18 @@ export function PipelinePie({ data, embedded = false }: { data: BenchmarkData; e
     router.push(`/benchmarks/polymarket/explorer?bucket=${slice.buckets}`);
   };
 
-  const focusSlice = hovered ? slices.find(sl => sl.key === hovered) : null;
-  const centerCount = focusSlice ? focusSlice.count : total;
-  const centerLabel = focusSlice ? focusSlice.shortLabel : 'polled markets';
+  const focusSlice = hovered && hovered !== 'onchain' ? slices.find(sl => sl.key === hovered) : null;
+  const onchainTotal = s.chainlink + s.pyth;
+  const centerCount = focusSlice
+    ? focusSlice.count
+    : hovered === 'onchain'
+      ? onchainTotal
+      : total;
+  const centerLabel = focusSlice
+    ? focusSlice.shortLabel
+    : hovered === 'onchain'
+      ? 'on-chain feeds'
+      : 'polled markets';
 
   const wrapperClass = embedded
     ? 'space-y-4'
@@ -133,14 +163,16 @@ export function PipelinePie({ data, embedded = false }: { data: BenchmarkData; e
               const large = frac > 0.5 ? 1 : 0;
 
               const aMid = (a0 + a1) / 2;
-              const isHovered = hovered === slice.key;
-              const isDim = hovered !== null && !isHovered;
-              const lift = isHovered ? 6 : 0;
+              const isActive = isSliceActive(slice.key, hovered);
+              const isDim = hovered !== null && !isActive;
+              const lift = isActive ? 6 : 0;
               const tx = lift * Math.cos(aMid);
               const ty = lift * Math.sin(aMid);
               const fillOpacity = isDim ? 0.35 : 1;
 
               const interactive = !!slice.buckets;
+              const handleEnter = () => setHovered(slice.key);
+              const handleLeave = () => setHovered(null);
 
               if (frac >= 0.9999) {
                 return (
@@ -151,8 +183,8 @@ export function PipelinePie({ data, embedded = false }: { data: BenchmarkData; e
                     r={r}
                     fill={slice.color}
                     fillOpacity={fillOpacity}
-                    onMouseEnter={() => setHovered(slice.key)}
-                    onMouseLeave={() => setHovered(null)}
+                    onMouseEnter={handleEnter}
+                    onMouseLeave={handleLeave}
                     onClick={() => goToExplorer(slice)}
                     style={{ cursor: interactive ? 'pointer' : 'default' }}
                   />
@@ -168,8 +200,8 @@ export function PipelinePie({ data, embedded = false }: { data: BenchmarkData; e
                   stroke="white"
                   strokeWidth="2"
                   transform={`translate(${tx}, ${ty})`}
-                  onMouseEnter={() => setHovered(slice.key)}
-                  onMouseLeave={() => setHovered(null)}
+                  onMouseEnter={handleEnter}
+                  onMouseLeave={handleLeave}
                   onClick={() => goToExplorer(slice)}
                   style={{ cursor: interactive ? 'pointer' : 'default', transition: 'transform 120ms ease, fill-opacity 120ms ease' }}
                 />
@@ -188,8 +220,8 @@ export function PipelinePie({ data, embedded = false }: { data: BenchmarkData; e
         <ul className="space-y-1 w-full text-sm">
           {slices.map(slice => {
             const pct = (slice.count / total) * 100;
-            const isHovered = hovered === slice.key;
-            const isDim = hovered !== null && !isHovered;
+            const isActive = isSliceActive(slice.key, hovered);
+            const isDim = hovered !== null && !isActive;
             const interactive = !!slice.buckets;
             return (
               <li
@@ -197,7 +229,7 @@ export function PipelinePie({ data, embedded = false }: { data: BenchmarkData; e
                 onMouseEnter={() => setHovered(slice.key)}
                 onMouseLeave={() => setHovered(null)}
                 onClick={() => goToExplorer(slice)}
-                className={`flex items-baseline gap-3 rounded-md px-2 py-1 transition-colors ${isHovered ? 'bg-muted/60' : ''} ${isDim ? 'opacity-50' : ''} ${interactive ? 'cursor-pointer' : 'cursor-default'}`}
+                className={`flex items-baseline gap-3 rounded-md px-2 py-1 transition-colors ${isActive ? 'bg-muted/60' : ''} ${isDim ? 'opacity-50' : ''} ${interactive ? 'cursor-pointer' : 'cursor-default'}`}
                 title={interactive ? 'Open this slice in the explorer' : undefined}
               >
                 <span aria-hidden className="inline-block h-2.5 w-2.5 rounded-sm shrink-0" style={{ backgroundColor: slice.color }} />
@@ -215,7 +247,9 @@ export function PipelinePie({ data, embedded = false }: { data: BenchmarkData; e
       <p className="text-xs text-muted-foreground leading-relaxed pt-1 min-h-[1.5em]">
         {focusSlice
           ? focusSlice.note + (focusSlice.buckets ? ' Click to open in the explorer.' : '')
-          : 'Hover a slice for details. Click to open that bucket in the explorer.'}
+          : hovered === 'onchain'
+            ? 'Chainlink and Pyth resolve via on-chain price feeds. The chain already has the answer.'
+            : 'Hover a slice for details. Click to open that bucket in the explorer.'}
       </p>
     </div>
   );
