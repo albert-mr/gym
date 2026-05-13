@@ -86,4 +86,3 @@ node benchmarks/pm-bench/scripts/cross-day-classify.mjs 2026-05-06 2026-05-07 ..
 - GitHub Action for daily refresh (cron → poll → analyze → build JSON → commit → auto-deploy)
 - Sources benchmark: stub → real
 - Accuracy backtest (replay closed markets through a local LLM, compare to Polymarket outcome) — this turns the routability claim into an accuracy claim. Biggest research milestone next.
-- xtracker rebind decision (parked; +0.5% headline if applied)

@@ -1,72 +1,72 @@
 {
   "date": "2026-05-11",
-  "raw_rows": 6125,
-  "after_dedup": 6125,
-  "total_rows": 6125,
-  "unique_markets": 6125,
-  "unique_events": 3272,
-  "unique_templates": 291,
-  "unique_domains": 38,
+  "raw_rows": 8285,
+  "after_dedup": 8285,
+  "total_rows": 8285,
+  "unique_markets": 8285,
+  "unique_events": 3509,
+  "unique_templates": 419,
+  "unique_domains": 47,
   "polled_at_min": "2026-05-11T10:32:47.683Z",
   "polled_at_max": "2026-05-11T10:32:47.683Z",
-  "end_date_min": "2026-05-11T10:35:00Z",
-  "end_date_max": "2026-05-12T10:30:00Z",
+  "end_date_min": "2026-05-04T21:40:00.000Z",
+  "end_date_max": "2026-05-13T00:00:00.000Z",
   "gate1_chainlink": {
-    "matched": 2723,
-    "pct": 44.457142857142856
+    "matched": 2730,
+    "pct": 32.95111647555824
   },
   "gate1_pyth": {
     "matched": 41,
-    "pct": 0.6693877551020408
+    "pct": 0.4948702474351237
   },
   "gate1_no_url": {
     "matched": 297,
-    "pct": 4.848979591836735
+    "pct": 3.5847917923958965
   },
-  "gate1_dropped": 3061,
-  "io_addressable_markets": 3064,
-  "io_addressable_templates": 255,
-  "io_addressable_events": 514,
-  "io_addressable_recurring": 723,
-  "io_addressable_non_recurring": 2341,
-  "io_unique_domains": 36,
-  "truly_io_shaped_markets": 2793,
-  "truly_io_shaped_templates": 213,
+  "gate1_dropped": 3068,
+  "io_addressable_markets": 5217,
+  "io_addressable_templates": 383,
+  "io_addressable_events": 744,
+  "io_addressable_recurring": 1446,
+  "io_addressable_non_recurring": 3771,
+  "io_unique_domains": 45,
+  "truly_io_shaped_markets": 4946,
+  "truly_io_shaped_templates": 341,
   "kinds": [
     {
       "kind": "sports_match",
       "label": "Sports match",
-      "markets": 1184,
-      "unique_templates": 38,
-      "unique_events": 134,
+      "markets": 2519,
+      "unique_templates": 170,
+      "unique_events": 324,
       "recurring": 0,
       "deterministic_feed": false
     },
     {
       "kind": "esports_match",
       "label": "Esports match",
-      "markets": 877,
-      "unique_templates": 89,
-      "unique_events": 89,
+      "markets": 1046,
+      "unique_templates": 85,
+      "unique_events": 85,
       "recurring": 0,
-      "deterministic_feed": false
-    },
-    {
-      "kind": "weather_forecast",
-      "label": "Weather forecast",
-      "markets": 388,
-      "unique_templates": 58,
-      "unique_events": 58,
-      "recurring": 388,
       "deterministic_feed": false
     },
     {
       "kind": "news_or_other",
       "label": "News / other",
-      "markets": 344,
-      "unique_templates": 28,
-      "unique_events": 30,
-      "recurring": 116,
+      "markets": 732,
+      "unique_templates": 27,
+      "unique_events": 73,
+      "recurring": 578,
+      "deterministic_feed": false
+    },
+    {
+      "kind": "weather_forecast",
+      "label": "Weather forecast",
+      "markets": 649,
+      "unique_templates": 59,
+      "unique_events": 59,
+      "recurring": 649,
       "deterministic_feed": false
     },
     {
@@ -91,208 +91,264 @@
   "resolution_source_buckets": [
     {
       "domain": "data.chain.link",
-      "count": 2723,
-      "pct": 44.457142857142856
+      "count": 2730,
+      "pct": 32.95111647555824
     },
     {
       "domain": "(empty)",
-      "count": 694,
-      "pct": 11.33061224489796
+      "count": 1096,
+      "pct": 13.228726614363307
     },
     {
       "domain": "www.twitch.tv",
-      "count": 490,
-      "pct": 8
+      "count": 777,
+      "pct": 9.378394689197345
+    },
+    {
+      "domain": "www.wtatennis.com",
+      "count": 656,
+      "pct": 7.917923958961979
     },
     {
       "domain": "www.wunderground.com",
-      "count": 347,
-      "pct": 5.66530612244898
+      "count": 594,
+      "pct": 7.169583584791793
+    },
+    {
+      "domain": "www.atptour.com",
+      "count": 381,
+      "pct": 4.59867229933615
     },
     {
       "domain": "www.ligaportugal.pt",
       "count": 238,
-      "pct": 3.8857142857142852
-    },
-    {
-      "domain": "kick.com",
-      "count": 199,
-      "pct": 3.248979591836735
+      "pct": 2.872661436330718
     },
     {
       "domain": "www.binance.com",
       "count": 175,
-      "pct": 2.857142857142857
+      "pct": 2.112251056125528
+    },
+    {
+      "domain": "kick.com",
+      "count": 171,
+      "pct": 2.063971031985516
+    },
+    {
+      "domain": "www.mlb.com",
+      "count": 159,
+      "pct": 1.9191309595654797
     },
     {
       "domain": "www.nba.com",
-      "count": 101,
-      "pct": 1.6489795918367345
+      "count": 141,
+      "pct": 1.7018708509354254
     },
     {
       "domain": "premierliga.ru",
       "count": 96,
-      "pct": 1.5673469387755101
+      "pct": 1.1587205793602897
     },
     {
       "domain": "www.frmf.ma",
       "count": 96,
-      "pct": 1.5673469387755101
+      "pct": 1.1587205793602897
     },
     {
       "domain": "www.kleague.com",
       "count": 96,
-      "pct": 1.5673469387755101
+      "pct": 1.1587205793602897
     },
     {
       "domain": "www.laliga.com",
       "count": 85,
-      "pct": 1.3877551020408163
+      "pct": 1.0259505129752564
     },
     {
       "domain": "www.lpf.ro",
       "count": 68,
-      "pct": 1.110204081632653
+      "pct": 0.8207604103802052
     },
     {
       "domain": "www.slstat.com",
       "count": 64,
-      "pct": 1.0448979591836736
+      "pct": 0.7724803862401931
     },
     {
       "domain": "liga1.pe",
       "count": 64,
-      "pct": 1.0448979591836736
-    },
-    {
-      "domain": "www.huya.com",
-      "count": 55,
-      "pct": 0.8979591836734694
+      "pct": 0.7724803862401931
     },
     {
       "domain": "www.legaseriea.it",
       "count": 52,
-      "pct": 0.8489795918367347
+      "pct": 0.627640313820157
     },
     {
       "domain": "www.premierleague.com",
       "count": 52,
-      "pct": 0.8489795918367347
-    },
-    {
-      "domain": "liquipedia.net",
-      "count": 44,
-      "pct": 0.7183673469387755
-    },
-    {
-      "domain": "pythdata.app",
-      "count": 41,
-      "pct": 0.6693877551020408
+      "pct": 0.627640313820157
     }
   ],
   "io_resolution_source_buckets": [
     {
-      "domain": "www.twitch.tv",
-      "count": 490,
-      "pct": 15.992167101827675
+      "domain": "(empty)",
+      "count": 799,
+      "pct": 15.315315315315313
     },
     {
-      "domain": "(empty)",
-      "count": 397,
-      "pct": 12.956919060052218
+      "domain": "www.twitch.tv",
+      "count": 777,
+      "pct": 14.893617021276595
+    },
+    {
+      "domain": "www.wtatennis.com",
+      "count": 656,
+      "pct": 12.574276404063639
     },
     {
       "domain": "www.wunderground.com",
-      "count": 347,
-      "pct": 11.325065274151436
+      "count": 594,
+      "pct": 11.385853939045429
+    },
+    {
+      "domain": "www.atptour.com",
+      "count": 381,
+      "pct": 7.303047728579644
     },
     {
       "domain": "www.ligaportugal.pt",
       "count": 238,
-      "pct": 7.7676240208877285
-    },
-    {
-      "domain": "kick.com",
-      "count": 199,
-      "pct": 6.494778067885118
+      "pct": 4.562008817327967
     },
     {
       "domain": "www.binance.com",
       "count": 175,
-      "pct": 5.711488250652741
+      "pct": 3.3544182480352696
+    },
+    {
+      "domain": "kick.com",
+      "count": 171,
+      "pct": 3.27774583093732
+    },
+    {
+      "domain": "www.mlb.com",
+      "count": 159,
+      "pct": 3.0477285796434734
     },
     {
       "domain": "www.nba.com",
-      "count": 101,
-      "pct": 3.296344647519582
+      "count": 141,
+      "pct": 2.7027027027027026
     },
     {
       "domain": "premierliga.ru",
       "count": 96,
-      "pct": 3.1331592689295036
+      "pct": 1.8401380103507763
     },
     {
       "domain": "www.frmf.ma",
       "count": 96,
-      "pct": 3.1331592689295036
+      "pct": 1.8401380103507763
     },
     {
       "domain": "www.kleague.com",
       "count": 96,
-      "pct": 3.1331592689295036
+      "pct": 1.8401380103507763
     },
     {
       "domain": "www.laliga.com",
       "count": 85,
-      "pct": 2.7741514360313317
+      "pct": 1.6292888633314166
     },
     {
       "domain": "www.lpf.ro",
       "count": 68,
-      "pct": 2.219321148825065
+      "pct": 1.3034310906651332
     },
     {
       "domain": "www.slstat.com",
       "count": 64,
-      "pct": 2.088772845953003
+      "pct": 1.2267586735671843
     },
     {
       "domain": "liga1.pe",
       "count": 64,
-      "pct": 2.088772845953003
-    },
-    {
-      "domain": "www.huya.com",
-      "count": 55,
-      "pct": 1.7950391644908616
+      "pct": 1.2267586735671843
     },
     {
       "domain": "www.legaseriea.it",
       "count": 52,
-      "pct": 1.6971279373368149
+      "pct": 0.9967414222733373
     },
     {
       "domain": "www.premierleague.com",
       "count": 52,
-      "pct": 1.6971279373368149
+      "pct": 0.9967414222733373
     },
     {
-      "domain": "liquipedia.net",
-      "count": 44,
-      "pct": 1.4360313315926894
-    },
-    {
-      "domain": "www.dotabuff.com",
-      "count": 40,
-      "pct": 1.3054830287206265
-    },
-    {
-      "domain": "hltv.org",
-      "count": 39,
-      "pct": 1.2728459530026108
+      "domain": "www.worldtabletennis.com",
+      "count": 47,
+      "pct": 0.9009009009009009
     }
   ],
   "top_families": [
+    {
+      "template": "Bitcoin above ___ on May #, #AM ET?",
+      "kind": "news_or_other",
+      "kindLabel": "News / other",
+      "markets": 120,
+      "recurring": true,
+      "domain": "(empty)"
+    },
+    {
+      "template": "Ethereum above ___ on May #, #AM ET?",
+      "kind": "news_or_other",
+      "kindLabel": "News / other",
+      "markets": 120,
+      "recurring": true,
+      "domain": "(empty)"
+    },
+    {
+      "template": "Bitcoin above ___ on May #, #PM ET?",
+      "kind": "news_or_other",
+      "kindLabel": "News / other",
+      "markets": 120,
+      "recurring": true,
+      "domain": "(empty)"
+    },
+    {
+      "template": "Ethereum above ___ on May #, #PM ET?",
+      "kind": "news_or_other",
+      "kindLabel": "News / other",
+      "markets": 120,
+      "recurring": true,
+      "domain": "(empty)"
+    },
+    {
+      "template": "Dota #: PARIVISION vs #win (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 109,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "Dota #: #win vs PlayTime (BO#)",
+      "kind": "esports_match",
+      "kindLabel": "Esports match",
+      "markets": 83,
+      "recurring": false,
+      "domain": "www.twitch.tv"
+    },
+    {
+      "template": "Timberwolves vs. Spurs",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 53,
+      "recurring": false,
+      "domain": "www.nba.com"
+    },
     {
       "template": "SSC Napoli vs. Bologna FC #",
       "kind": "sports_match",
@@ -318,6 +374,30 @@
       "domain": "www.laliga.com"
     },
     {
+      "template": "WTT",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 47,
+      "recurring": false,
+      "domain": "www.worldtabletennis.com"
+    },
+    {
+      "template": "Pistons vs. Cavaliers",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 44,
+      "recurring": false,
+      "domain": "www.nba.com"
+    },
+    {
+      "template": "Thunder vs. Lakers",
+      "kind": "sports_match",
+      "kindLabel": "Sports match",
+      "markets": 43,
+      "recurring": false,
+      "domain": "www.nba.com"
+    },
+    {
       "template": "## Free App in the US Apple App Store on May #?",
       "kind": "news_or_other",
       "kindLabel": "News / other",
@@ -326,92 +406,12 @@
       "domain": "(empty)"
     },
     {
-      "template": "Dota #: #win vs PlayTime (BO#)",
-      "kind": "esports_match",
-      "kindLabel": "Esports match",
-      "markets": 40,
-      "recurring": false,
-      "domain": "www.dotabuff.com"
-    },
-    {
-      "template": "Pistons vs. Cavaliers",
-      "kind": "sports_match",
-      "kindLabel": "Sports match",
-      "markets": 39,
-      "recurring": false,
-      "domain": "www.nba.com"
-    },
-    {
       "template": "LoL: Ei Nerd Esports vs Estral Esports (BO#)",
       "kind": "esports_match",
       "kindLabel": "Esports match",
       "markets": 39,
       "recurring": false,
       "domain": "www.twitch.tv"
-    },
-    {
-      "template": "Thunder vs. Lakers",
-      "kind": "sports_match",
-      "kindLabel": "Sports match",
-      "markets": 37,
-      "recurring": false,
-      "domain": "www.nba.com"
-    },
-    {
-      "template": "FC Metaloglobus București vs. FC Hermannstadt",
-      "kind": "sports_match",
-      "kindLabel": "Sports match",
-      "markets": 34,
-      "recurring": false,
-      "domain": "www.lpf.ro"
-    },
-    {
-      "template": "FCSB vs. AFC Unirea Slobozia",
-      "kind": "sports_match",
-      "kindLabel": "Sports match",
-      "markets": 34,
-      "recurring": false,
-      "domain": "www.lpf.ro"
-    },
-    {
-      "template": "SD Huesca vs. Real Sociedad de Fútbol B",
-      "kind": "sports_match",
-      "kindLabel": "Sports match",
-      "markets": 34,
-      "recurring": false,
-      "domain": "www.laliga.com"
-    },
-    {
-      "template": "Millwall FC vs. Hull City AFC",
-      "kind": "sports_match",
-      "kindLabel": "Sports match",
-      "markets": 34,
-      "recurring": false,
-      "domain": "www.efl.com"
-    },
-    {
-      "template": "CF Estrela da Amadora vs. FC Famalicão",
-      "kind": "sports_match",
-      "kindLabel": "Sports match",
-      "markets": 34,
-      "recurring": false,
-      "domain": "www.ligaportugal.pt"
-    },
-    {
-      "template": "Vitória SC vs. Casa Pia AC",
-      "kind": "sports_match",
-      "kindLabel": "Sports match",
-      "markets": 34,
-      "recurring": false,
-      "domain": "www.ligaportugal.pt"
-    },
-    {
-      "template": "CD Santa Clara vs. CD Nacional",
-      "kind": "sports_match",
-      "kindLabel": "Sports match",
-      "markets": 34,
-      "recurring": false,
-      "domain": "www.ligaportugal.pt"
     }
   ]
 }

@@ -142,11 +142,17 @@ const NEW_RENDER = new Set([
 function clean(h){return (h||'').replace(/[.,;:)\]]+$/g,'');}
 
 function realBinding(m){
+  const desc = m.description||'';
+  // Xtracker rebind: Polymarket's own post-counter at xtracker.polymarket.com is the
+  // explicit resolution source for tweet-count markets, but eventResolutionSource
+  // points to the underlying x.com profile (login-walled, HARD-bucketed). When the
+  // description pins xtracker, prefer it — it's already RENDER-routable.
+  if(desc.includes('xtracker.polymarket.com')) return 'xtracker.polymarket.com';
+
   const url = m.eventResolutionSource||'';
   let host=null;
   if(url) try{host=new URL(url).hostname;}catch{}
   if(host && STREAMING.has(host)){
-    const desc = m.description||'';
     const sl = desc.match(/official information from\s+(https?:\/\/[\w./?=&%#:-]+)/i);
     if(sl) try{return clean(new URL(sl[1]).hostname);}catch{}
     const u = desc.match(/https?:\/\/([\w.-]+)/);
@@ -154,7 +160,6 @@ function realBinding(m){
     return host;
   }
   if(host) return host;
-  const desc = m.description||'';
   const paren = desc.match(/\((https?:\/\/[\w./?=&%#:-]+)\)/);
   if(paren) try{return clean(new URL(paren[1]).hostname);}catch{}
   const m2 = desc.match(/https?:\/\/([\w.-]+)/);
