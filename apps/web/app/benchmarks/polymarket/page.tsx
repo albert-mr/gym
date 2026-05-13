@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { loadBenchmark } from '@/lib/data';
 import { PipelineFunnel } from '@/components/PipelineFunnel';
+import { PipelinePie } from '@/components/PipelinePie';
 import { PerDayTable } from '@/components/PerDayTable';
 import { longDate } from '@/lib/format';
 import { DIRECT_BUCKETS, ALT_BUCKETS } from '@/lib/types';
@@ -35,6 +36,8 @@ export default function PolymarketBenchmarkPage() {
       </header>
 
       <PipelineFunnel data={data} />
+
+      <PipelinePie data={data} />
 
       <section className="space-y-4">
         <h2 className="text-xl font-semibold tracking-tight">Daily activity</h2>
