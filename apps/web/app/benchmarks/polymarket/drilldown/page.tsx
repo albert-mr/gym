@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
 export default function DrilldownRedirect() {
-  redirect('/benchmarks/polymarket/explorer#categories');
+  redirect('/benchmarks/polymarket/explorer?view=category');
 }

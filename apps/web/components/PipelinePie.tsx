@@ -1,8 +1,6 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { BenchmarkData } from '@/lib/types';
-import { DIRECT_BUCKETS, ALT_BUCKETS } from '@/lib/types';
 
 type SliceKey = 'chainlink' | 'pyth' | 'direct' | 'alt' | 'held';
 // Funnel rows can pair multiple slices under one hover label (the "we hand
@@ -15,23 +13,17 @@ type Slice = {
   shortLabel: string;
   count: number;
   color: string;
-  buckets?: string;
+  circle?: string;
   note: string;
 };
 
-function bucketSums(data: BenchmarkData) {
-  let direct = 0;
-  let alt = 0;
-  let held = 0;
-  for (const t of data.templates) {
-    for (const [bucket, n] of Object.entries(t.buckets)) {
-      if (DIRECT_BUCKETS.has(bucket)) direct += n;
-      else if (ALT_BUCKETS.has(bucket)) alt += n;
-      else held += n;
-    }
-  }
-  return { direct, alt, held };
-}
+export type PipelineStats = {
+  chainlink: number;
+  pyth: number;
+  direct: number;
+  alt: number;
+  held: number;
+};
 
 function isSliceActive(slice: SliceKey, hovered: PieHoverKey | null): boolean {
   if (hovered === null) return false;
@@ -40,13 +32,13 @@ function isSliceActive(slice: SliceKey, hovered: PieHoverKey | null): boolean {
 }
 
 type Props = {
-  data: BenchmarkData;
+  stats: PipelineStats;
   embedded?: boolean;
   hovered?: PieHoverKey | null;
   onHover?: (next: PieHoverKey | null) => void;
 };
 
-export function PipelinePie({ data, embedded = false, hovered: hoveredProp, onHover }: Props) {
+export function PipelinePie({ stats, embedded = false, hovered: hoveredProp, onHover }: Props) {
   const router = useRouter();
   const [internalHovered, setInternalHovered] = useState<PieHoverKey | null>(null);
   const hovered = hoveredProp !== undefined ? hoveredProp : internalHovered;
@@ -55,8 +47,7 @@ export function PipelinePie({ data, embedded = false, hovered: hoveredProp, onHo
     else setInternalHovered(next);
   };
 
-  const s = data.onchainFeedStats;
-  const { direct, alt, held } = bucketSums(data);
+  const { chainlink, pyth, direct, alt, held } = stats;
 
   const slices: Slice[] = [
     {
@@ -65,7 +56,7 @@ export function PipelinePie({ data, embedded = false, hovered: hoveredProp, onHo
       shortLabel: 'direct',
       count: direct,
       color: '#10b981',
-      buckets: 'render,api',
+      circle: 'direct',
       note: 'We fetch the host Polymarket named.',
     },
     {
@@ -74,7 +65,7 @@ export function PipelinePie({ data, embedded = false, hovered: hoveredProp, onHo
       shortLabel: 'alternate',
       count: alt,
       color: '#84cc16',
-      buckets: 'alt,liquipedia_recover,bo3_recover,frmf_via_flashscore,eurovision_via_wiki',
+      circle: 'alternative',
       note: 'We route to a verified alternate that contains the same fact.',
     },
     {
@@ -83,23 +74,25 @@ export function PipelinePie({ data, embedded = false, hovered: hoveredProp, onHo
       shortLabel: 'held',
       count: held,
       color: '#f59e0b',
-      buckets: 'hard,yahoo,subjective,misc,no_source,studio_blocked,hltv_lost',
+      circle: 'held',
       note: 'Paywall, login wall, captcha, or pure-consensus markets.',
     },
     {
       key: 'chainlink',
-      label: 'Chainlink (handed back)',
+      label: 'Chainlink',
       shortLabel: 'chainlink',
-      count: s.chainlink,
+      count: chainlink,
       color: '#7c3aed',
+      circle: 'chainlink',
       note: 'Resolved by on-chain price feed. The Intelligent Oracle has no role.',
     },
     {
       key: 'pyth',
-      label: 'Pyth (handed back)',
+      label: 'Pyth',
       shortLabel: 'pyth',
-      count: s.pyth,
+      count: pyth,
       color: '#0ea5e9',
+      circle: 'pyth',
       note: 'Resolved by on-chain price feed. The Intelligent Oracle has no role.',
     },
   ];
@@ -115,12 +108,12 @@ export function PipelinePie({ data, embedded = false, hovered: hoveredProp, onHo
   let angle = -Math.PI / 2;
 
   const goToExplorer = (slice: Slice) => {
-    if (!slice.buckets) return;
-    router.push(`/benchmarks/polymarket/explorer?bucket=${slice.buckets}`);
+    if (!slice.circle) return;
+    router.push(`/benchmarks/polymarket/explorer?view=list&circle=${slice.circle}`);
   };
 
   const focusSlice = hovered && hovered !== 'onchain' ? slices.find(sl => sl.key === hovered) : null;
-  const onchainTotal = s.chainlink + s.pyth;
+  const onchainTotal = chainlink + pyth;
   const centerCount = focusSlice
     ? focusSlice.count
     : hovered === 'onchain'
@@ -170,7 +163,7 @@ export function PipelinePie({ data, embedded = false, hovered: hoveredProp, onHo
               const ty = lift * Math.sin(aMid);
               const fillOpacity = isDim ? 0.35 : 1;
 
-              const interactive = !!slice.buckets;
+              const interactive = !!slice.circle;
               const handleEnter = () => setHovered(slice.key);
               const handleLeave = () => setHovered(null);
 
@@ -222,7 +215,7 @@ export function PipelinePie({ data, embedded = false, hovered: hoveredProp, onHo
             const pct = (slice.count / total) * 100;
             const isActive = isSliceActive(slice.key, hovered);
             const isDim = hovered !== null && !isActive;
-            const interactive = !!slice.buckets;
+            const interactive = !!slice.circle;
             return (
               <li
                 key={slice.key}
@@ -246,7 +239,7 @@ export function PipelinePie({ data, embedded = false, hovered: hoveredProp, onHo
 
       <p className="text-xs text-muted-foreground leading-relaxed pt-1 min-h-[1.5em]">
         {focusSlice
-          ? focusSlice.note + (focusSlice.buckets ? ' Click to open in the explorer.' : '')
+          ? focusSlice.note + (focusSlice.circle ? ' Click to open in the explorer.' : '')
           : hovered === 'onchain'
             ? 'Chainlink and Pyth resolve via on-chain price feeds. The chain already has the answer.'
             : 'Hover a slice for details. Click to open that bucket in the explorer.'}

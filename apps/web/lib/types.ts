@@ -38,6 +38,8 @@ export type PerDay = {
   solvedPct: number;
   resolved: number;
   buckets: Record<string, number>;
+  chainlink?: number;
+  pyth?: number;
   directDeep: number;
   directShallow: number;
   alt: number;
@@ -51,6 +53,29 @@ export type DomainRow = {
   dominantBucket: string;
   rebind: string;
   category: string; // dominant L1 across markets bound to this host
+};
+
+export type ExplorerCircle = 'chainlink' | 'pyth' | 'direct' | 'alternative' | 'held';
+
+export type ExplorerMarketRow = {
+  id: string;
+  date: string;
+  question: string;
+  circle: ExplorerCircle;
+  bucket: string;
+  namedHost: string;
+  verifiedHost: string;
+  L1: string;
+  L2: string;
+  L3: string;
+  template: string;
+  winner: Winner;
+  slug: string;
+  eventSlug: string;
+  count: number;
+  synthetic?: boolean;
+  detailAvailable?: boolean;
+  polymarketUrl?: string;
 };
 
 export type Unsolvable = {
@@ -89,6 +114,7 @@ export type BenchmarkData = {
   perDay: Record<string, PerDay>;
   templates: Template[];
   domains: DomainRow[];
+  onchainMarkets?: ExplorerMarketRow[];
   unsolvables: Unsolvable[];
   marketsByTemplate: Record<string, MarketRow[]>;
   onchainFeedStats: {
@@ -143,6 +169,7 @@ export type MarketsDoc = {
 };
 
 export const DIRECT_BUCKETS = new Set(['render', 'api']);
-export const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki']);
+export const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki', 'cricinfo_via_espn']);
 export const UNSOLVABLE_BUCKETS = new Set(['hard', 'yahoo', 'subjective', 'misc', 'no_source', 'studio_blocked', 'hltv_lost']);
-export const SOLVED_BUCKETS = new Set(['render', 'alt', 'api', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki']);
+export const SOLVED_BUCKETS = new Set(['render', 'alt', 'api', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki', 'cricinfo_via_espn']);
+export const ONCHAIN_BUCKETS = new Set(['chainlink', 'pyth']);

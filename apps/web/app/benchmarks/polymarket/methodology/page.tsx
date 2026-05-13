@@ -31,19 +31,19 @@ export default function MethodologyPage() {
         <h2 className="text-xl font-semibold tracking-tight">The gates</h2>
         <div className="space-y-5 text-base text-muted-foreground leading-relaxed">
           <div>
-            <p className="text-foreground font-medium">Gate 1 &mdash; on-chain feed filter.</p>
+            <p className="text-foreground font-medium">Gate 1: on-chain feed filter.</p>
             <p>Is the market bound to an on-chain price feed (Chainlink, Pyth)? If yes, the chain has the answer and we step out.</p>
           </div>
           <div>
-            <p className="text-foreground font-medium">Gate 2 &mdash; source URL.</p>
+            <p className="text-foreground font-medium">Gate 2: source URL.</p>
             <p>Do the resolution criteria name a source URL we can fetch? Markets without one wait for a later agentic-search release. We don&rsquo;t ship best-effort scraping.</p>
           </div>
           <div>
-            <p className="text-foreground font-medium">Gate 3 &mdash; accessibility.</p>
-            <p>Can a validator reach the named source? If the host blocks validator traffic, we route to a verified alternate with the same fact. If no alternate exists &mdash; paywall, login, captcha, pure-consensus subjective market &mdash; the market goes to Currently held.</p>
+            <p className="text-foreground font-medium">Gate 3: accessibility.</p>
+            <p>Can a validator reach the named source? If the host blocks validator traffic, we route to a verified alternate with the same fact. If no alternate exists (paywall, login, captcha, pure-consensus subjective market), the market goes to Currently held.</p>
           </div>
           <div>
-            <p className="text-foreground font-medium">Off-chain step &mdash; deeper-page agent.</p>
+            <p className="text-foreground font-medium">Off-chain step: deeper-page agent.</p>
             <p>When a market names a host but not a specific URL, an off-chain agent picks the page and hands the URL to the Intelligent Oracle. The agent runs off-chain; the oracle runs on-chain.</p>
           </div>
         </div>
@@ -55,17 +55,14 @@ export default function MethodologyPage() {
       <section className="space-y-3" id="bradbury">
         <h2 className="text-xl font-semibold tracking-tight">Bradbury</h2>
         <p className="text-base text-muted-foreground leading-relaxed">
-          Bradbury is a controlled IP pool that mirrors the ranges real validators use. Studio doesn&rsquo;t see the web the way a validator does &mdash; some hosts return 403 to Studio while accepting validator traffic. Bradbury closes that gap, and once the rollout completes it surfaces per-validator on-chain transactions on every per-market detail page.
+          Bradbury is <a href="https://genlayer.com/testnet" target="_blank" rel="noreferrer" className="underline hover:text-foreground">GenLayer&rsquo;s testnet</a>. The benchmark runs in Studio today (GenLayer&rsquo;s developer environment); moving it to Bradbury runs each market through real validators and surfaces per-validator on-chain transactions on every per-market detail page.
         </p>
       </section>
 
       <section className="space-y-3" id="tls-notary">
         <h2 className="text-xl font-semibold tracking-tight">TLS notary</h2>
         <p className="text-base text-muted-foreground leading-relaxed">
-          A TLS notary proves a validator actually fetched specific content from a specific HTTPS origin. It is the cryptographic receipt for a paywalled, logged-in, or otherwise non-public page: the validator performs the fetch using its own credentials and walks away with a signed proof that the content came from that exact origin, at that time. Other validators verify the proof without re-fetching, which matters when the source is rate-limited, IP-locked, or behind a session.
-        </p>
-        <p className="text-base text-muted-foreground leading-relaxed">
-          It is the resolution mode that unblocks most of what is in <span className="text-foreground">Currently held</span> today: WSJ paywalls, NYT metered articles, login-gated sports and finance sites. We don&rsquo;t ship it yet. It lands on the roadmap alongside hardened alternates and the accuracy backtest.
+          A TLS notary is a cryptographic receipt that specific bytes came from a specific HTTPS origin at a specific time. It&rsquo;s the same primitive GenLayer Labs is piloting in its Twitter bounty, applied to any web source. One validator fetches with its own credentials; the proof is portable, and the rest verify it without re-fetching. For this benchmark, it unlocks most of <span className="text-foreground">Currently held</span>: paywalled, logged-in, rate-limited, or IP-locked pages. Not shipped yet; on the roadmap alongside hardened alternates and the accuracy backtest.
         </p>
       </section>
 
@@ -75,8 +72,7 @@ export default function MethodologyPage() {
           <li><span className="text-foreground font-medium">Accuracy backtest.</span> Today the headline is coverage. Next is replaying closed markets through the oracle on Bradbury and publishing per-category accuracy alongside it.</li>
           <li><span className="text-foreground font-medium">Hardened alternates.</span> The alternate is agent-chosen; a vetted list is still open product work.</li>
           <li><span className="text-foreground font-medium">Bradbury in production.</span> Moves runs out of Studio and exposes per-validator transactions on the detail pages.</li>
-          <li><span className="text-foreground font-medium">Pending markets.</span> A few percent are still inside UMA&rsquo;s 2-hour challenge window. We refresh daily.</li>
-          <li><span className="text-foreground font-medium">Longer horizons.</span> Markets resolving beyond 24 hours are out of scope today.</li>
+          <li><span className="text-foreground font-medium">Vertical-specific prompts.</span> The oracle prompt is horizontal today; per-vertical prompts (esports, sports, weather) should sharpen routing and resolution.</li>
         </ul>
       </section>
 

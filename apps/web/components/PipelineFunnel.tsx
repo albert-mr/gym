@@ -1,9 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import type { BenchmarkData } from '@/lib/types';
-import { DIRECT_BUCKETS, ALT_BUCKETS } from '@/lib/types';
-import { PipelinePie, type PieHoverKey } from './PipelinePie';
+import { PipelinePie, type PieHoverKey, type PipelineStats } from './PipelinePie';
 
 type Row = {
   count: number;
@@ -13,27 +11,12 @@ type Row = {
   hoverKey?: PieHoverKey;
 };
 
-function bucketSums(data: BenchmarkData) {
-  let direct = 0;
-  let alt = 0;
-  let held = 0;
-  for (const t of data.templates) {
-    for (const [bucket, n] of Object.entries(t.buckets)) {
-      if (DIRECT_BUCKETS.has(bucket)) direct += n;
-      else if (ALT_BUCKETS.has(bucket)) alt += n;
-      else held += n;
-    }
-  }
-  return { direct, alt, held };
-}
-
-export function PipelineFunnel({ data }: { data: BenchmarkData }) {
+export function PipelineFunnel({ stats }: { stats: PipelineStats }) {
   const [hovered, setHovered] = useState<PieHoverKey | null>(null);
 
-  const s = data.onchainFeedStats;
-  const { direct, alt, held } = bucketSums(data);
-  const universe = s.polledUniverse;
-  const afterOnchain = universe - s.chainlink - s.pyth;
+  const { direct, alt, held } = stats;
+  const onchain = stats.chainlink + stats.pyth;
+  const universe = onchain + direct + alt + held;
   const addressable = direct + alt + held;
   const resolved = direct + alt;
 
@@ -44,15 +27,15 @@ export function PipelineFunnel({ data }: { data: BenchmarkData }) {
       detail: 'Every market ending in the cumulative window.',
     },
     {
-      count: afterOnchain,
-      label: 'We hand on-chain oracles back',
+      count: onchain,
+      label: 'On-chain feeds handed back',
       detail: 'Chainlink and Pyth resolve via on-chain price feeds. The chain already has the answer.',
       hoverKey: 'onchain',
     },
     {
       count: addressable,
-      label: 'We set aside markets with no source URL',
-      detail: 'Markets without a source URL wait for a future agentic-search release.',
+      label: 'IO-addressable URL markets',
+      detail: 'Remaining markets with a usable source path after deterministic feed and no-source gates.',
     },
     {
       count: direct,
@@ -110,7 +93,7 @@ export function PipelineFunnel({ data }: { data: BenchmarkData }) {
         </ul>
 
         <div className="lg:pt-1">
-          <PipelinePie data={data} embedded hovered={hovered} onHover={setHovered} />
+          <PipelinePie stats={stats} embedded hovered={hovered} onHover={setHovered} />
         </div>
       </div>
 

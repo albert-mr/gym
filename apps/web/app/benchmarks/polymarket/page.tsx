@@ -3,9 +3,19 @@ import { loadBenchmark } from '@/lib/data';
 import { PipelineFunnel } from '@/components/PipelineFunnel';
 import { PerDayTable } from '@/components/PerDayTable';
 import { longDate } from '@/lib/format';
+import { buildExplorerRows, summarizeRows } from '@/lib/explorer-data';
 
 export default function PolymarketBenchmarkPage() {
   const data = loadBenchmark('pm-bench');
+  const rows = buildExplorerRows(data);
+  const summary = summarizeRows(rows);
+  const pipelineStats = {
+    chainlink: summary.circles.chainlink,
+    pyth: summary.circles.pyth,
+    direct: summary.circles.direct,
+    alt: summary.circles.alternative,
+    held: summary.circles.held,
+  };
   const startLong = longDate(data.meta.window.start);
 
   return (
@@ -21,7 +31,7 @@ export default function PolymarketBenchmarkPage() {
         </p>
       </header>
 
-      <PipelineFunnel data={data} />
+      <PipelineFunnel stats={pipelineStats} />
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold tracking-tight">The three categories</h2>
@@ -47,16 +57,10 @@ export default function PolymarketBenchmarkPage() {
       <section className="space-y-4">
         <h2 className="text-xl font-semibold tracking-tight">Daily activity</h2>
         <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
-          Each row is one day&rsquo;s contribution to the cumulative dataset. Cells deep-link into the explorer.
+          Each row is one day&rsquo;s contribution to the cumulative dataset. Cells deep-link into the{' '}
+          <Link href="/benchmarks/polymarket/explorer" className="underline underline-offset-2 hover:text-foreground">explorer</Link>.
         </p>
-        <PerDayTable data={data} />
-      </section>
-
-      <section className="space-y-3" id="bradbury-callout">
-        <h2 className="text-xl font-semibold tracking-tight">About Bradbury</h2>
-        <p className="text-base text-muted-foreground max-w-2xl leading-relaxed">
-          We run validator-equivalent infrastructure on <Link href="/benchmarks/polymarket/methodology#bradbury" className="underline underline-offset-2 hover:text-foreground">Bradbury</Link>, a controlled IP pool that matches real validator ranges. Studio&rsquo;s <code className="bg-muted px-1 rounded text-sm">web.render</code> IPs are not representative; some hosts block them. Bradbury makes our runs faithful to production and surfaces per-validator on-chain transactions on every per-market detail page once the rollout completes.
-        </p>
+        <PerDayTable data={data} rows={rows} />
       </section>
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4">

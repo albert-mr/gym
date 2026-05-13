@@ -87,6 +87,10 @@ const FRMF_REROUTED = new Set(['www.frmf.ma']); // → flashscore.com/football/m
 // en.wikipedia.org/wiki/Eurovision_Song_Contest_2026 renders the full event data.
 const EUROVISION_REROUTED = new Set(['eurovision.tv','eurovision.com']);
 
+// Cricinfo rerouting: www.espncricinfo.com is Akamai-blocked. The natural alt
+// source is ESPN's cricket surface, verified separately from the Cricinfo host.
+const CRICINFO_REROUTED = new Set(['www.espncricinfo.com']);
+
 // API endpoints (off-chain). Pyth was previously here but is now excluded at Gate 1
 // (deterministic on-chain oracle, like Chainlink — GenLayer has no role).
 // Note: pythdata.app/hermes.pyth.network are filtered upstream by Gate 1 in analyze.ts.
@@ -102,7 +106,6 @@ const HARD = new Set([
   // theahl.com REMOVED — Studio-verified 2026-05-09 to render fine (1/1 match)
   // 2026-05-10 30-day audit additions:
   'www.cnn.com',             // per-URL article failures
-  'www.espncricinfo.com',    // Akamai blocked (also blocks ESPN cricket — same backend)
   'www.indec.gob.ar',        // geo-blocks the webdriver IP
   // 2026-05-11 retroactive May 6 audit:
   'www.aljazeera.com',       // news site — paywall/article-specific, not canonical (24 May 6)
@@ -232,6 +235,7 @@ export function classifyMarket(m){
   if(RENDER.has(host) || NEW_RENDER.has(host)) return { bucket:'render', rebindHost:host };
   if(FRMF_REROUTED.has(host)) return { bucket:'frmf_via_flashscore', rebindHost:'www.flashscore.com' };
   if(EUROVISION_REROUTED.has(host)) return { bucket:'eurovision_via_wiki', rebindHost:'en.wikipedia.org' };
+  if(CRICINFO_REROUTED.has(host)) return { bucket:'cricinfo_via_espn', rebindHost:'www.espn.com' };
   if(STUDIO_BLOCKED.has(host)) return { bucket:'studio_blocked', rebindHost:host };
   if(ALT.has(host)) return { bucket:'alt', rebindHost:host };
   if(API.has(host)) return { bucket:'api', rebindHost:host };
@@ -247,14 +251,14 @@ export function classifyMarket(m){
 
 // Buckets considered "solved" for the headline percent.
 export const SOLVED_BUCKETS = new Set([
-  'render','alt','api','liquipedia_recover','bo3_recover','frmf_via_flashscore','eurovision_via_wiki',
+  'render','alt','api','liquipedia_recover','bo3_recover','frmf_via_flashscore','eurovision_via_wiki','cricinfo_via_espn',
 ]);
 
 function tally(date){
   const lines = fs.readFileSync(`data/markets/${date}/gate1-pass.jsonl`,'utf-8').trim().split('\n');
   const b = {render:0, alt:0, api:0,
              liquipedia_recover:0, bo3_recover:0,
-             frmf_via_flashscore:0, eurovision_via_wiki:0,
+             frmf_via_flashscore:0, eurovision_via_wiki:0, cricinfo_via_espn:0,
              hltv_lost:0, studio_blocked:0,
              yahoo:0, hard:0, subjective:0, no_source:0, misc:0};
   for(const line of lines){
@@ -295,6 +299,7 @@ const rows = [
   ['[OK] bo3.gg recovers HLTV per-map kills','bo3_recover'],
   ['[OK] frmf.ma → Flashscore Botola','frmf_via_flashscore'],
   ['[OK] eurovision.tv → Wikipedia','eurovision_via_wiki'],
+  ['[OK] espncricinfo → ESPN cricket','cricinfo_via_espn'],
   ['[--] Studio-blocked (no alt)','studio_blocked'],
   ['[--] HLTV per-map kills lost','hltv_lost'],
   ['[--] Yahoo + WSJ','yahoo'],
@@ -307,15 +312,15 @@ for(const [name,key] of rows){
   const cells = results.map(r => `${String(r.b[key]).padStart(5)} (${pct(r.b[key], r.total).padStart(4)}%)`).join('  ');
   console.log(name.padEnd(32), cells);
 }
-const totals = results.map(r => r.b.render + r.b.alt + r.b.api + r.b.liquipedia_recover + r.b.bo3_recover + r.b.frmf_via_flashscore + r.b.eurovision_via_wiki);
+const totals = results.map(r => r.b.render + r.b.alt + r.b.api + r.b.liquipedia_recover + r.b.bo3_recover + r.b.frmf_via_flashscore + r.b.eurovision_via_wiki + r.b.cricinfo_via_espn);
 console.log('TOTAL SOLVED'.padEnd(32), results.map((r,i) => `${String(totals[i]).padStart(5)} (${pct(totals[i], r.total).padStart(4)}%)`).join('  '));
 console.log('gate1-pass total'.padEnd(32), results.map(r => String(r.total).padStart(5).padEnd(15)).join(''));
 
 if (results.length >= 2) {
   console.log('\n--- Day-over-day delta (first vs last) ---');
   const a = results[0], b = results[results.length-1];
-  const ta = a.b.render + a.b.alt + a.b.api + a.b.liquipedia_recover + a.b.bo3_recover + a.b.frmf_via_flashscore + a.b.eurovision_via_wiki;
-  const tb = b.b.render + b.b.alt + b.b.api + b.b.liquipedia_recover + b.b.bo3_recover + b.b.frmf_via_flashscore + b.b.eurovision_via_wiki;
+  const ta = a.b.render + a.b.alt + a.b.api + a.b.liquipedia_recover + a.b.bo3_recover + a.b.frmf_via_flashscore + a.b.eurovision_via_wiki + a.b.cricinfo_via_espn;
+  const tb = b.b.render + b.b.alt + b.b.api + b.b.liquipedia_recover + b.b.bo3_recover + b.b.frmf_via_flashscore + b.b.eurovision_via_wiki + b.b.cricinfo_via_espn;
   console.log(`Universe: ${a.total} -> ${b.total}  (+${b.total - a.total}, ${pct(100*(b.total-a.total)/a.total, 100)}%)`);
   console.log(`Solved:   ${ta} -> ${tb}  (+${tb - ta})`);
   console.log(`Solve %:  ${pct(ta, a.total)}% -> ${pct(tb, b.total)}%  (${(pct(tb,b.total) - pct(ta,a.total)).toFixed(1)} pp)`);

@@ -16,6 +16,8 @@ import { deriveHierarchy, deriveTemplate } from './lib/hierarchy.mjs';
 // Reader-friendly labels. Internal bucket keys stay stable (render/alt/api/...)
 // for classifier compatibility; these labels are what shows in the UI.
 const BUCKET_LABELS = {
+  chainlink: 'Chainlink',
+  pyth: 'Pyth',
   render: 'Direct source',
   alt: 'Alternative source',
   api: 'Direct source (JSON API)',
@@ -23,6 +25,7 @@ const BUCKET_LABELS = {
   bo3_recover: 'Alternate: bo3.gg',
   frmf_via_flashscore: 'Alternate: Flashscore',
   eurovision_via_wiki: 'Alternate: Wikipedia',
+  cricinfo_via_espn: 'Alternate: ESPN Cricket',
   studio_blocked: 'Blocked by validator infrastructure',
   hltv_lost: 'No alternate available',
   yahoo: 'Paywalled',
@@ -32,6 +35,8 @@ const BUCKET_LABELS = {
   misc: 'Unclassified',
 };
 const BUCKET_COLORS = {
+  chainlink: '#7c3aed',
+  pyth: '#0ea5e9',
   render: '#16a34a',
   alt: '#10b981',
   api: '#059669',
@@ -39,6 +44,7 @@ const BUCKET_COLORS = {
   bo3_recover: '#ca8a04',
   frmf_via_flashscore: '#84cc16',
   eurovision_via_wiki: '#4d7c0f',
+  cricinfo_via_espn: '#a3e635',
   studio_blocked: '#dc2626',
   hltv_lost: '#dc2626',
   yahoo: '#ea580c',
@@ -49,7 +55,7 @@ const BUCKET_COLORS = {
 };
 
 const DIRECT_BUCKETS = new Set(['render', 'api']);
-const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki']);
+const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki', 'cricinfo_via_espn']);
 
 function parseArgs(argv) {
   const out = { start: '2026-05-06', end: '2026-05-10', outDir: '../../data/pm-bench' };
@@ -181,6 +187,8 @@ function build() {
   // deterministic on-chain oracles.
   const chainlinkIds = new Set();
   const pythIds = new Set();
+  const onchainRowsById = new Map();
+  const onchainPerDay = Object.fromEntries(days.map(date => [date, { chainlink: 0, pyth: 0 }]));
   for (const date of days) {
     for (const f of [`data/markets/${date}/gate1-drop-chainlink.jsonl`, `data/markets/${date}/gate1-drop-pyth.jsonl`]) {
       const p = path.resolve(f);
@@ -188,14 +196,44 @@ function build() {
       for (const line of fs.readFileSync(p, 'utf-8').split('\n').filter(Boolean)) {
         try {
           const m = JSON.parse(line);
-          if (f.includes('chainlink')) chainlinkIds.add(String(m.id));
-          else pythIds.add(String(m.id));
+          const id = String(m.id);
+          const circle = f.includes('chainlink') ? 'chainlink' : 'pyth';
+          const ids = circle === 'chainlink' ? chainlinkIds : pythIds;
+          const isNew = !ids.has(id);
+          ids.add(id);
+          if (isNew) onchainPerDay[date][circle]++;
+          if (!onchainRowsById.has(`${circle}:${id}`)) {
+            const h = deriveHierarchy(m);
+            const cl = closedIdx.get(id);
+            const eventSlug = cl?.eventSlug || m.slug || '';
+            const namedHost = hostOf(m.eventResolutionSource ?? '') ?? (circle === 'chainlink' ? 'data.chain.link' : 'pythdata.app');
+            onchainRowsById.set(`${circle}:${id}`, {
+              id,
+              date,
+              question: m.question ?? '',
+              circle,
+              bucket: circle,
+              namedHost,
+              verifiedHost: namedHost,
+              L1: h.L1,
+              L2: h.L2,
+              L3: h.L3,
+              template: deriveTemplate(m.question, m.outcomes, m.eventTitle),
+              winner: cl ? cl.winner : 'pending',
+              slug: id,
+              eventSlug,
+              count: 1,
+              detailAvailable: false,
+              polymarketUrl: eventSlug ? `https://polymarket.com/event/${eventSlug}` : '',
+            });
+          }
         } catch {}
       }
     }
   }
   const chainlink = chainlinkIds.size;
   const pyth = pythIds.size;
+  const onchainMarkets = [...onchainRowsById.values()];
   const addressable = allRows.length;
   const polledUniverse = chainlink + pyth + addressable;
   const onchainFeedStats = {
@@ -208,6 +246,11 @@ function build() {
     onchainFeedPct: polledUniverse ? (100 * (chainlink + pyth) / polledUniverse) : 0,
     addressablePct: polledUniverse ? (100 * addressable / polledUniverse) : 0,
   };
+  for (const [date, counts] of Object.entries(onchainPerDay)) {
+    if (!perDay[date]) continue;
+    perDay[date].chainlink = counts.chainlink;
+    perDay[date].pyth = counts.pyth;
+  }
 
   // Templates
   const groups = new Map();
@@ -352,6 +395,7 @@ function build() {
     perDay,
     templates,
     domains,
+    onchainMarkets,
     unsolvables,
     marketsByTemplate,
     onchainFeedStats,
@@ -379,6 +423,11 @@ function build() {
   fs.writeFileSync(publicMarketsFile, JSON.stringify(downloadDoc) + '\n', 'utf8');
   const downloadSizeMB = (fs.statSync(publicMarketsFile).size / 1024 / 1024).toFixed(2);
   console.log(`Wrote ${publicMarketsFile} (${downloadSizeMB} MB, ${downloadMarkets.length} markets)`);
+
+  const publicLatestFile = path.join(publicDir, 'latest.json');
+  fs.writeFileSync(publicLatestFile, JSON.stringify(data) + '\n', 'utf8');
+  const publicLatestMB = (fs.statSync(publicLatestFile).size / 1024 / 1024).toFixed(2);
+  console.log(`Wrote ${publicLatestFile} (${publicLatestMB} MB, for client-side explorer)`);
 
   console.log(`Templates: ${templates.length}, Markets: ${allRows.length}, Unsolvables: ${unsolvables.length}, Headline: ${headlinePct.toFixed(1)}%`);
 }

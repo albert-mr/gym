@@ -9,8 +9,11 @@ import {
   filtersToParams,
   paramsToFilters,
   BUCKET_GROUPS,
+  CIRCLE_GROUPS,
   bucketsToUmbrellaId,
+  circlesToGroupId,
 } from '@/lib/explorer-filters';
+import type { ExplorerMarketRow } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
@@ -18,6 +21,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 type Props = {
   data: BenchmarkData;
+  rows: ExplorerMarketRow[];
   value: ExplorerFilterState;
   onChange: (next: ExplorerFilterState) => void;
 };
@@ -26,16 +30,31 @@ const ALL_BUCKET_TOKEN = 'all';
 
 // Pure presentational filter bar driven by props. Parent owns state and the
 // URL-sync side effect; this component only renders controls and emits diffs.
-export function ExplorerFilters({ data, value, onChange }: Props) {
+export function ExplorerFilters({ data, rows, value, onChange }: Props) {
   const bucketSelectValue = value.buckets.length === 0
     ? ALL_BUCKET_TOKEN
     : (bucketsToUmbrellaId(value.buckets) ?? '__multi__');
 
-  const hostOptions = [...data.domains]
-    .filter(d => d.host && d.host !== '(none)')
-    .sort((a, b) => b.count - a.count)
+  const circleSelectValue = value.circles.length === 0
+    ? ALL_BUCKET_TOKEN
+    : (circlesToGroupId(value.circles) ?? '__multi__');
+
+  const hostCounts = new Map<string, number>();
+  const verifiedCounts = new Map<string, number>();
+  for (const row of rows) {
+    if (row.namedHost && row.namedHost !== '(none)') hostCounts.set(row.namedHost, (hostCounts.get(row.namedHost) ?? 0) + row.count);
+    if (row.verifiedHost && row.verifiedHost !== '(none)') verifiedCounts.set(row.verifiedHost, (verifiedCounts.get(row.verifiedHost) ?? 0) + row.count);
+  }
+
+  const hostOptions = [...hostCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
     .slice(0, 60)
-    .map(d => d.host);
+    .map(([host]) => host);
+
+  const verifiedHostOptions = [...verifiedCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 60)
+    .map(([host]) => host);
 
   const reset = () => onChange(defaultExplorerFilters);
 
@@ -48,6 +67,25 @@ export function ExplorerFilters({ data, value, onChange }: Props) {
             <SelectContent>
               <SelectItem value="all">all dates</SelectItem>
               {data.meta.dates.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-xs text-muted-foreground block">Resolution path</label>
+          <Select
+            value={circleSelectValue}
+            onValueChange={(v) => {
+              if (!v || v === ALL_BUCKET_TOKEN) { onChange({ ...value, circles: [] }); return; }
+              if (v === '__multi__') return;
+              const group = CIRCLE_GROUPS.find(g => g.id === v);
+              if (group) onChange({ ...value, circles: [...group.circles] });
+            }}
+          >
+            <SelectTrigger className="w-52 h-8 text-sm"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value={ALL_BUCKET_TOKEN}>All paths</SelectItem>
+              {CIRCLE_GROUPS.map(g => <SelectItem key={g.id} value={g.id}>{g.label}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
@@ -72,12 +110,23 @@ export function ExplorerFilters({ data, value, onChange }: Props) {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs text-muted-foreground block">Source host</label>
+          <label className="text-xs text-muted-foreground block">Named source host</label>
           <Select value={value.host} onValueChange={(v) => onChange({ ...value, host: v ?? 'all' })}>
             <SelectTrigger className="w-52 h-8 text-sm"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">all hosts</SelectItem>
               {hostOptions.map(h => <SelectItem key={h} value={h}>{h}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-xs text-muted-foreground block">Verified / fetched host</label>
+          <Select value={value.verifiedHost} onValueChange={(v) => onChange({ ...value, verifiedHost: v ?? 'all' })}>
+            <SelectTrigger className="w-52 h-8 text-sm"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">all hosts</SelectItem>
+              {verifiedHostOptions.map(h => <SelectItem key={h} value={h}>{h}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
@@ -116,20 +165,20 @@ export function useExplorerFilters() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const hydrated = useRef(false);
+  const lastWritten = useRef<string | null>(null);
 
-  const [state, setState] = useState<ExplorerFilterState>(defaultExplorerFilters);
+  const [state, setState] = useState<ExplorerFilterState>(() => paramsToFilters(new URLSearchParams(searchParams.toString())));
 
   useEffect(() => {
-    if (hydrated.current) return;
-    hydrated.current = true;
-    const next = paramsToFilters(searchParams as unknown as URLSearchParams);
-    setState(next);
-  }, [searchParams, setState]);
+    const raw = searchParams.toString();
+    if (raw === lastWritten.current) return;
+    setState(paramsToFilters(new URLSearchParams(raw)));
+  }, [searchParams]);
 
   const setFilters = useCallback((next: ExplorerFilterState) => {
     setState(next);
     const qs = filtersToParams(next).toString();
+    lastWritten.current = qs;
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   }, [router, pathname, setState]);
 
