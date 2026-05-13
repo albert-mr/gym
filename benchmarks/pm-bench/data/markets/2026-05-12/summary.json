@@ -1,42 +1,42 @@
 {
   "date": "2026-05-12",
-  "raw_rows": 7515,
-  "after_dedup": 7515,
-  "total_rows": 7515,
-  "unique_markets": 7515,
-  "unique_events": 3439,
-  "unique_templates": 352,
-  "unique_domains": 43,
+  "raw_rows": 7385,
+  "after_dedup": 7385,
+  "total_rows": 7385,
+  "unique_markets": 7385,
+  "unique_events": 3444,
+  "unique_templates": 357,
+  "unique_domains": 44,
   "polled_at_min": "2026-05-12T09:08:12.457Z",
   "polled_at_max": "2026-05-12T09:08:12.457Z",
-  "end_date_min": "2026-05-05T22:40:00.000Z",
+  "end_date_min": "2026-05-12T09:10:00.000Z",
   "end_date_max": "2026-05-13T09:05:00.000Z",
   "gate1_chainlink": {
     "matched": 2730,
-    "pct": 36.327345309381236
+    "pct": 36.96682464454976
   },
   "gate1_pyth": {
     "matched": 42,
-    "pct": 0.5588822355289421
+    "pct": 0.5687203791469194
   },
   "gate1_no_url": {
     "matched": 0,
     "pct": 0
   },
   "gate1_dropped": 2772,
-  "io_addressable_markets": 4743,
-  "io_addressable_templates": 329,
-  "io_addressable_events": 687,
-  "io_addressable_recurring": 1423,
-  "io_addressable_non_recurring": 3320,
-  "io_unique_domains": 41,
-  "truly_io_shaped_markets": 4478,
-  "truly_io_shaped_templates": 293,
+  "io_addressable_markets": 4613,
+  "io_addressable_templates": 334,
+  "io_addressable_events": 692,
+  "io_addressable_recurring": 1434,
+  "io_addressable_non_recurring": 3179,
+  "io_unique_domains": 42,
+  "truly_io_shaped_markets": 4348,
+  "truly_io_shaped_templates": 298,
   "kinds": [
     {
       "kind": "sports_match",
       "label": "Sports match",
-      "markets": 2215,
+      "markets": 2065,
       "unique_templates": 136,
       "unique_events": 290,
       "recurring": 0,
@@ -45,9 +45,9 @@
     {
       "kind": "esports_match",
       "label": "Esports match",
-      "markets": 976,
-      "unique_templates": 79,
-      "unique_events": 79,
+      "markets": 985,
+      "unique_templates": 83,
+      "unique_events": 83,
       "recurring": 0,
       "deterministic_feed": false
     },
@@ -63,10 +63,10 @@
     {
       "kind": "weather_forecast",
       "label": "Weather forecast",
-      "markets": 638,
-      "unique_templates": 58,
-      "unique_events": 58,
-      "recurring": 638,
+      "markets": 649,
+      "unique_templates": 59,
+      "unique_events": 59,
+      "recurring": 649,
       "deterministic_feed": false
     },
     {
@@ -92,204 +92,204 @@
     {
       "domain": "data.chain.link",
       "count": 2730,
-      "pct": 36.327345309381236
+      "pct": 36.96682464454976
     },
     {
       "domain": "www.twitch.tv",
-      "count": 697,
-      "pct": 9.274783765801729
+      "count": 700,
+      "pct": 9.47867298578199
     },
     {
       "domain": "(empty)",
       "count": 663,
-      "pct": 8.822355289421157
+      "pct": 8.97765741367637
     },
     {
       "domain": "www.wunderground.com",
-      "count": 583,
-      "pct": 7.757817697937458
+      "count": 594,
+      "pct": 8.043331076506433
     },
     {
       "domain": "www.atptour.com",
       "count": 502,
-      "pct": 6.6799733865602136
+      "pct": 6.797562626946513
     },
     {
       "domain": "kick.com",
       "count": 201,
-      "pct": 2.6746506986027945
-    },
-    {
-      "domain": "www.mlb.com",
-      "count": 178,
-      "pct": 2.368596141051231
+      "pct": 2.721733243060257
     },
     {
       "domain": "www.binance.com",
       "count": 175,
-      "pct": 2.3286759813705924
+      "pct": 2.3696682464454977
     },
     {
       "domain": "www.wtatennis.com",
       "count": 159,
-      "pct": 2.1157684630738522
+      "pct": 2.1530128639133377
     },
     {
       "domain": "www.laliga.com",
       "count": 148,
-      "pct": 1.9693945442448437
+      "pct": 2.004062288422478
     },
     {
       "domain": "upl.ua",
       "count": 136,
-      "pct": 1.8097139055222886
+      "pct": 1.8415707515233581
     },
     {
       "domain": "www.fortunaliga.cz",
       "count": 128,
-      "pct": 1.7032601463739188
+      "pct": 1.7332430602572784
     },
     {
       "domain": "www.cbf.com.br",
       "count": 116,
-      "pct": 1.5435795076513639
+      "pct": 1.5707515233581584
     },
     {
       "domain": "spfl.co.uk",
       "count": 102,
-      "pct": 1.3572854291417165
+      "pct": 1.3811780636425186
     },
     {
       "domain": "www.kleague.com",
       "count": 96,
-      "pct": 1.2774451097804391
+      "pct": 1.2999322951929586
     },
     {
       "domain": "www.efa.com.eg",
       "count": 96,
-      "pct": 1.2774451097804391
+      "pct": 1.2999322951929586
     },
     {
       "domain": "x.com",
       "count": 72,
-      "pct": 0.9580838323353293
+      "pct": 0.974949221394719
     },
     {
       "domain": "www.legaserieb.it",
       "count": 68,
-      "pct": 0.9048569527611443
+      "pct": 0.9207853757616791
     },
     {
       "domain": "www.afa.com.ar",
       "count": 68,
-      "pct": 0.9048569527611443
+      "pct": 0.9207853757616791
     },
     {
       "domain": "dimayor.com.co",
       "count": 68,
-      "pct": 0.9048569527611443
+      "pct": 0.9207853757616791
+    },
+    {
+      "domain": "www.slstat.com",
+      "count": 64,
+      "pct": 0.8666215301286392
     }
   ],
   "io_resolution_source_buckets": [
     {
       "domain": "www.twitch.tv",
-      "count": 697,
-      "pct": 14.695340501792115
+      "count": 700,
+      "pct": 15.174506828528072
     },
     {
       "domain": "(empty)",
       "count": 663,
-      "pct": 13.978494623655912
+      "pct": 14.372425753305876
     },
     {
       "domain": "www.wunderground.com",
-      "count": 583,
-      "pct": 12.29179843980603
+      "count": 594,
+      "pct": 12.876652937350967
     },
     {
       "domain": "www.atptour.com",
       "count": 502,
-      "pct": 10.584018553658023
+      "pct": 10.882289182744417
     },
     {
       "domain": "kick.com",
       "count": 201,
-      "pct": 4.237824161922834
-    },
-    {
-      "domain": "www.mlb.com",
-      "count": 178,
-      "pct": 3.752899009065992
+      "pct": 4.357251246477347
     },
     {
       "domain": "www.binance.com",
       "count": 175,
-      "pct": 3.6896479021716213
+      "pct": 3.793626707132018
     },
     {
       "domain": "www.wtatennis.com",
       "count": 159,
-      "pct": 3.3523086654016447
+      "pct": 3.4467808367656625
     },
     {
       "domain": "www.laliga.com",
       "count": 148,
-      "pct": 3.1203879401222854
+      "pct": 3.2083243008887923
     },
     {
       "domain": "upl.ua",
       "count": 136,
-      "pct": 2.867383512544803
+      "pct": 2.9481898981140255
     },
     {
       "domain": "www.fortunaliga.cz",
       "count": 128,
-      "pct": 2.6987138941598143
+      "pct": 2.7747669629308476
     },
     {
       "domain": "www.cbf.com.br",
       "count": 116,
-      "pct": 2.445709466582332
+      "pct": 2.5146325601560804
     },
     {
       "domain": "spfl.co.uk",
       "count": 102,
-      "pct": 2.1505376344086025
+      "pct": 2.2111424235855193
     },
     {
       "domain": "www.kleague.com",
       "count": 96,
-      "pct": 2.0240354206198607
+      "pct": 2.0810752221981357
     },
     {
       "domain": "www.efa.com.eg",
       "count": 96,
-      "pct": 2.0240354206198607
+      "pct": 2.0810752221981357
     },
     {
       "domain": "x.com",
       "count": 72,
-      "pct": 1.5180265654648957
+      "pct": 1.5608064166486018
     },
     {
       "domain": "www.legaserieb.it",
       "count": 68,
-      "pct": 1.4336917562724014
+      "pct": 1.4740949490570128
     },
     {
       "domain": "www.afa.com.ar",
       "count": 68,
-      "pct": 1.4336917562724014
+      "pct": 1.4740949490570128
     },
     {
       "domain": "dimayor.com.co",
       "count": 68,
-      "pct": 1.4336917562724014
+      "pct": 1.4740949490570128
     },
     {
       "domain": "www.slstat.com",
       "count": 64,
-      "pct": 1.3493569470799072
+      "pct": 1.3873834814654238
+    },
+    {
+      "domain": "lfpb.com.bo",
+      "count": 64,
+      "pct": 1.3873834814654238
     }
   ],
   "top_families": [

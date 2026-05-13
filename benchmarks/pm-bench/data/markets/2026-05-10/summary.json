@@ -1,19 +1,19 @@
 {
   "date": "2026-05-10",
-  "raw_rows": 11331,
-  "after_dedup": 11331,
-  "total_rows": 11331,
-  "unique_markets": 11331,
-  "unique_events": 3758,
-  "unique_templates": 432,
+  "raw_rows": 11163,
+  "after_dedup": 11163,
+  "total_rows": 11163,
+  "unique_markets": 11163,
+  "unique_events": 3757,
+  "unique_templates": 431,
   "unique_domains": 57,
   "polled_at_min": "2026-05-10T11:44:08.080Z",
   "polled_at_max": "2026-05-10T11:44:08.080Z",
-  "end_date_min": "2025-12-31T00:00:00.000Z",
+  "end_date_min": "2026-05-10T11:45:00.000Z",
   "end_date_max": "2026-05-11T11:40:00.000Z",
   "gate1_chainlink": {
     "matched": 2730,
-    "pct": 24.093195657929574
+    "pct": 24.45579145391024
   },
   "gate1_pyth": {
     "matched": 0,
@@ -21,22 +21,22 @@
   },
   "gate1_no_url": {
     "matched": 537,
-    "pct": 4.739211014032301
+    "pct": 4.8105348024724535
   },
   "gate1_dropped": 3267,
-  "io_addressable_markets": 8064,
-  "io_addressable_templates": 423,
-  "io_addressable_events": 1010,
+  "io_addressable_markets": 7896,
+  "io_addressable_templates": 422,
+  "io_addressable_events": 1009,
   "io_addressable_recurring": 1498,
-  "io_addressable_non_recurring": 6566,
+  "io_addressable_non_recurring": 6398,
   "io_unique_domains": 56,
-  "truly_io_shaped_markets": 7845,
-  "truly_io_shaped_templates": 405,
+  "truly_io_shaped_markets": 7677,
+  "truly_io_shaped_templates": 404,
   "kinds": [
     {
       "kind": "sports_match",
       "label": "Sports match",
-      "markets": 4783,
+      "markets": 4633,
       "unique_templates": 228,
       "unique_events": 610,
       "recurring": 0,
@@ -45,7 +45,7 @@
     {
       "kind": "esports_match",
       "label": "Esports match",
-      "markets": 1600,
+      "markets": 1596,
       "unique_templates": 90,
       "unique_events": 90,
       "recurring": 0,
@@ -54,9 +54,9 @@
     {
       "kind": "news_or_other",
       "label": "News / other",
-      "markets": 813,
-      "unique_templates": 28,
-      "unique_events": 72,
+      "markets": 799,
+      "unique_templates": 27,
+      "unique_events": 71,
       "recurring": 630,
       "deterministic_feed": false
     },
@@ -83,204 +83,204 @@
     {
       "domain": "data.chain.link",
       "count": 2730,
-      "pct": 24.093195657929574
+      "pct": 24.45579145391024
     },
     {
       "domain": "www.twitch.tv",
-      "count": 1354,
-      "pct": 11.949519018621482
+      "count": 1350,
+      "pct": 12.09352324643913
     },
     {
       "domain": "(empty)",
-      "count": 1321,
-      "pct": 11.658282587591563
+      "count": 1307,
+      "pct": 11.708322135626624
     },
     {
       "domain": "www.wunderground.com",
       "count": 594,
-      "pct": 5.242255758538523
+      "pct": 5.321150228433217
     },
     {
       "domain": "www.ligue1.com",
       "count": 482,
-      "pct": 4.253816962315771
+      "pct": 4.317835707247156
     },
     {
       "domain": "www.laliga.com",
       "count": 344,
-      "pct": 3.0359191598270234
+      "pct": 3.0816088865000446
     },
     {
       "domain": "www.atptour.com",
       "count": 340,
-      "pct": 3.000617774247639
+      "pct": 3.045776225029114
     },
     {
       "domain": "www.cbf.com.br",
       "count": 305,
-      "pct": 2.6917306504280294
+      "pct": 2.73224043715847
     },
     {
       "domain": "eredivisie.nl",
       "count": 288,
-      "pct": 2.5416997617156474
+      "pct": 2.579951625907014
     },
     {
       "domain": "kick.com",
       "count": 232,
-      "pct": 2.0474803636042713
+      "pct": 2.0782943653139836
     },
     {
       "domain": "www.premierleague.com",
       "count": 216,
-      "pct": 1.9062748212867358
+      "pct": 1.934963719430261
     },
     {
       "domain": "www.wtatennis.com",
       "count": 212,
-      "pct": 1.8709734357073515
+      "pct": 1.8991310579593297
     },
     {
       "domain": "www.legaseriea.it",
       "count": 201,
-      "pct": 1.7738946253640455
-    },
-    {
-      "domain": "www.mlb.com",
-      "count": 180,
-      "pct": 1.5885623510722795
+      "pct": 1.8005912389142704
     },
     {
       "domain": "www.binance.com",
       "count": 175,
-      "pct": 1.5444356190980497
+      "pct": 1.5676789393532204
     },
     {
       "domain": "www.bundesliga.com",
       "count": 139,
-      "pct": 1.2267231488835937
+      "pct": 1.2451849861148436
     },
     {
       "domain": "www.afa.com.ar",
       "count": 136,
-      "pct": 1.2002471096990557
+      "pct": 1.2183104900116455
     },
     {
       "domain": "premierliga.ru",
       "count": 128,
-      "pct": 1.1296443385402877
+      "pct": 1.1466451670697841
     },
     {
       "domain": "superligaen.dk",
       "count": 128,
-      "pct": 1.1296443385402877
+      "pct": 1.1466451670697841
     },
     {
       "domain": "www.eliteserien.no",
       "count": 128,
-      "pct": 1.1296443385402877
+      "pct": 1.1466451670697841
+    },
+    {
+      "domain": "www.frmf.ma",
+      "count": 128,
+      "pct": 1.1466451670697841
     }
   ],
   "io_resolution_source_buckets": [
     {
       "domain": "www.twitch.tv",
-      "count": 1354,
-      "pct": 16.7906746031746
+      "count": 1350,
+      "pct": 17.09726443768997
     },
     {
       "domain": "(empty)",
-      "count": 784,
-      "pct": 9.722222222222223
+      "count": 770,
+      "pct": 9.75177304964539
     },
     {
       "domain": "www.wunderground.com",
       "count": 594,
-      "pct": 7.366071428571429
+      "pct": 7.522796352583587
     },
     {
       "domain": "www.ligue1.com",
       "count": 482,
-      "pct": 5.9771825396825395
+      "pct": 6.10435663627153
     },
     {
       "domain": "www.laliga.com",
       "count": 344,
-      "pct": 4.265873015873016
+      "pct": 4.356636271529888
     },
     {
       "domain": "www.atptour.com",
       "count": 340,
-      "pct": 4.216269841269842
+      "pct": 4.305977710233029
     },
     {
       "domain": "www.cbf.com.br",
       "count": 305,
-      "pct": 3.7822420634920633
+      "pct": 3.8627152988855116
     },
     {
       "domain": "eredivisie.nl",
       "count": 288,
-      "pct": 3.571428571428571
+      "pct": 3.64741641337386
     },
     {
       "domain": "kick.com",
       "count": 232,
-      "pct": 2.876984126984127
+      "pct": 2.9381965552178317
     },
     {
       "domain": "www.premierleague.com",
       "count": 216,
-      "pct": 2.6785714285714284
+      "pct": 2.735562310030395
     },
     {
       "domain": "www.wtatennis.com",
       "count": 212,
-      "pct": 2.628968253968254
+      "pct": 2.684903748733536
     },
     {
       "domain": "www.legaseriea.it",
       "count": 201,
-      "pct": 2.492559523809524
-    },
-    {
-      "domain": "www.mlb.com",
-      "count": 180,
-      "pct": 2.232142857142857
+      "pct": 2.545592705167173
     },
     {
       "domain": "www.binance.com",
       "count": 175,
-      "pct": 2.170138888888889
+      "pct": 2.2163120567375887
     },
     {
       "domain": "www.bundesliga.com",
       "count": 139,
-      "pct": 1.7237103174603177
+      "pct": 1.760385005065856
     },
     {
       "domain": "www.afa.com.ar",
       "count": 136,
-      "pct": 1.6865079365079365
+      "pct": 1.7223910840932117
     },
     {
       "domain": "premierliga.ru",
       "count": 128,
-      "pct": 1.5873015873015872
+      "pct": 1.6210739614994936
     },
     {
       "domain": "superligaen.dk",
       "count": 128,
-      "pct": 1.5873015873015872
+      "pct": 1.6210739614994936
     },
     {
       "domain": "www.eliteserien.no",
       "count": 128,
-      "pct": 1.5873015873015872
+      "pct": 1.6210739614994936
     },
     {
       "domain": "www.frmf.ma",
       "count": 128,
-      "pct": 1.5873015873015872
+      "pct": 1.6210739614994936
+    },
+    {
+      "domain": "www.formula1.com",
+      "count": 128,
+      "pct": 1.6210739614994936
     }
   ],
   "top_families": [

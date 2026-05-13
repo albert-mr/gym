@@ -156,8 +156,10 @@ function realBinding(m){
   // Xtracker rebind: Polymarket's own post-counter at xtracker.polymarket.com is the
   // explicit resolution source for tweet-count markets, but eventResolutionSource
   // points to the underlying x.com profile (login-walled, HARD-bucketed). When the
-  // description pins xtracker, prefer it — it's already RENDER-routable.
-  if(desc.includes('xtracker.polymarket.com')) return 'xtracker.polymarket.com';
+  // description pins xtracker as a URL (https:// prefix), prefer it — it's already
+  // RENDER-routable. The full-URL match prevents unrelated mentions of the substring
+  // from triggering the rebind.
+  if(/https?:\/\/xtracker\.polymarket\.com/i.test(desc)) return 'xtracker.polymarket.com';
 
   const url = m.eventResolutionSource||'';
   let host=null;

@@ -133,8 +133,11 @@ async function regenDate(date, polledAtOverride) {
   console.log(`window: ${start.toISOString()} → ${end.toISOString()}`);
 
   const rows = [];
+  const startMs = start.getTime();
+  const endMs = end.getTime();
   let offset = 0;
   let pages = 0;
+  let outOfWindow = 0;
   while (offset <= MAX_OFFSET) {
     const batch = await fetchPage(start, end, offset);
     pages++;
@@ -143,13 +146,26 @@ async function regenDate(date, polledAtOverride) {
       const markets = Array.isArray(ev.markets) ? ev.markets : [];
       for (const m of markets) {
         if (!m || typeof m !== 'object') continue;
-        rows.push(normalizeMarket(ev, m, polledAt));
+        const normalized = normalizeMarket(ev, m, polledAt);
+        // The event-level window matches by event endDate, but events bundle markets
+        // with different endDates (e.g., a "Cubs vs Diamondbacks" event has both the
+        // game market with endDate=05-01 and a season market ending months later).
+        // The live poll filters per-market post-flatten (src/poller/filter.ts) — we
+        // mirror that here to avoid stale out-of-window markets bleeding into
+        // gate1-pass.jsonl and inflating per-day bucket counts.
+        const edMs = Date.parse(normalized.endDate);
+        if (!Number.isFinite(edMs) || edMs < startMs || edMs > endMs) {
+          outOfWindow++;
+          continue;
+        }
+        rows.push(normalized);
       }
     }
     if (batch.length < PAGE_SIZE) break;
     offset += PAGE_SIZE;
     await sleep(POLITENESS_MS);
   }
+  if (outOfWindow > 0) console.log(`  filtered ${outOfWindow} markets with endDate outside window`);
 
   const outDir = path.resolve('data/markets', date);
   fs.mkdirSync(outDir, { recursive: true });
