@@ -20,8 +20,9 @@
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
 
-const ROOT = '/Users/albert/conductor/workspaces/gym/beijing/benchmarks/pm-bench';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = path.join(ROOT, 'data/benchmark-daily');
 const SNAP_FILE = path.join(OUT_DIR, 'snapshots.jsonl');
 const DOMAINS_SEEN_FILE = path.join(OUT_DIR, 'domains-seen.json');
