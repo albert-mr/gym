@@ -30,7 +30,7 @@ function bucketSums(data: BenchmarkData) {
   return { direct, alt, held };
 }
 
-export function PipelinePie({ data }: { data: BenchmarkData }) {
+export function PipelinePie({ data, embedded = false }: { data: BenchmarkData; embedded?: boolean }) {
   const router = useRouter();
   const [hovered, setHovered] = useState<SliceKey | null>(null);
 
@@ -102,16 +102,22 @@ export function PipelinePie({ data }: { data: BenchmarkData }) {
   const centerCount = focusSlice ? focusSlice.count : total;
   const centerLabel = focusSlice ? focusSlice.shortLabel : 'polled markets';
 
-  return (
-    <div className="border border-border rounded-lg p-5 md:p-6 space-y-4">
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div className="text-xs uppercase tracking-widest text-muted-foreground">Where every market lands</div>
-        <div className="text-xs text-muted-foreground tabular-nums">
-          {total.toLocaleString()} markets &middot; <span className="text-foreground font-medium">{resolvedPct.toFixed(1)}%</span> of addressable resolved
-        </div>
-      </div>
+  const wrapperClass = embedded
+    ? 'space-y-4'
+    : 'border border-border rounded-lg p-5 md:p-6 space-y-4';
 
-      <div className="flex flex-wrap items-center gap-8">
+  return (
+    <div className={wrapperClass}>
+      {!embedded && (
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="text-xs uppercase tracking-widest text-muted-foreground">Where every market lands</div>
+          <div className="text-xs text-muted-foreground tabular-nums">
+            {total.toLocaleString()} markets &middot; <span className="text-foreground font-medium">{resolvedPct.toFixed(1)}%</span> of addressable resolved
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-col items-center gap-3">
         <div className="relative shrink-0">
           <svg viewBox="0 0 200 200" width="200" height="200" aria-label="Market universe breakdown" className="overflow-visible">
             {slices.map(slice => {
@@ -179,7 +185,7 @@ export function PipelinePie({ data }: { data: BenchmarkData }) {
           </svg>
         </div>
 
-        <ul className="space-y-1 flex-1 min-w-[260px] text-sm">
+        <ul className="space-y-1 w-full text-sm">
           {slices.map(slice => {
             const pct = (slice.count / total) * 100;
             const isHovered = hovered === slice.key;
@@ -209,7 +215,7 @@ export function PipelinePie({ data }: { data: BenchmarkData }) {
       <p className="text-xs text-muted-foreground leading-relaxed pt-1 min-h-[1.5em]">
         {focusSlice
           ? focusSlice.note + (focusSlice.buckets ? ' Click to open in the explorer.' : '')
-          : 'Hover a slice for the focus details. Click a slice to open that bucket in the explorer.'}
+          : 'Hover a slice for details. Click to open that bucket in the explorer.'}
       </p>
     </div>
   );

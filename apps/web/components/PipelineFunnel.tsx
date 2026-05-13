@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { BenchmarkData } from '@/lib/types';
 import { DIRECT_BUCKETS, ALT_BUCKETS } from '@/lib/types';
+import { PipelinePie } from './PipelinePie';
 
 type Row = {
   kind: 'start' | 'drop' | 'result' | 'held';
@@ -77,50 +78,38 @@ export function PipelineFunnel({ data }: { data: BenchmarkData }) {
     },
   ];
 
-  const maxCount = universe || 1;
-
   return (
-    <div className="border border-border rounded-2xl p-6 md:p-8 space-y-4">
+    <div className="border border-border rounded-2xl p-6 md:p-8 space-y-6">
       <div className="text-xs uppercase tracking-widest text-muted-foreground">The pipeline</div>
-      <ul className="space-y-3">
-        {rows.map((row, i) => {
-          const widthPct = (row.count / maxCount) * 100;
-          const isStart = row.kind === 'start';
-          const isResult = row.kind === 'result';
-          const isHeld = row.kind === 'held';
-          const barColor = isStart
-            ? 'bg-foreground/70'
-            : isResult
-              ? 'bg-emerald-500/80'
-              : isHeld
-                ? 'bg-amber-500/70'
-                : 'bg-foreground/60';
-          return (
-            <li key={i} className="space-y-1.5">
-              <div className="flex items-baseline justify-between gap-4">
-                <div className="flex items-baseline gap-3 flex-1 min-w-0">
-                  <span className="font-semibold tabular-nums text-lg md:text-xl text-foreground">
-                    {row.count.toLocaleString()}
-                  </span>
-                  {row.delta !== undefined && (
-                    <span className="text-xs tabular-nums text-muted-foreground">−{row.delta.toLocaleString()}</span>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 lg:gap-12">
+        <ul className="space-y-5">
+          {rows.map((row, i) => (
+            <li key={i} className="space-y-1">
+              <div className="flex items-baseline gap-3 flex-wrap">
+                <span className="font-semibold tabular-nums text-lg md:text-xl text-foreground">
+                  {row.count.toLocaleString()}
+                </span>
+                {row.delta !== undefined && (
+                  <span className="text-xs tabular-nums text-muted-foreground">−{row.delta.toLocaleString()}</span>
+                )}
+                <span className="text-sm md:text-base text-foreground/90">
+                  {row.label}
+                  {row.altLink && (
+                    <sup><Link href="/benchmarks/polymarket/methodology#alt-source-disclaimer" className="underline underline-offset-2 hover:text-foreground">*</Link></sup>
                   )}
-                  <span className="text-sm md:text-base text-foreground/90 truncate">
-                    {row.label}
-                    {row.altLink && (
-                      <sup><Link href="/benchmarks/polymarket/methodology#alt-source-disclaimer" className="underline underline-offset-2 hover:text-foreground">*</Link></sup>
-                    )}
-                  </span>
-                </div>
-              </div>
-              <div className="h-2 rounded-sm bg-muted overflow-hidden">
-                <div className={`h-full ${barColor}`} style={{ width: `${widthPct}%` }} />
+                </span>
               </div>
               <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">{row.detail}</p>
             </li>
-          );
-        })}
-      </ul>
+          ))}
+        </ul>
+
+        <div className="lg:pt-1">
+          <PipelinePie data={data} embedded />
+        </div>
+      </div>
+
       <div className="pt-3 border-t border-border text-sm text-muted-foreground tabular-nums">
         <span className="text-foreground font-medium">{resolved.toLocaleString()} resolved</span>
         <span className="px-2 text-muted-foreground/60">·</span>

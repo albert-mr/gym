@@ -1,26 +1,12 @@
 import Link from 'next/link';
 import { loadBenchmark } from '@/lib/data';
 import { PipelineFunnel } from '@/components/PipelineFunnel';
-import { PipelinePie } from '@/components/PipelinePie';
 import { PerDayTable } from '@/components/PerDayTable';
 import { longDate } from '@/lib/format';
-import { DIRECT_BUCKETS, ALT_BUCKETS } from '@/lib/types';
 
 export default function PolymarketBenchmarkPage() {
   const data = loadBenchmark('pm-bench');
   const startLong = longDate(data.meta.window.start);
-
-  const counts = data.templates.reduce(
-    (acc, t) => {
-      for (const [bucket, n] of Object.entries(t.buckets)) {
-        if (DIRECT_BUCKETS.has(bucket)) acc.direct += n;
-        else if (ALT_BUCKETS.has(bucket)) acc.alt += n;
-        else acc.held += n;
-      }
-      return acc;
-    },
-    { direct: 0, alt: 0, held: 0 },
-  );
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-16 space-y-12">
@@ -37,8 +23,6 @@ export default function PolymarketBenchmarkPage() {
 
       <PipelineFunnel data={data} />
 
-      <PipelinePie data={data} />
-
       <section className="space-y-4">
         <h2 className="text-xl font-semibold tracking-tight">Daily activity</h2>
         <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
@@ -51,18 +35,18 @@ export default function PolymarketBenchmarkPage() {
         <h2 className="text-xl font-semibold tracking-tight">The three categories</h2>
         <ul className="space-y-2 text-base text-muted-foreground leading-relaxed list-disc pl-5">
           <li>
-            <span className="text-foreground font-medium">Direct source &mdash; {counts.direct.toLocaleString()}.</span>{' '}
+            <span className="text-foreground font-medium">Direct source.</span>{' '}
             The Intelligent Oracle fetches the host Polymarket named.
           </li>
           <li>
             <span className="text-foreground font-medium">
-              Alternative source &mdash; {counts.alt.toLocaleString()}
+              Alternative source
               <sup><Link href="/benchmarks/polymarket/methodology#alt-source-disclaimer" className="underline underline-offset-2 hover:text-foreground">*</Link></sup>.
             </span>{' '}
             Named host blocks validator infrastructure; we route to a verified alternate that contains the same fact.
           </li>
           <li>
-            <span className="text-foreground font-medium">Currently held &mdash; {counts.held.toLocaleString()}.</span>{' '}
+            <span className="text-foreground font-medium">Currently held.</span>{' '}
             Paywall, login wall, captcha, or pure-consensus markets we do not ship best-effort scraping for. They wait for the resolution mode they need (TLS notary, official APIs).
           </li>
         </ul>
