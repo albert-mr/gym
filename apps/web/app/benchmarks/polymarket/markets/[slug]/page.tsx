@@ -25,7 +25,7 @@ export default async function MarketDetailPage({ params }: Props) {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16 space-y-10">
       <div>
-        <Link href="/benchmarks/polymarket/drilldown" className="text-sm text-muted-foreground hover:text-foreground">&larr; Back to drilldown</Link>
+        <Link href="/benchmarks/polymarket/explorer" className="text-sm text-muted-foreground hover:text-foreground">&larr; Back to explorer</Link>
       </div>
       <MarketDetailCard market={market} bucketLabels={data.bucketLabels} bucketColors={data.bucketColors} />
     </div>

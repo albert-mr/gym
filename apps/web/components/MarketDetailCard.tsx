@@ -142,9 +142,8 @@ export function MarketDetailCard({ market, bucketLabels, bucketColors }: Props) 
           )}
           <li className="text-muted-foreground leading-relaxed">
             <span className="text-foreground/90 font-medium">Intelligent Oracle on-chain transaction:</span>{' '}
-            On-chain receipt pending. The Intelligent Oracle is running on Studio in batches today; per-validator transactions become visible with{' '}
-            <Link href="/benchmarks/polymarket/methodology#bradbury" className="underline underline-offset-2 hover:text-foreground">Bradbury</Link>
-            {' '}(real validator IPs, controlled pool).
+            <Link href="/benchmarks/polymarket/methodology#bradbury" className="underline underline-offset-2 hover:text-foreground">Bradbury</Link>{' '}
+            rollout in progress. Studio batches today; real validator IPs on Bradbury attach on-chain receipts here.
           </li>
         </ul>
       </section>

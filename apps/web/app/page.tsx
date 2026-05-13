@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { longDate } from '@/lib/format';
 import { buildSourcesTable } from '@/lib/sources-bench';
+import { DIRECT_BUCKETS, ALT_BUCKETS } from '@/lib/types';
 
 export default function HomePage() {
   const pm = loadBenchmark('pm-bench');
@@ -42,7 +43,15 @@ export default function HomePage() {
 
 function PolymarketCard({ pm }: { pm: ReturnType<typeof loadBenchmark> }) {
   const startLong = longDate(pm.meta.window.start);
-  const s = pm.onchainFeedStats;
+  let direct = 0, alt = 0, held = 0;
+  for (const t of pm.templates) {
+    for (const [bucket, n] of Object.entries(t.buckets)) {
+      if (DIRECT_BUCKETS.has(bucket)) direct += n;
+      else if (ALT_BUCKETS.has(bucket)) alt += n;
+      else held += n;
+    }
+  }
+  const resolved = direct + alt;
   return (
     <Link href="/benchmarks/polymarket" className="block group">
       <Card className="transition-colors group-hover:border-foreground/40">
@@ -51,24 +60,17 @@ function PolymarketCard({ pm }: { pm: ReturnType<typeof loadBenchmark> }) {
             <span className="font-mono text-xs text-muted-foreground">Polymarket benchmark</span>
             <Badge variant="secondary" className="text-[10px] uppercase tracking-widest">Live &middot; cumulative since {startLong}</Badge>
           </div>
-          <h2 className="text-xl font-semibold tracking-tight">Polymarket resolution coverage</h2>
+          <h2 className="text-xl font-semibold tracking-tight">GenLayer&rsquo;s Intelligent Oracle on Polymarket</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            <span className="text-foreground">GenLayer&rsquo;s Intelligent Oracle on Polymarket.</span> Of every Polymarket market that has ended since {startLong}, what fraction can the Intelligent Oracle resolve from public sources?
+            Every Polymarket market that ends in the next 24 hours runs through a six-step pipeline of deliberate filtering decisions, public sources, and verified gates.
           </p>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex items-baseline gap-3 mt-2">
-            <div className="hero-number text-6xl md:text-7xl font-semibold tabular-nums tracking-tighter">
-              {pm.meta.headlinePct.toFixed(1)}%<sup className="text-lg text-muted-foreground align-super">*</sup>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              <div>{pm.meta.totalPass.toLocaleString()} markets and counting</div>
-              <div>{pm.meta.dates.length} days &middot; refreshed daily</div>
-            </div>
+          <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1 text-sm">
+            <span><span className="text-foreground font-medium tabular-nums">{resolved.toLocaleString()}</span> <span className="text-muted-foreground">resolved</span></span>
+            <span><span className="text-foreground font-medium tabular-nums">{held.toLocaleString()}</span> <span className="text-muted-foreground">deliberately held</span></span>
+            <span><span className="text-foreground font-medium tabular-nums">0</span> <span className="text-muted-foreground">disagreements so far</span></span>
           </div>
-          <p className="text-xs text-muted-foreground/80 max-w-xl">
-            *Polymarket&rsquo;s daily universe is roughly {s.onchainFeedPct.toFixed(0)}% on-chain price feeds (Chainlink {s.chainlinkPct.toFixed(0)}%, Pyth {s.pythPct.toFixed(1)}%) and {s.addressablePct.toFixed(0)}% markets that need human-style resolution. The headline measures the Intelligent Oracle&rsquo;s coverage of the second group.
-          </p>
           <div className="pt-1">
             <span className="text-sm text-foreground/80 group-hover:text-foreground underline underline-offset-4">Open the benchmark &rarr;</span>
           </div>
