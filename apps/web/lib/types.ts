@@ -38,6 +38,8 @@ export type PerDay = {
   solvedPct: number;
   resolved: number;
   buckets: Record<string, number>;
+  chainlink?: number;
+  pyth?: number;
   directDeep: number;
   directShallow: number;
   alt: number;
@@ -51,6 +53,29 @@ export type DomainRow = {
   dominantBucket: string;
   rebind: string;
   category: string; // dominant L1 across markets bound to this host
+};
+
+export type ExplorerCircle = 'chainlink' | 'pyth' | 'direct' | 'alternative' | 'held';
+
+export type ExplorerMarketRow = {
+  id: string;
+  date: string;
+  question: string;
+  circle: ExplorerCircle;
+  bucket: string;
+  namedHost: string;
+  verifiedHost: string;
+  L1: string;
+  L2: string;
+  L3: string;
+  template: string;
+  winner: Winner;
+  slug: string;
+  eventSlug: string;
+  count: number;
+  synthetic?: boolean;
+  detailAvailable?: boolean;
+  polymarketUrl?: string;
 };
 
 export type Unsolvable = {
@@ -72,7 +97,8 @@ export type MarketRow = {
   rebindHost: string;
   bucket: string;
   winner: Winner;
-  slug: string;
+  slug: string;        // URL slug for /markets/[slug] (always populated, falls back to id)
+  eventSlug: string;   // Polymarket event slug (empty for pending markets)
 };
 
 export type BenchmarkData = {
@@ -82,11 +108,13 @@ export type BenchmarkData = {
     totalPass: number;
     totalSolved: number;
     headlinePct: number;
+    resolvedCorrectlyPct: number;
     window: { start: string; end: string };
   };
   perDay: Record<string, PerDay>;
   templates: Template[];
   domains: DomainRow[];
+  onchainMarkets?: ExplorerMarketRow[];
   unsolvables: Unsolvable[];
   marketsByTemplate: Record<string, MarketRow[]>;
   onchainFeedStats: {
@@ -111,7 +139,37 @@ export type ComingSoonData = {
   link?: string;
 };
 
+// Per-market detail row from apps/web/public/data/pm-bench/markets.json.
+// Used by the per-market detail page at /benchmarks/polymarket/markets/[slug]
+// and by the downloadable dataset for API consumers.
+export type MarketDetail = {
+  id: string;
+  date: string;
+  slug: string;        // URL slug for /markets/[slug] (always populated, falls back to id)
+  eventSlug: string;   // Polymarket event slug (empty for pending markets)
+  question: string;
+  namedSource: string | null;
+  verifiedSource: string | null;
+  status: 'accessible' | 'alternative' | 'blocked';
+  bucket: string;
+  winner: Winner;
+};
+
+export type MarketsDoc = {
+  markets: MarketDetail[];
+  meta: {
+    generatedAt: string;
+    window: { start: string; end: string };
+    counts: { accessible: number; alternative: number; blocked: number; total: number };
+    headlinePct: number;
+    resolvedCorrectlyPct: number;
+    schema: string;
+    notes: string;
+  };
+};
+
 export const DIRECT_BUCKETS = new Set(['render', 'api']);
 export const ALT_BUCKETS = new Set(['alt', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki', 'cricinfo_via_espn']);
 export const UNSOLVABLE_BUCKETS = new Set(['hard', 'yahoo', 'subjective', 'misc', 'no_source', 'studio_blocked', 'hltv_lost']);
 export const SOLVED_BUCKETS = new Set(['render', 'alt', 'api', 'liquipedia_recover', 'bo3_recover', 'frmf_via_flashscore', 'eurovision_via_wiki', 'cricinfo_via_espn']);
+export const ONCHAIN_BUCKETS = new Set(['chainlink', 'pyth']);

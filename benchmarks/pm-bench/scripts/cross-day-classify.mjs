@@ -112,7 +112,6 @@ const HARD = new Set([
   // theahl.com REMOVED — Studio-verified 2026-05-09 to render fine (1/1 match)
   // 2026-05-10 30-day audit additions:
   'www.cnn.com',             // per-URL article failures
-  'www.espncricinfo.com',    // Akamai blocked (also blocks ESPN cricket — same backend)
   'www.indec.gob.ar',        // geo-blocks the webdriver IP
   // 2026-05-11 retroactive May 6 audit:
   'www.aljazeera.com',       // news site — paywall/article-specific, not canonical (24 May 6)

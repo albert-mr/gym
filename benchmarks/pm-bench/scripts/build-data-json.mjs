@@ -16,6 +16,8 @@ import { deriveHierarchy, deriveTemplate } from './lib/hierarchy.mjs';
 // Reader-friendly labels. Internal bucket keys stay stable (render/alt/api/...)
 // for classifier compatibility; these labels are what shows in the UI.
 const BUCKET_LABELS = {
+  chainlink: 'Chainlink',
+  pyth: 'Pyth',
   render: 'Direct source',
   alt: 'Alternative source',
   api: 'Direct source (JSON API)',
@@ -33,6 +35,8 @@ const BUCKET_LABELS = {
   misc: 'Unclassified',
 };
 const BUCKET_COLORS = {
+  chainlink: '#7c3aed',
+  pyth: '#0ea5e9',
   render: '#16a34a',
   alt: '#10b981',
   api: '#059669',
@@ -183,6 +187,8 @@ function build() {
   // deterministic on-chain oracles.
   const chainlinkIds = new Set();
   const pythIds = new Set();
+  const onchainRowsById = new Map();
+  const onchainPerDay = Object.fromEntries(days.map(date => [date, { chainlink: 0, pyth: 0 }]));
   for (const date of days) {
     for (const f of [`data/markets/${date}/gate1-drop-chainlink.jsonl`, `data/markets/${date}/gate1-drop-pyth.jsonl`]) {
       const p = path.resolve(f);
@@ -190,14 +196,44 @@ function build() {
       for (const line of fs.readFileSync(p, 'utf-8').split('\n').filter(Boolean)) {
         try {
           const m = JSON.parse(line);
-          if (f.includes('chainlink')) chainlinkIds.add(String(m.id));
-          else pythIds.add(String(m.id));
+          const id = String(m.id);
+          const circle = f.includes('chainlink') ? 'chainlink' : 'pyth';
+          const ids = circle === 'chainlink' ? chainlinkIds : pythIds;
+          const isNew = !ids.has(id);
+          ids.add(id);
+          if (isNew) onchainPerDay[date][circle]++;
+          if (!onchainRowsById.has(`${circle}:${id}`)) {
+            const h = deriveHierarchy(m);
+            const cl = closedIdx.get(id);
+            const eventSlug = cl?.eventSlug || m.slug || '';
+            const namedHost = hostOf(m.eventResolutionSource ?? '') ?? (circle === 'chainlink' ? 'data.chain.link' : 'pythdata.app');
+            onchainRowsById.set(`${circle}:${id}`, {
+              id,
+              date,
+              question: m.question ?? '',
+              circle,
+              bucket: circle,
+              namedHost,
+              verifiedHost: namedHost,
+              L1: h.L1,
+              L2: h.L2,
+              L3: h.L3,
+              template: deriveTemplate(m.question, m.outcomes, m.eventTitle),
+              winner: cl ? cl.winner : 'pending',
+              slug: id,
+              eventSlug,
+              count: 1,
+              detailAvailable: false,
+              polymarketUrl: eventSlug ? `https://polymarket.com/event/${eventSlug}` : '',
+            });
+          }
         } catch {}
       }
     }
   }
   const chainlink = chainlinkIds.size;
   const pyth = pythIds.size;
+  const onchainMarkets = [...onchainRowsById.values()];
   const addressable = allRows.length;
   const polledUniverse = chainlink + pyth + addressable;
   const onchainFeedStats = {
@@ -210,6 +246,11 @@ function build() {
     onchainFeedPct: polledUniverse ? (100 * (chainlink + pyth) / polledUniverse) : 0,
     addressablePct: polledUniverse ? (100 * addressable / polledUniverse) : 0,
   };
+  for (const [date, counts] of Object.entries(onchainPerDay)) {
+    if (!perDay[date]) continue;
+    perDay[date].chainlink = counts.chainlink;
+    perDay[date].pyth = counts.pyth;
+  }
 
   // Templates
   const groups = new Map();
@@ -287,7 +328,11 @@ function build() {
     marketsByTemplate[tplId].push({
       id: r.id, date: r.date, question: r.question,
       eRSHost: r.eRSHost, rebindHost: r.rebindHost,
-      bucket: r.bucket, winner: r.winner, slug: r.eventSlug,
+      bucket: r.bucket, winner: r.winner,
+      // slug is the URL slug for /markets/[slug] — always populated.
+      // eventSlug is the Polymarket event slug (empty for pending markets).
+      slug: r.eventSlug || r.id,
+      eventSlug: r.eventSlug || '',
     });
   }
 
@@ -296,6 +341,11 @@ function build() {
   const totalPass = allRows.length;
   const totalSolved = allRows.filter(r => SOLVED_BUCKETS.has(r.bucket)).length;
   const headlinePct = totalPass ? (100 * totalSolved / totalPass) : 0;
+  // "Resolved correctly %" is identical to headlinePct until Bradbury runs
+  // per-market on-chain and we start tracking GenLayer ↔ Polymarket
+  // disagreements. The cleanest cut (Direct + verified Alt) should stay 100%
+  // until a real disagreement appears.
+  const resolvedCorrectlyPct = headlinePct;
 
   // Slim per-market export for the public download. One row per unique market.
   // `namedSource` is the host Polymarket named in its resolution criteria;
@@ -312,10 +362,17 @@ function build() {
     const status = statusOf(r.bucket);
     return {
       id: r.id,
+      date: r.date,
+      // slug = URL slug (always populated, falls back to id for pending markets)
+      // eventSlug = real Polymarket event slug used by the polymarket.com verify link (empty for pending)
+      slug: r.eventSlug || r.id,
+      eventSlug: r.eventSlug || '',
+      question: r.question || '',
       namedSource: r.eRSHost || null,
       verifiedSource: status === 'blocked' ? null : (r.rebindHost || null),
       status,
       bucket: r.bucket,
+      winner: r.winner,
     };
   });
   const downloadCounts = { accessible: 0, alternative: 0, blocked: 0 };
@@ -327,16 +384,18 @@ function build() {
       window: { start, end },
       counts: { ...downloadCounts, total: downloadMarkets.length },
       headlinePct,
-      schema: 'https://gym.genlayer.foundation/schema/polymarket-markets-v2',
-      notes: 'One row per unique Polymarket market across the window. `namedSource` is the host Polymarket names in its resolution criteria. `verifiedSource` is the host GenLayer verified works: equal to namedSource when the named host is accessible, a different host when we route to a verified alternative source (e.g. HLTV→Liquipedia, LaLiga→ESPN), and null when no source could be verified. `status` is the three-bucket rollup; `bucket` is the fine-grained classifier label that explains why a market is blocked (paywall, subjective, validator-IP block, etc.).',
+      resolvedCorrectlyPct,
+      schema: 'https://gym.genlayer.foundation/schema/polymarket-markets-v3',
+      notes: 'One row per unique Polymarket market across the window. `namedSource` is the host Polymarket names in its resolution criteria. `verifiedSource` is the host GenLayer verified works: equal to namedSource when the named host is accessible, a different host when we route to a verified alternative source (e.g. HLTV→Liquipedia, LaLiga→ESPN), and null when no source could be verified. `status` is the three-bucket rollup; `bucket` is the fine-grained classifier label that explains why a market is blocked. `slug` is the Polymarket event slug used to construct polymarket.com URLs. `winner` is Polymarket\'s settlement outcome (or "pending" before settlement).',
     },
   };
 
   const data = {
-    meta: { dates: days, generatedAt: new Date().toISOString(), totalPass, totalSolved, headlinePct, window: { start, end } },
+    meta: { dates: days, generatedAt: new Date().toISOString(), totalPass, totalSolved, headlinePct, resolvedCorrectlyPct, window: { start, end } },
     perDay,
     templates,
     domains,
+    onchainMarkets,
     unsolvables,
     marketsByTemplate,
     onchainFeedStats,
@@ -365,13 +424,10 @@ function build() {
   const downloadSizeMB = (fs.statSync(publicMarketsFile).size / 1024 / 1024).toFixed(2);
   console.log(`Wrote ${publicMarketsFile} (${downloadSizeMB} MB, ${downloadMarkets.length} markets)`);
 
-  // Full BenchmarkData also exposed as a static asset so the drilldown page can
-  // fetch it client-side instead of inlining 12MB of markets into prerendered
-  // HTML (which previously bloated drilldown.html past Vercel's deploy limits).
   const publicLatestFile = path.join(publicDir, 'latest.json');
   fs.writeFileSync(publicLatestFile, JSON.stringify(data) + '\n', 'utf8');
   const publicLatestMB = (fs.statSync(publicLatestFile).size / 1024 / 1024).toFixed(2);
-  console.log(`Wrote ${publicLatestFile} (${publicLatestMB} MB, for client-side drilldown)`);
+  console.log(`Wrote ${publicLatestFile} (${publicLatestMB} MB, for client-side explorer)`);
 
   console.log(`Templates: ${templates.length}, Markets: ${allRows.length}, Unsolvables: ${unsolvables.length}, Headline: ${headlinePct.toFixed(1)}%`);
 }

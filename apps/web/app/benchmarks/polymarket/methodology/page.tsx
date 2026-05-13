@@ -14,67 +14,65 @@ export default function MethodologyPage() {
 
       <header className="space-y-3">
         <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Methodology</p>
-        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">How GenLayer resolves Polymarket</h1>
-        <p className="text-base text-muted-foreground leading-relaxed">The universe, the pipeline, and the three resolution categories.</p>
+        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">How GenLayer&rsquo;s Intelligent Oracle resolves Polymarket</h1>
+        <p className="text-base text-muted-foreground leading-relaxed">
+          A short reference. The landing page has the narrative.
+        </p>
       </header>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">The universe</h2>
-        <p className="text-base text-muted-foreground leading-relaxed">
-          Cumulative since {startLong}. Each day at the same UTC moment, we poll Polymarket&rsquo;s public API for every market resolving in the next 24 hours, drop the markets resolved by deterministic on-chain oracles (Chainlink, Pyth), and add the remainder to the cumulative dataset. Long-horizon markets (election forecasts in November, &ldquo;X happens by end of year&rdquo;) have a different risk profile and need different treatment; they are out of scope for this benchmark.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">Polymarket has three oracles. We measure one.</h2>
-        <p className="text-base text-muted-foreground leading-relaxed">
-          Polymarket settles markets through three on-chain oracles. The share each one takes across our daily polls (since {startLong}, {data.onchainFeedStats.polledUniverse.toLocaleString()} unique markets):
-        </p>
-        <ul className="space-y-2 text-base text-muted-foreground leading-relaxed list-disc pl-5">
-          <li><span className="text-foreground font-medium">UMA Optimistic Oracle: {data.onchainFeedStats.addressablePct.toFixed(0)}%.</span> A human proposer reads the source, the answer is challengeable for two hours. This is the resolution GenLayer&rsquo;s intelligent oracle substitutes for.</li>
-          <li><span className="text-foreground font-medium">Chainlink Data Feeds: {data.onchainFeedStats.chainlinkPct.toFixed(0)}%.</span> Deterministic on-chain price feeds (mostly recurring &ldquo;BTC Up or Down hourly&rdquo;-style markets). No human in the loop. GenLayer has no role.</li>
-          <li><span className="text-foreground font-medium">Pyth Network: {data.onchainFeedStats.pythPct.toFixed(1)}%.</span> Deterministic high-frequency price oracle for stocks and commodities. No human in the loop. GenLayer has no role.</li>
-        </ul>
-        <p className="text-base text-muted-foreground leading-relaxed">
-          We drop the Chainlink and Pyth markets at the first gate. The headline measures only the UMA share: the markets whose resolution requires interpreting an external source.
-        </p>
-      </section>
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold tracking-tight">The pipeline</h2>
         <p className="text-base text-muted-foreground leading-relaxed">
-          Each day we poll Polymarket&rsquo;s public API for markets resolving in the next 24 hours. Markets bound to deterministic on-chain price feeds (Chainlink, Pyth) are removed: GenLayer is not a substitute for these. Markets with no source URL anywhere in their resolution criteria are removed: there is nothing to resolve against. The remaining markets form the cumulative addressable universe.
+          Cumulative since {startLong}. Once a day we poll Polymarket for every market resolving in the next 24 hours, then run each one through three gates. Markets land in Direct source, Alternative source, or Currently held.
         </p>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold tracking-tight">The gates</h2>
+        <div className="space-y-5 text-base text-muted-foreground leading-relaxed">
+          <div>
+            <p className="text-foreground font-medium">Gate 1: on-chain feed filter.</p>
+            <p>Is the market bound to an on-chain price feed (Chainlink, Pyth)? If yes, the chain has the answer and we step out.</p>
+          </div>
+          <div>
+            <p className="text-foreground font-medium">Gate 2: source URL.</p>
+            <p>Do the resolution criteria name a source URL we can fetch? Markets without one wait for a later agentic-search release. We don&rsquo;t ship best-effort scraping.</p>
+          </div>
+          <div>
+            <p className="text-foreground font-medium">Gate 3: accessibility.</p>
+            <p>Can a validator reach the named source? If the host blocks validator traffic, we route to a verified alternate with the same fact. If no alternate exists (paywall, login, captcha, pure-consensus subjective market), the market goes to Currently held.</p>
+          </div>
+          <div>
+            <p className="text-foreground font-medium">Off-chain step: deeper-page agent.</p>
+            <p>When a market names a host but not a specific URL, an off-chain agent picks the page and hands the URL to the Intelligent Oracle. The agent runs off-chain; the oracle runs on-chain.</p>
+          </div>
+        </div>
+        <div id="alt-source-disclaimer" className="rounded-md border border-muted bg-muted/40 p-4 text-sm text-muted-foreground leading-relaxed mt-6">
+          <span className="text-foreground font-medium">* On the alternate.</span> The alternate is currently agent-chosen, not a hardened whitelist. Anyone publishing a blog post could in principle pass this gate. Reputation and approved-alternate lists are still open product work.
+        </div>
+      </section>
+
+      <section className="space-y-3" id="bradbury">
+        <h2 className="text-xl font-semibold tracking-tight">Bradbury</h2>
         <p className="text-base text-muted-foreground leading-relaxed">
-          Every market in that universe is then mapped to a source family GenLayer has end-to-end coverage for. The market lands in one of three categories: Direct source, Alternative source, or Currently unresolvable. The first two count toward the headline; the third does not.
+          Bradbury is <a href="https://genlayer.com/testnet" target="_blank" rel="noreferrer" className="underline hover:text-foreground">GenLayer&rsquo;s testnet</a>. The benchmark runs in Studio today (GenLayer&rsquo;s developer environment); moving it to Bradbury runs each market through real validators and surfaces per-validator on-chain transactions on every per-market detail page.
         </p>
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold tracking-tight">The three categories</h2>
-        <dl className="space-y-4 text-base text-muted-foreground leading-relaxed">
-          <div>
-            <dt className="font-medium text-foreground">Direct source</dt>
-            <dd>The source named in Polymarket&rsquo;s resolution criteria is the source GenLayer fetches. Sometimes that is the exact URL Polymarket provides; sometimes GenLayer navigates to a deeper page on the same host. Either way, GenLayer reads the source the criteria points to.</dd>
-          </div>
-          <div>
-            <dt className="font-medium text-foreground">Alternative source</dt>
-            <dd>The named host is not reachable from validator infrastructure: Cloudflare-walled, JS-only, geo-blocked, or anti-bot-blocked. GenLayer routes to a verified alternate that contains the same resolution fact. LaLiga &rarr; ESPN, HLTV &rarr; Liquipedia, Eurovision.tv &rarr; Wikipedia, frmf.ma &rarr; Flashscore.</dd>
-          </div>
-          <div>
-            <dt className="font-medium text-foreground">Currently unresolvable</dt>
-            <dd>Paywall, login wall, captcha, or pure-consensus subjective markets with no canonical source. We mark these honestly and revisit when the infrastructure or methodology improves. The <Link href="/benchmarks/sources-bench" className="underline underline-offset-2 hover:text-foreground">Sources benchmark</Link> tracks them by failure reason.</dd>
-          </div>
-        </dl>
+      <section className="space-y-3" id="tls-notary">
+        <h2 className="text-xl font-semibold tracking-tight">TLS notary</h2>
+        <p className="text-base text-muted-foreground leading-relaxed">
+          A TLS notary is a cryptographic receipt that specific bytes came from a specific HTTPS origin at a specific time. It&rsquo;s the same primitive GenLayer Labs is piloting in its Twitter bounty, applied to any web source. One validator fetches with its own credentials; the proof is portable, and the rest verify it without re-fetching. For this benchmark, it unlocks most of <span className="text-foreground">Currently held</span>: paywalled, logged-in, rate-limited, or IP-locked pages. Not shipped yet; on the roadmap alongside hardened alternates and the accuracy backtest.
+        </p>
       </section>
 
-      <section className="space-y-3">
+      <section className="space-y-3" id="open-questions">
         <h2 className="text-xl font-semibold tracking-tight">Open questions</h2>
         <ul className="space-y-2 text-base text-muted-foreground leading-relaxed list-disc pl-5">
-          <li><span className="text-foreground font-medium">Accuracy backtest.</span> The headline measures resolution coverage. The next milestone is replaying closed markets through a local LLM and comparing the output to Polymarket&rsquo;s settlement, then publishing per-category accuracy alongside coverage.</li>
-          <li><span className="text-foreground font-medium">Validator-equivalent infrastructure.</span> Some hosts return HTTP 403 to certain validator IP ranges. The production answer should test against the same IPs validators would use, not a single development environment.</li>
-          <li><span className="text-foreground font-medium">Currently-pending markets.</span> A few percent of recent markets have not finished UMA&rsquo;s 2-hour challenge window. We label them <code className="bg-muted px-1 rounded text-sm">pending</code> and refresh daily.</li>
-          <li><span className="text-foreground font-medium">Long-horizon markets.</span> Markets resolving further out than 24 hours are out of scope today. Whether to extend coverage, and how, is open.</li>
+          <li><span className="text-foreground font-medium">Accuracy backtest.</span> Today the headline is coverage. Next is replaying closed markets through the oracle on Bradbury and publishing per-category accuracy alongside it.</li>
+          <li><span className="text-foreground font-medium">Hardened alternates.</span> The alternate is agent-chosen; a vetted list is still open product work.</li>
+          <li><span className="text-foreground font-medium">Bradbury in production.</span> Moves runs out of Studio and exposes per-validator transactions on the detail pages.</li>
+          <li><span className="text-foreground font-medium">Vertical-specific prompts.</span> The oracle prompt is horizontal today; per-vertical prompts (esports, sports, weather) should sharpen routing and resolution.</li>
         </ul>
       </section>
 
