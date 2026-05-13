@@ -365,6 +365,14 @@ function build() {
   const downloadSizeMB = (fs.statSync(publicMarketsFile).size / 1024 / 1024).toFixed(2);
   console.log(`Wrote ${publicMarketsFile} (${downloadSizeMB} MB, ${downloadMarkets.length} markets)`);
 
+  // Full BenchmarkData also exposed as a static asset so the drilldown page can
+  // fetch it client-side instead of inlining 12MB of markets into prerendered
+  // HTML (which previously bloated drilldown.html past Vercel's deploy limits).
+  const publicLatestFile = path.join(publicDir, 'latest.json');
+  fs.writeFileSync(publicLatestFile, JSON.stringify(data) + '\n', 'utf8');
+  const publicLatestMB = (fs.statSync(publicLatestFile).size / 1024 / 1024).toFixed(2);
+  console.log(`Wrote ${publicLatestFile} (${publicLatestMB} MB, for client-side drilldown)`);
+
   console.log(`Templates: ${templates.length}, Markets: ${allRows.length}, Unsolvables: ${unsolvables.length}, Headline: ${headlinePct.toFixed(1)}%`);
 }
 
