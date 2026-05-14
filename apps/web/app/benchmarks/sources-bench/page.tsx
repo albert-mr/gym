@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { loadBenchmark } from '@/lib/data';
+import { notFound } from 'next/navigation';
+import { getBenchmark } from '@/lib/queries/benchmark';
 import { Badge } from '@/components/ui/badge';
 import {
   Table,
@@ -17,8 +18,9 @@ import {
   buildJsonExport,
 } from '@/lib/sources-bench';
 
-export default function SourcesBenchPage() {
-  const pm = loadBenchmark('pm-bench');
+export default async function SourcesBenchPage() {
+  const pm = await getBenchmark('pm-bench');
+  if (!pm) notFound();
   const table = buildSourcesTable(pm.domains, pm.meta.generatedAt);
   const markdown = buildAgentPromptMarkdown(table);
   const json = buildJsonExport(table);

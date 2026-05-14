@@ -1,14 +1,17 @@
 import Link from 'next/link';
-import { loadBenchmark, loadComingSoon } from '@/lib/data';
+import { notFound } from 'next/navigation';
+import { getBenchmark } from '@/lib/queries/benchmark';
+import { getComingSoon } from '@/lib/queries/coming-soon';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { longDate } from '@/lib/format';
 import { buildSourcesTable } from '@/lib/sources-bench';
-import { DIRECT_BUCKETS, ALT_BUCKETS } from '@/lib/types';
+import { DIRECT_BUCKETS, ALT_BUCKETS, type BenchmarkData } from '@/lib/types';
 
-export default function HomePage() {
-  const pm = loadBenchmark('pm-bench');
-  const _sources = loadComingSoon('sources-bench'); // placeholder data, kept for future shape parity
+export default async function HomePage() {
+  const pm = await getBenchmark('pm-bench');
+  if (!pm) notFound();
+  void (await getComingSoon('sources-bench')); // placeholder fetch, kept for future shape parity
   const sourcesTable = buildSourcesTable(pm.domains, pm.meta.generatedAt);
   return (
     <div className="mx-auto max-w-4xl px-6 py-16 space-y-14">
@@ -41,7 +44,7 @@ export default function HomePage() {
   );
 }
 
-function PolymarketCard({ pm }: { pm: ReturnType<typeof loadBenchmark> }) {
+function PolymarketCard({ pm }: { pm: BenchmarkData }) {
   const startLong = longDate(pm.meta.window.start);
   let direct = 0, alt = 0, held = 0;
   for (const t of pm.templates) {

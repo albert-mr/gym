@@ -1,18 +1,13 @@
 #!/usr/bin/env node
 // poll-closed.mjs
 // Re-poll Polymarket gamma-api for already-closed markets in a date range,
-// extract per-market resolution outcome from final outcomePrices, write closed.jsonl per day.
+// extract per-market resolution outcome, upsert into raw.market_outcomes.
 //
 // Usage:
-//   node scripts/poll-closed.mjs                    # defaults to 2026-05-06 .. 2026-05-10
+//   node scripts/poll-closed.mjs                    # defaults to 2026-05-05 .. 2026-05-13
 //   node scripts/poll-closed.mjs 2026-05-06 2026-05-10
-//
-// Output: data/markets/<date>/closed.jsonl  (one market per line)
-//   {id, eventSlug, question, outcomes, outcomePrices, winner, endDate, closedTime}
-//   winner = outcomes[i] where outcomePrices[i] === 1, else 'pending'
 
-import fs from 'node:fs';
-import path from 'node:path';
+import { upsertOutcomes, close as closeDb } from '../src/lib/db-writers.mjs';
 
 const PAGE_SIZE = 100;
 const POLITENESS_MS = 50;
@@ -160,23 +155,21 @@ async function main() {
     const { pages, rows } = await pollRange(startDate, endDate);
     const resolved = rows.filter(r => r.winner !== 'pending').length;
     console.log(`  ${day}: ${pages} pages, ${rows.length} markets (${resolved} resolved, ${rows.length - resolved} pending), ${Date.now() - t0}ms`);
-    const outDir = path.resolve('data/markets', day);
-    fs.mkdirSync(outDir, { recursive: true });
-    fs.writeFileSync(path.join(outDir, 'closed.jsonl'), rows.map(r => JSON.stringify(r)).join('\n') + (rows.length ? '\n' : ''), 'utf8');
     allRows.push(...rows);
   }
 
-  // Global index for fast id→winner lookup by the report builder
-  // (dedupes if a market shows up in multiple day buckets due to endDate boundary)
+  // Dedup if a market shows up in multiple day buckets due to endDate boundary
   const dedup = new Map();
   for (const r of allRows) {
     if (r.id && !dedup.has(r.id)) dedup.set(r.id, r);
   }
-  const indexDir = path.resolve('data/markets');
-  fs.mkdirSync(indexDir, { recursive: true });
   const indexRows = [...dedup.values()];
-  fs.writeFileSync(path.join(indexDir, 'closed-index.jsonl'), indexRows.map(r => JSON.stringify(r)).join('\n') + '\n', 'utf8');
-  console.log(`Total: ${allRows.length} raw rows -> ${indexRows.length} unique markets in closed-index.jsonl`);
+  const upserted = await upsertOutcomes(indexRows);
+  console.log(`Total: ${allRows.length} raw rows -> ${indexRows.length} unique markets -> ${upserted} upserted into raw.market_outcomes`);
 }
 
-main().catch(err => { console.error('poll-closed failed:', err); process.exit(1); });
+main().then(() => closeDb()).catch(async err => {
+  console.error('poll-closed failed:', err);
+  await closeDb();
+  process.exit(1);
+});

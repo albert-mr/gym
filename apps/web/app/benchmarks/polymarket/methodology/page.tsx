@@ -1,9 +1,11 @@
 import Link from 'next/link';
-import { loadBenchmark } from '@/lib/data';
+import { notFound } from 'next/navigation';
+import { getBenchmark } from '@/lib/queries/benchmark';
 import { longDate } from '@/lib/format';
 
-export default function MethodologyPage() {
-  const data = loadBenchmark('pm-bench');
+export default async function MethodologyPage() {
+  const data = await getBenchmark('pm-bench');
+  if (!data) notFound();
   const startLong = longDate(data.meta.window.start);
   return (
     <div className="mx-auto max-w-3xl px-6 py-16 space-y-12">

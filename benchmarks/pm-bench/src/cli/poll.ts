@@ -1,4 +1,3 @@
-import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { z } from "zod";
 
@@ -8,7 +7,13 @@ import { listEventsInWindow } from "../poller/list-events.js";
 import { flattenEvents, type FlattenedMarket } from "../poller/flatten.js";
 import { filterMarkets } from "../poller/filter.js";
 import { enrichTagsForEvents } from "../poller/enrich-tags.js";
-import { appendJsonl } from "../poller/writer.js";
+import {
+  createPoll,
+  finishPoll,
+  upsertMarkets,
+  insertObservations,
+  close as closeDb,
+} from "../lib/db-writers.mjs";
 import {
   polledMarketSchema,
   SCHEMA_VERSION,
@@ -20,7 +25,6 @@ const HOUR_MS = 60 * 60 * 1000;
 interface CliArgs {
   date: string | null;
   horizonHours: number;
-  outDir: string;
   enrichTags: boolean;
   baseUrl: string | null;
 }
@@ -28,7 +32,6 @@ interface CliArgs {
 function parseArgs(argv: string[]): CliArgs {
   let date: string | null = null;
   let horizonHours = 24;
-  let outDir = "data/markets";
   let enrichTags = false;
   let baseUrl: string | null = null;
 
@@ -36,7 +39,7 @@ function parseArgs(argv: string[]): CliArgs {
     const a = argv[i];
     if (a === "--date") date = requireDateArg("--date", argv[++i]);
     else if (a === "--horizon-hours") horizonHours = Number(argv[++i]);
-    else if (a === "--out-dir") outDir = argv[++i] ?? outDir;
+    else if (a === "--out-dir") { argv[++i]; } // deprecated, kept for arg-compat
     else if (a === "--enrich-tags") enrichTags = true;
     else if (a === "--base-url") baseUrl = argv[++i] ?? null;
     else if (a === "--help" || a === "-h") {
@@ -53,7 +56,7 @@ function parseArgs(argv: string[]): CliArgs {
     process.exit(2);
   }
 
-  return { date, horizonHours, outDir, enrichTags, baseUrl };
+  return { date, horizonHours, enrichTags, baseUrl };
 }
 
 function printHelp(): void {
@@ -62,12 +65,15 @@ function printHelp(): void {
 usage: pnpm --filter @gym/pm-bench poll [options]
 
 options:
-  --date YYYY-MM-DD     output filename date (default: today UTC)
+  --date YYYY-MM-DD     poll-date tag (default: today UTC)
   --horizon-hours N     window width in hours (default: 24)
-  --out-dir PATH        output base directory; rows append to {out-dir}/{date}/all.jsonl (default: data/markets)
   --enrich-tags         fetch /events/{id} per unique event to fill tags (default: off)
   --base-url URL        override Gamma API base (default: env POLYMARKET_API_BASE or production)
   -h, --help            show this help
+
+writes:
+  raw.markets, raw.market_observations, raw.polls in Postgres (Vercel/Neon).
+  Requires POSTGRES_URL_NON_POOLING in apps/web/.env.local.
 `);
 }
 
@@ -137,7 +143,8 @@ const numericOrNull = (
 };
 
 export interface PollResult {
-  outFile: string;
+  pollId: number;
+  pollDate: string;
   summary: {
     stage: "poll";
     events_fetched: number;
@@ -145,6 +152,8 @@ export interface PollResult {
     after_filter: number;
     dropped: number;
     drop_reasons: Record<string, number>;
+    markets_upserted: number;
+    observations_inserted: number;
     elapsed_ms: number;
     enrich_tags: boolean;
   };
@@ -159,8 +168,7 @@ export async function runPoll(
   const horizonMs = args.horizonHours * HOUR_MS;
   const windowEnd = new Date(now.getTime() + horizonMs);
   const polledAt = now.toISOString();
-  const fileDate = args.date ?? utcDateStr(now);
-  const outFile = resolve(args.outDir, fileDate, "all.jsonl");
+  const pollDate = args.date ?? utcDateStr(now);
 
   const clientOpts = args.baseUrl ? { baseUrl: args.baseUrl } : undefined;
 
@@ -197,13 +205,20 @@ export async function runPoll(
     }
   });
 
-  await appendJsonl(outFile, rows);
+  const pollId = await createPoll(pollDate, "pipeline-poll-v1", {
+    horizon_hours: args.horizonHours,
+    schema_version: SCHEMA_VERSION,
+  });
+  const marketsUpserted = await upsertMarkets(rows);
+  const observationsInserted = await insertObservations(pollId, rows);
+  await finishPoll(pollId, marketsUpserted);
 
   const dropReasons: Record<string, number> = {};
   for (const d of dropped) dropReasons[d.reason] = (dropReasons[d.reason] ?? 0) + 1;
 
   return {
-    outFile,
+    pollId,
+    pollDate,
     summary: {
       stage: "poll",
       events_fetched: events.length,
@@ -211,6 +226,8 @@ export async function runPoll(
       after_filter: rows.length,
       dropped: flat.length - rows.length,
       drop_reasons: dropReasons,
+      markets_upserted: marketsUpserted,
+      observations_inserted: observationsInserted,
       elapsed_ms: Date.now() - startedAt,
       enrich_tags: args.enrichTags,
     },
@@ -223,13 +240,15 @@ const isMain = entry ? import.meta.url === pathToFileURL(entry).href : false;
 if (isMain) {
   const args = parseArgs(process.argv.slice(2));
   runPoll(args).then(
-    (result) => {
+    async (result) => {
       console.log(JSON.stringify(result.summary));
-      console.log(JSON.stringify({ stage: "poll", out_file: result.outFile }));
+      console.log(JSON.stringify({ stage: "poll", poll_id: result.pollId, poll_date: result.pollDate }));
+      await closeDb();
     },
-    (err: unknown) => {
+    async (err: unknown) => {
       const msg = err instanceof Error ? err.message : String(err);
       console.error(JSON.stringify({ stage: "poll", error: msg }));
+      await closeDb();
       process.exitCode = 1;
     },
   );

@@ -1,12 +1,14 @@
 import Link from 'next/link';
-import { loadBenchmark } from '@/lib/data';
+import { notFound } from 'next/navigation';
+import { getBenchmark } from '@/lib/queries/benchmark';
 import { PipelineFunnel } from '@/components/PipelineFunnel';
 import { PerDayTable } from '@/components/PerDayTable';
 import { longDate } from '@/lib/format';
 import { buildExplorerRows, summarizeRows } from '@/lib/explorer-data';
 
-export default function PolymarketBenchmarkPage() {
-  const data = loadBenchmark('pm-bench');
+export default async function PolymarketBenchmarkPage() {
+  const data = await getBenchmark('pm-bench');
+  if (!data) notFound();
   const rows = buildExplorerRows(data);
   const summary = summarizeRows(rows);
   const pipelineStats = {
@@ -89,7 +91,7 @@ export default function PolymarketBenchmarkPage() {
 
       <section className="pt-8 border-t border-border flex flex-wrap items-center gap-3">
         <a
-          href="/data/pm-bench/markets.json"
+          href="/api/benchmarks/pm-bench/markets"
           download="polymarket-markets.json"
           className="inline-flex items-center gap-2 text-sm border border-border rounded-md px-3 py-1.5 transition-colors hover:border-foreground/40 hover:bg-muted/30"
         >
