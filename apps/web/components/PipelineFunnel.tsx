@@ -9,6 +9,8 @@ type Row = {
   detail: string;
   altLink?: boolean;
   hoverKey?: PieHoverKey;
+  pct?: number;
+  pctLabel?: string;
 };
 
 export function PipelineFunnel({ stats }: { stats: PipelineStats }) {
@@ -19,6 +21,8 @@ export function PipelineFunnel({ stats }: { stats: PipelineStats }) {
   const universe = onchain + direct + alt + held;
   const addressable = direct + alt + held;
   const resolved = direct + alt;
+  const denom = addressable || 1;
+  const pctOf = (n: number) => (n / denom) * 100;
 
   const rows: Row[] = [
     {
@@ -35,13 +39,15 @@ export function PipelineFunnel({ stats }: { stats: PipelineStats }) {
     {
       count: addressable,
       label: 'IO-addressable URL markets',
-      detail: 'Remaining markets with a usable source path after deterministic feed and no-source gates.',
+      detail: 'Remaining markets with a usable source path. This is the Intelligent Oracle’s universe — the 100% the pie chart breaks down.',
+      pctLabel: '100%',
     },
     {
       count: direct,
       label: 'Direct source',
       detail: 'The Intelligent Oracle fetches the host Polymarket named.',
       hoverKey: 'direct',
+      pct: pctOf(direct),
     },
     {
       count: alt,
@@ -49,14 +55,18 @@ export function PipelineFunnel({ stats }: { stats: PipelineStats }) {
       detail: 'Named host blocks validators. We route to a verified alternate.',
       altLink: true,
       hoverKey: 'alt',
+      pct: pctOf(alt),
     },
     {
       count: held,
       label: 'Held for later',
       detail: 'Paywall, login wall, captcha, or pure-consensus markets. They wait for the right resolution mode.',
       hoverKey: 'held',
+      pct: pctOf(held),
     },
   ];
+
+  const formatPct = (pct: number) => `${pct.toFixed(pct < 1 ? 1 : 0)}%`;
 
   return (
     <div className="border border-border rounded-2xl p-6 md:p-8 space-y-6">
@@ -68,6 +78,7 @@ export function PipelineFunnel({ stats }: { stats: PipelineStats }) {
             const isHovered = !!row.hoverKey && hovered === row.hoverKey;
             const isDim = hovered !== null && row.hoverKey !== undefined && hovered !== row.hoverKey;
             const interactive = !!row.hoverKey;
+            const pctDisplay = row.pctLabel ?? (row.pct !== undefined ? formatPct(row.pct) : null);
             return (
               <li
                 key={i}
@@ -79,6 +90,11 @@ export function PipelineFunnel({ stats }: { stats: PipelineStats }) {
                   <span className="font-semibold tabular-nums text-lg md:text-xl text-foreground">
                     {row.count.toLocaleString()}
                   </span>
+                  {pctDisplay && (
+                    <span className="font-medium tabular-nums text-sm md:text-base text-muted-foreground">
+                      {pctDisplay}
+                    </span>
+                  )}
                   <span className="text-sm md:text-base text-foreground/90">
                     {row.label}
                     {row.altLink && (
@@ -101,9 +117,6 @@ export function PipelineFunnel({ stats }: { stats: PipelineStats }) {
         <span className="text-foreground font-medium">{resolved.toLocaleString()} resolved</span>
         <span className="px-2 text-muted-foreground/60">·</span>
         <span className="text-foreground font-medium">{held.toLocaleString()} deliberately held</span>
-        <span className="px-2 text-muted-foreground/60">·</span>
-        <span className="text-foreground font-medium">0 disagreements</span>
-        <span className="text-muted-foreground"> with Polymarket so far.</span>
       </div>
     </div>
   );
