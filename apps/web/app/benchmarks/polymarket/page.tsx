@@ -55,10 +55,7 @@ export default async function PolymarketBenchmarkPage() {
               The Intelligent Oracle fetches the host Polymarket named.
             </li>
             <li>
-              <span className="text-foreground font-medium">
-                Alternative source
-                <sup><Link href="/benchmarks/polymarket/methodology#alt-source-disclaimer" className="underline underline-offset-2 hover:text-foreground">*</Link></sup>.
-              </span>{' '}
+              <span className="text-foreground font-medium">Alternative source.</span>{' '}
               Named host blocks validator infrastructure; we route to a verified alternate that contains the same fact.
             </li>
             <li>
