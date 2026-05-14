@@ -8,9 +8,7 @@ import {
   defaultExplorerFilters,
   filtersToParams,
   paramsToFilters,
-  BUCKET_GROUPS,
   CIRCLE_GROUPS,
-  bucketsToUmbrellaId,
   circlesToGroupId,
 } from '@/lib/explorer-filters';
 import type { ExplorerMarketRow } from '@/lib/types';
@@ -31,27 +29,16 @@ const ALL_BUCKET_TOKEN = 'all';
 // Pure presentational filter bar driven by props. Parent owns state and the
 // URL-sync side effect; this component only renders controls and emits diffs.
 export function ExplorerFilters({ data, rows, value, onChange }: Props) {
-  const bucketSelectValue = value.buckets.length === 0
-    ? ALL_BUCKET_TOKEN
-    : (bucketsToUmbrellaId(value.buckets) ?? '__multi__');
-
   const circleSelectValue = value.circles.length === 0
     ? ALL_BUCKET_TOKEN
     : (circlesToGroupId(value.circles) ?? '__multi__');
 
   const hostCounts = new Map<string, number>();
-  const verifiedCounts = new Map<string, number>();
   for (const row of rows) {
     if (row.namedHost && row.namedHost !== '(none)') hostCounts.set(row.namedHost, (hostCounts.get(row.namedHost) ?? 0) + row.count);
-    if (row.verifiedHost && row.verifiedHost !== '(none)') verifiedCounts.set(row.verifiedHost, (verifiedCounts.get(row.verifiedHost) ?? 0) + row.count);
   }
 
   const hostOptions = [...hostCounts.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 60)
-    .map(([host]) => host);
-
-  const verifiedHostOptions = [...verifiedCounts.entries()]
     .sort((a, b) => b[1] - a[1])
     .slice(0, 60)
     .map(([host]) => host);
@@ -91,42 +78,12 @@ export function ExplorerFilters({ data, rows, value, onChange }: Props) {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs text-muted-foreground block">Source category</label>
-          <Select
-            value={bucketSelectValue}
-            onValueChange={(v) => {
-              if (!v || v === ALL_BUCKET_TOKEN) { onChange({ ...value, buckets: [] }); return; }
-              if (v === '__multi__') return;
-              const group = BUCKET_GROUPS.find(g => g.id === v);
-              if (group) onChange({ ...value, buckets: [...group.buckets] });
-            }}
-          >
-            <SelectTrigger className="w-56 h-8 text-sm"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value={ALL_BUCKET_TOKEN}>All Categories</SelectItem>
-              {BUCKET_GROUPS.map(g => <SelectItem key={g.id} value={g.id}>{g.label}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-1">
           <label className="text-xs text-muted-foreground block">Named source host</label>
           <Select value={value.host} onValueChange={(v) => onChange({ ...value, host: v ?? 'all' })}>
             <SelectTrigger className="w-52 h-8 text-sm"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">all hosts</SelectItem>
               {hostOptions.map(h => <SelectItem key={h} value={h}>{h}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-1">
-          <label className="text-xs text-muted-foreground block">Verified / fetched host</label>
-          <Select value={value.verifiedHost} onValueChange={(v) => onChange({ ...value, verifiedHost: v ?? 'all' })}>
-            <SelectTrigger className="w-52 h-8 text-sm"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">all hosts</SelectItem>
-              {verifiedHostOptions.map(h => <SelectItem key={h} value={h}>{h}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>

@@ -68,9 +68,14 @@ export function PipelineFunnel({ stats }: { stats: PipelineStats }) {
 
   const formatPct = (pct: number) => `${pct.toFixed(pct < 1 ? 1 : 0)}%`;
 
+  const resolvedPct = (resolved / denom) * 100;
+  const headlinePct = resolvedPct.toFixed(resolvedPct >= 99.95 ? 0 : 1);
+
   return (
     <div className="border border-border rounded-2xl p-6 md:p-8 space-y-6">
-      <div className="text-xs uppercase tracking-widest text-muted-foreground">The pipeline</div>
+      <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-balance">
+        Intelligent Oracle can resolve {headlinePct}% of today&rsquo;s UMA-resolved markets
+      </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 lg:gap-12">
         <ul className="space-y-3">
