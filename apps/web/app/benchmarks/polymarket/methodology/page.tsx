@@ -25,7 +25,7 @@ export default async function MethodologyPage() {
       <section className="space-y-3">
         <h2 className="text-xl font-semibold tracking-tight">The pipeline</h2>
         <p className="text-base text-muted-foreground leading-relaxed">
-          Cumulative since {startLong}. Once a day we poll Polymarket for every market resolving in the next 24 hours, then run each one through three gates. Markets land in Direct source, Alternative source, or Currently held.
+          Cumulative since {startLong}. We poll Polymarket and run each market through three gates. Markets land in Direct source, Alternative source, or Currently held.
         </p>
       </section>
 

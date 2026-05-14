@@ -48,7 +48,7 @@ The Polymarket benchmark headline is **forward-looking inference**: GenLayer has
 
 Public copy on the dashboard should:
 - Say **GenLayer can resolve X%** (forward-looking capability) — not "GenLayer resolved" (past-tense fact).
-- Use **"Polymarket markets resolving in the next 24 hours"** — never "24-hour markets" (means something else).
+- Don't reintroduce a time window in user-facing copy (no "24 hours", "24-hour markets", "next 24 hours", "resolving today"). The benchmark window is implicit in "cumulative since {start date}" — don't restate it.
 - Use display name **"Polymarket benchmark"**, not "pm-bench" (the latter is the codebase slug).
 - Use **"Direct source / Alternative source / Currently unresolvable"** for the three top-level categories.
 - Methodology page is the place for nuance; headline pages stay clean.
