@@ -41,7 +41,7 @@ export default async function PolymarketBenchmarkPage() {
             </Link>
           </div>
           <p className="text-base text-muted-foreground max-w-2xl leading-relaxed">
-            We resolve prediction-market questions whose answer lives at a public URL. Polymarket is our live testbed. Every market that ends in the next 24 hours runs through a six-step pipeline of deliberate filtering decisions, public sources, and verified gates.
+            We resolve prediction-market questions whose answer lives at a public URL. Polymarket is our live testbed. Every market runs through a six-step pipeline of deliberate filtering decisions, public sources, and verified gates.
           </p>
         </header>
 

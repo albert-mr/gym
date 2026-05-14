@@ -65,7 +65,7 @@ function PolymarketCard({ pm }: { pm: BenchmarkData }) {
           </div>
           <h2 className="text-xl font-semibold tracking-tight">GenLayer&rsquo;s Intelligent Oracle on Polymarket</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Every Polymarket market that ends in the next 24 hours runs through a six-step pipeline of deliberate filtering decisions, public sources, and verified gates.
+            Every Polymarket market runs through a six-step pipeline of deliberate filtering decisions, public sources, and verified gates.
           </p>
         </CardHeader>
         <CardContent className="space-y-3">
