@@ -368,36 +368,6 @@ function FutureWorkInline({ title, note }: { title: string; note: string }) {
   );
 }
 
-function StartRow() {
-  const { ref, seen } = useInView();
-  return (
-    <article
-      ref={ref}
-      className={`grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_320px_minmax(0,1fr)] gap-6 items-center py-5 transition-all duration-500 ${
-        seen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
-      }`}
-    >
-      <div className="md:order-1">
-        <Narrative
-          html={`<strong>64,487</strong> rows after daily dedupe, summed across <strong>${META.window}</strong>. The Intelligent Oracle is offered every one of them.`}
-        />
-      </div>
-      <div className="md:order-2">
-        <Spine
-          variant="start"
-          label="Start"
-          title="Total markets polled"
-          question="All Polymarket daily-polled markets in the benchmark window."
-          value={META.totalPolled}
-          counterLabel="Enter the funnel"
-          active={seen}
-        />
-      </div>
-      <div className="md:order-3" />
-    </article>
-  );
-}
-
 function PhaseRow({ phase, index }: { phase: Phase; index: number }) {
   const { ref, seen } = useInView();
   const branchSide: 'left' | 'right' = index % 2 === 0 ? 'right' : 'left';
@@ -545,7 +515,6 @@ export function UnderstandingFunnel() {
       </header>
 
       <div className="relative">
-        <StartRow />
         {PHASES.map((phase, i) => (
           <PhaseRow key={phase.id} phase={phase} index={i} />
         ))}
