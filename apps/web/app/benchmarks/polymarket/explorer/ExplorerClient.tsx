@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import Link from 'next/link';
 import type { BenchmarkData } from '@/lib/types';
 import { ExplorerFilters, useExplorerFilters } from '@/components/ExplorerFilters';
@@ -20,39 +20,11 @@ const TABS: { key: ExplorerView; label: string; subtitle: string }[] = [
   { key: 'list', label: 'Flat list', subtitle: 'Every market matching filters, 25 per page.' },
 ];
 
-export function ExplorerClient() {
+export function ExplorerClient({ data }: { data: BenchmarkData }) {
   const { filters, setFilters } = useExplorerFilters();
-  const [data, setData] = useState<BenchmarkData | null>(null);
-  const [loadError, setLoadError] = useState<string | null>(null);
-  const allRows = useMemo(() => data ? buildExplorerRows(data) : [], [data]);
+  const allRows = useMemo(() => buildExplorerRows(data), [data]);
   const filteredRows = useMemo(() => applyExplorerFilters(allRows, filters), [allRows, filters]);
   const current = TABS.find(t => t.key === filters.view) ?? TABS[0];
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch('/data/pm-bench/latest.json')
-      .then(response => {
-        if (!response.ok) throw new Error(`fetch failed: ${response.status}`);
-        return response.json();
-      })
-      .then(json => {
-        if (!cancelled) setData(json as BenchmarkData);
-      })
-      .catch(error => {
-        if (!cancelled) setLoadError(error instanceof Error ? error.message : 'failed to load');
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  if (loadError) {
-    return <div className="text-sm text-destructive py-12">Failed to load Explorer data: {loadError}</div>;
-  }
-
-  if (!data) {
-    return <div className="text-sm text-muted-foreground py-12 text-center" role="status">Loading market data...</div>;
-  }
 
   return (
     <div className="space-y-6">
@@ -91,7 +63,7 @@ export function ExplorerClient() {
 
       <section className="pt-8 border-t border-border">
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Want the full data? <a href="/data/pm-bench/markets.json" download className="underline underline-offset-2 hover:text-foreground">Download the dataset (JSON)</a>.{' '}
+          Want the full data? <a href="/api/benchmarks/pm-bench/markets" download="polymarket-markets.json" className="underline underline-offset-2 hover:text-foreground">Download the dataset (JSON)</a>.{' '}
           Or read the methodology behind every number: <Link href="/benchmarks/polymarket/methodology" className="underline underline-offset-2 hover:text-foreground">methodology &rarr;</Link>.
         </p>
       </section>

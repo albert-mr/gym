@@ -1,27 +1,18 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { loadBenchmark, loadMarkets, loadMarketBySlug } from '@/lib/data';
+import { getBenchmark } from '@/lib/queries/benchmark';
+import { getMarketBySlug } from '@/lib/queries/markets';
 import { MarketDetailCard } from '@/components/MarketDetailCard';
-
-export function generateStaticParams() {
-  const doc = loadMarkets();
-  const seen = new Set<string>();
-  const params: Array<{ slug: string }> = [];
-  for (const m of doc.markets) {
-    if (!m.slug || seen.has(m.slug)) continue;
-    seen.add(m.slug);
-    params.push({ slug: m.slug });
-  }
-  return params;
-}
 
 type Props = { params: Promise<{ slug: string }> };
 
 export default async function MarketDetailPage({ params }: Props) {
   const { slug } = await params;
-  const market = loadMarketBySlug(slug);
-  if (!market) notFound();
-  const data = loadBenchmark('pm-bench');
+  const [market, data] = await Promise.all([
+    getMarketBySlug(slug),
+    getBenchmark('pm-bench'),
+  ]);
+  if (!market || !data) notFound();
   return (
     <div className="mx-auto max-w-3xl px-6 py-16 space-y-10">
       <div>

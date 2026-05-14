@@ -1,8 +1,12 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { ExplorerClient } from './ExplorerClient';
+import { getBenchmark } from '@/lib/queries/benchmark';
 
-export default function ExplorerPage() {
+export default async function ExplorerPage() {
+  const data = await getBenchmark('pm-bench');
+  if (!data) notFound();
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">
       <div className="mb-3">
@@ -16,7 +20,7 @@ export default function ExplorerPage() {
         </p>
       </header>
       <Suspense fallback={<div className="text-muted-foreground text-sm italic py-12 text-center">Loading filters…</div>}>
-        <ExplorerClient />
+        <ExplorerClient data={data} />
       </Suspense>
     </div>
   );

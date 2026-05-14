@@ -1,37 +1,34 @@
-import { writeFile, mkdir } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { analyze } from "../analyze/analyze.js";
 import { gate1Reason, hasAnyUrl, isGate1Match } from "../analyze/buckets.js";
-import { dedupeByLatestPoll, loadJsonl } from "../analyze/load.js";
-import { renderMarkdown } from "../analyze/render-markdown.js";
+import { dedupeByLatestPoll } from "../analyze/load.js";
 import { requireDateArg } from "../lib/parse-date.js";
+import {
+  sql,
+  createPoll,
+  finishPoll,
+  insertGateEvaluations,
+  close as closeDb,
+} from "../lib/db-writers.mjs";
 import type { PolledMarket } from "../schemas/polled-market.js";
 
 interface CliArgs {
   date: string | null;
-  inFile: string | null;
-  inDir: string;
-  outDir: string | null;
   noDedup: boolean;
 }
 
 function parseArgs(argv: string[]): CliArgs {
   let date: string | null = null;
-  let inFile: string | null = null;
-  let inDir = "data/markets";
-  let outDir: string | null = null;
   let noDedup = false;
 
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--date") date = requireDateArg("--date", argv[++i]);
-    else if (a === "--in") inFile = argv[++i] ?? null;
-    else if (a === "--in-dir") inDir = argv[++i] ?? inDir;
-    else if (a === "--out-dir") outDir = argv[++i] ?? outDir;
     else if (a === "--no-dedup") noDedup = true;
-    else if (a === "-h" || a === "--help") {
+    else if (a === "--in" || a === "--in-dir" || a === "--out-dir") {
+      argv[++i]; // deprecated, arg-compat only
+    } else if (a === "-h" || a === "--help") {
       printHelp();
       process.exit(0);
     } else {
@@ -39,56 +36,47 @@ function parseArgs(argv: string[]): CliArgs {
       process.exit(2);
     }
   }
-  return { date, inFile, inDir, outDir, noDedup };
+  return { date, noDedup };
 }
 
 function printHelp(): void {
-  console.log(`pm-bench analyze — descriptive snapshot of a daily JSONL
+  console.log(`pm-bench analyze — classify polled markets through Gate 1 and write to raw.gate_evaluations
 
 usage: pnpm --filter @gym/pm-bench analyze [options]
 
 options:
-  --date YYYY-MM-DD     pick {in-dir}/{date}/all.jsonl (default: today UTC)
-  --in PATH             read this exact JSONL file (overrides --date / --in-dir)
-  --in-dir PATH         input base directory (default: data/markets)
-  --out-dir PATH        write derived outputs here (default: {in-dir}/{date}/)
-  --no-dedup            keep duplicate rows for the same id (default: dedup, latest polled_at wins)
+  --date YYYY-MM-DD     poll-date to analyze (default: today UTC)
+  --no-dedup            keep duplicate observations (default: dedup, latest polled_at wins)
   -h, --help            show this help
 
-writes (into out-dir):
-  snapshot.md
-  summary.json
-  gate1-pass.jsonl
-  gate1-drop-chainlink.jsonl
-  gate1-drop-no-url.jsonl
+reads:  raw.markets joined with raw.market_observations (polled on --date)
+writes: raw.gate_evaluations (one row per market, with passed/dropped + bucket)
 `);
 }
 
 const utcDateStr = (d: Date): string => d.toISOString().slice(0, 10);
 
-async function writeJsonl(path: string, rows: PolledMarket[]): Promise<void> {
-  await mkdir(dirname(path), { recursive: true });
-  const payload = rows.map((r) => JSON.stringify(r)).join("\n");
-  await writeFile(path, payload + (payload.length > 0 ? "\n" : ""), "utf8");
+async function loadFromDb(date: string): Promise<PolledMarket[]> {
+  // Latest observation per market for the given poll_date, materialised back
+  // into the PolledMarket shape via the original raw_payload jsonb.
+  const rows = await sql`
+    select m.raw_payload as payload
+    from raw.market_observations o
+    join raw.polls p on p.id = o.poll_id
+    join raw.markets m on m.id = o.market_id
+    where p.poll_date = ${date}
+    order by o.observed_at desc
+  ` as Array<{ payload: PolledMarket }>;
+  return rows.map((r) => r.payload);
 }
 
 async function main(args: CliArgs): Promise<void> {
   const date = args.date ?? utcDateStr(new Date());
-  const dayDir = resolve(args.inDir, date);
-  const inFile = args.inFile
-    ? resolve(args.inFile)
-    : resolve(dayDir, "all.jsonl");
-  const outDir = args.outDir ? resolve(args.outDir) : dayDir;
 
   const startedAt = Date.now();
-  const raw = await loadJsonl(inFile);
+  const raw = await loadFromDb(date);
   const rows = args.noDedup ? raw : dedupeByLatestPoll(raw);
   const result = analyze(rows);
-  const md = renderMarkdown(date, result);
-
-  const snapshotPath = resolve(outDir, "snapshot.md");
-  await mkdir(outDir, { recursive: true });
-  await writeFile(snapshotPath, md, "utf8");
 
   const chainlinkRows = rows.filter((r) => gate1Reason(r.eventResolutionSource) === "chainlink");
   const pythRows = rows.filter((r) => gate1Reason(r.eventResolutionSource) === "pyth");
@@ -99,72 +87,67 @@ async function main(args: CliArgs): Promise<void> {
     (r) => !isGate1Match(r.eventResolutionSource) && hasAnyUrl(r),
   );
 
-  const passPath = resolve(outDir, "gate1-pass.jsonl");
-  const dropChainlinkPath = resolve(outDir, "gate1-drop-chainlink.jsonl");
-  const dropPythPath = resolve(outDir, "gate1-drop-pyth.jsonl");
-  const dropNoUrlPath = resolve(outDir, "gate1-drop-no-url.jsonl");
-  await writeJsonl(passPath, passRows);
-  await writeJsonl(dropChainlinkPath, chainlinkRows);
-  await writeJsonl(dropPythPath, pythRows);
-  await writeJsonl(dropNoUrlPath, noUrlRows);
-
-  const summary = {
-    date,
-    raw_rows: raw.length,
-    after_dedup: rows.length,
-    total_rows: result.totalRows,
-    unique_markets: result.uniqueMarkets,
-    unique_events: result.uniqueEvents,
-    unique_templates: result.uniqueTemplates,
-    unique_domains: result.uniqueDomains,
-    polled_at_min: result.polledAtMin,
-    polled_at_max: result.polledAtMax,
-    end_date_min: result.endDateMin,
-    end_date_max: result.endDateMax,
-    gate1_chainlink: { matched: result.gate1Chainlink.matched, pct: result.gate1Chainlink.pct },
-    gate1_pyth: { matched: result.gate1Pyth.matched, pct: result.gate1Pyth.pct },
-    gate1_no_url: { matched: result.gate1NoUrl.matched, pct: result.gate1NoUrl.pct },
-    gate1_dropped: result.gate1Dropped,
-    io_addressable_markets: result.ioAddressableMarkets,
-    io_addressable_templates: result.ioAddressableTemplates,
-    io_addressable_events: result.ioAddressableEvents,
-    io_addressable_recurring: result.ioAddressableRecurring,
-    io_addressable_non_recurring: result.ioAddressableNonRecurring,
-    io_unique_domains: result.ioUniqueDomains,
-    truly_io_shaped_markets: result.trulyIoShapedMarkets,
-    truly_io_shaped_templates: result.trulyIoShapedTemplates,
-    kinds: result.kindBreakdown.map((k) => ({
-      kind: k.kind,
-      label: k.label,
-      markets: k.markets,
-      unique_templates: k.uniqueTemplates,
-      unique_events: k.uniqueEvents,
-      recurring: k.recurring,
-      deterministic_feed: k.isDeterministicFeed,
+  const pollId = await createPoll(date, "pipeline-analyze-v1", { rows: rows.length });
+  const evaluations = [
+    ...passRows.map((r) => ({
+      marketId: String(r.id),
+      passed: true,
+      droppedAtGate: null,
+      dropReason: null,
+      bucket: null,
+      bindingDomain: null,
+      bindingUrl: r.eventResolutionSource ?? null,
+      notes: null,
     })),
-    resolution_source_buckets: result.resolutionSourceBuckets,
-    io_resolution_source_buckets: result.ioResolutionSourceBuckets,
-    top_families: result.topFamilies,
-  };
-  const summaryPath = resolve(outDir, "summary.json");
-  await writeFile(summaryPath, JSON.stringify(summary, null, 2) + "\n", "utf8");
+    ...chainlinkRows.map((r) => ({
+      marketId: String(r.id),
+      passed: false,
+      droppedAtGate: 1,
+      dropReason: "chainlink",
+      bucket: "chainlink",
+      bindingDomain: null,
+      bindingUrl: r.eventResolutionSource ?? null,
+      notes: null,
+    })),
+    ...pythRows.map((r) => ({
+      marketId: String(r.id),
+      passed: false,
+      droppedAtGate: 1,
+      dropReason: "pyth",
+      bucket: "pyth",
+      bindingDomain: null,
+      bindingUrl: r.eventResolutionSource ?? null,
+      notes: null,
+    })),
+    ...noUrlRows.map((r) => ({
+      marketId: String(r.id),
+      passed: false,
+      droppedAtGate: 1,
+      dropReason: "no_url",
+      bucket: null,
+      bindingDomain: null,
+      bindingUrl: r.eventResolutionSource ?? null,
+      notes: null,
+    })),
+  ];
+  const inserted = await insertGateEvaluations(pollId, date, evaluations);
+  await finishPoll(pollId, inserted);
 
   console.log(
     JSON.stringify({
       stage: "analyze",
-      in_file: inFile,
-      out_dir: outDir,
-      snapshot_md: snapshotPath,
-      summary_json: summaryPath,
-      gate1_pass_jsonl: passPath,
-      gate1_drop_chainlink_jsonl: dropChainlinkPath,
-      gate1_drop_pyth_jsonl: dropPythPath,
-      gate1_drop_no_url_jsonl: dropNoUrlPath,
+      date,
+      poll_id: pollId,
       raw_rows: raw.length,
       after_dedup: rows.length,
+      gate1_pass: passRows.length,
+      gate1_drop_chainlink: chainlinkRows.length,
+      gate1_drop_pyth: pythRows.length,
+      gate1_drop_no_url: noUrlRows.length,
       gate1_dropped: result.gate1Dropped,
       io_addressable_markets: result.ioAddressableMarkets,
       truly_io_shaped_markets: result.trulyIoShapedMarkets,
+      gate_evaluations_inserted: inserted,
       elapsed_ms: Date.now() - startedAt,
     }),
   );
@@ -174,11 +157,14 @@ const entry = process.argv[1];
 const isMain = entry ? import.meta.url === pathToFileURL(entry).href : false;
 
 if (isMain) {
-  main(parseArgs(process.argv.slice(2))).catch((err: unknown) => {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error(JSON.stringify({ stage: "analyze", error: msg }));
-    process.exitCode = 1;
-  });
+  main(parseArgs(process.argv.slice(2)))
+    .then(() => closeDb())
+    .catch(async (err: unknown) => {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(JSON.stringify({ stage: "analyze", error: msg }));
+      await closeDb();
+      process.exitCode = 1;
+    });
 }
 
 export { main as runAnalyze, parseArgs };
