@@ -1,13 +1,11 @@
 'use client';
 import { useState } from 'react';
-import Link from 'next/link';
 import { PipelinePie, type PieHoverKey, type PipelineStats } from './PipelinePie';
 
 type Row = {
   count: number;
   label: string;
   detail: string;
-  altLink?: boolean;
   hoverKey?: PieHoverKey;
   pct?: number;
   pctLabel?: string;
@@ -53,7 +51,6 @@ export function PipelineFunnel({ stats }: { stats: PipelineStats }) {
       count: alt,
       label: 'Alternative source',
       detail: 'Named host blocks validators. We route to a verified alternate.',
-      altLink: true,
       hoverKey: 'alt',
       pct: pctOf(alt),
     },
@@ -102,9 +99,6 @@ export function PipelineFunnel({ stats }: { stats: PipelineStats }) {
                   )}
                   <span className="text-sm md:text-base text-foreground/90">
                     {row.label}
-                    {row.altLink && (
-                      <sup><Link href="/benchmarks/polymarket/methodology#alt-source-disclaimer" className="underline underline-offset-2 hover:text-foreground">*</Link></sup>
-                    )}
                   </span>
                 </div>
                 <p className="text-xs md:text-sm text-muted-foreground leading-relaxed mt-0.5">{row.detail}</p>
